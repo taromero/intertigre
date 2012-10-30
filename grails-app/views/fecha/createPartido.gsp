@@ -49,12 +49,12 @@
 										value="${fecha?.single1?.jugadorVisitante?.id}" noSelection="['null': '']"/>
 							</td>
 							<td>
-								<g:field type="number" min='0' max='7' name="single1.primerSet.gamesGanador" value="${fecha?.single1?.primerSet?.gamesGanador}" class="sett"/>
-								<g:field type="number" min='0' max='7' name="single1.primerSet.gamesPerdedor" value="${fecha?.single1?.primerSet?.gamesPerdedor}" class="sett"/>
-								<g:field type="number" min='0' max='7' name="single1.segundoSet.gamesGanador" value="${fecha?.single1?.segundoSet?.gamesGanador}" class="sett"/>
-								<g:field type="number" min='0' max='7' name="single1.segundoSet.gamesPerdedor" value="${fecha?.single1?.segundoSet?.gamesPerdedor}" class="sett"/>
-								<g:field type="number" min='0' max='7' name="single1.tercerSet.gamesGanador" value="${fecha?.single1?.tercerSet?.gamesGanador}" class="sett"/>
-								<g:field type="number" min='0' max='7' name="single1.tercerSet.gamesPerdedor" value="${fecha?.single1?.tercerSet?.gamesPerdedor}" class="sett"/>
+								<g:field type="number" min='0' max='7' name="single1.primerSet.gamesGanador" value="${fecha?.single1?.primerSet?.gamesGanador}" class="sett" style='width:35%'/>
+								<g:field type="number" min='0' max='7' name="single1.primerSet.gamesPerdedor" value="${fecha?.single1?.primerSet?.gamesPerdedor}" class="sett" style='width:35%'/>
+								<g:field type="number" min='0' max='7' name="single1.segundoSet.gamesGanador" value="${fecha?.single1?.segundoSet?.gamesGanador}" class="sett" style='width:35%'/>
+								<g:field type="number" min='0' max='7' name="single1.segundoSet.gamesPerdedor" value="${fecha?.single1?.segundoSet?.gamesPerdedor}" class="sett" style='width:35%'/>
+								<g:field type="number" min='0' max='7' name="single1.tercerSet.gamesGanador" value="${fecha?.single1?.tercerSet?.gamesGanador}" class="sett" style='width:35%'/>
+								<g:field type="number" min='0' max='7' name="single1.tercerSet.gamesPerdedor" value="${fecha?.single1?.tercerSet?.gamesPerdedor}" class="sett" style='width:35%'/>
 							</td>
 							<td>
 								<g:checkBox name="abandonoSingle1" value="${fecha?.single1?.abandono }"/>
@@ -77,12 +77,12 @@
 										value="${fecha?.single2?.jugadorVisitante?.id}" noSelection="['null': '']"/>
 							</td>
 							<td>
-								<g:field type="number" min='0' max='7' name="single2.primerSet.gamesGanador" value="${fecha?.single2?.primerSet?.gamesGanador}" class="sett"/>
-								<g:field type="number" min='0' max='7' name="single2.primerSet.gamesPerdedor" value="${fecha?.single2?.primerSet?.gamesPerdedor}" class="sett"/>
-								<g:field type="number" min='0' max='7' name="single2.segundoSet.gamesGanador" value="${fecha?.single2?.segundoSet?.gamesGanador}" class="sett"/>
-								<g:field type="number" min='0' max='7' name="single2.segundoSet.gamesPerdedor" value="${fecha?.single2?.segundoSet?.gamesPerdedor}" class="sett"/>
-								<g:field type="number" min='0' max='7' name="single2.tercerSet.gamesGanador" value="${fecha?.single2?.tercerSet?.gamesGanador}" class="sett"/>
-								<g:field type="number" min='0' max='7' name="single2.tercerSet.gamesPerdedor" value="${fecha?.single2?.primerSet?.gamesGanador}" class="sett"/>
+								<g:field type="number" min='0' max='7' name="single2.primerSet.gamesGanador" value="${fecha?.single2?.primerSet?.gamesGanador}" class="sett" style='width:35%'/>
+								<g:field type="number" min='0' max='7' name="single2.primerSet.gamesPerdedor" value="${fecha?.single2?.primerSet?.gamesPerdedor}" class="sett" style='width:35%'/>
+								<g:field type="number" min='0' max='7' name="single2.segundoSet.gamesGanador" value="${fecha?.single2?.segundoSet?.gamesGanador}" class="sett" style='width:35%'/>
+								<g:field type="number" min='0' max='7' name="single2.segundoSet.gamesPerdedor" value="${fecha?.single2?.segundoSet?.gamesPerdedor}" class="sett" style='width:35%'/>
+								<g:field type="number" min='0' max='7' name="single2.tercerSet.gamesGanador" value="${fecha?.single2?.tercerSet?.gamesGanador}" class="sett" style='width:35%'/>
+								<g:field type="number" min='0' max='7' name="single2.tercerSet.gamesPerdedor" value="${fecha?.single2?.primerSet?.gamesGanador}" class="sett" style='width:35%'/>
 							</td>
 							<td>
 								<g:checkBox name="abandonoSingle2" value="${fecha?.single2?.abandono }"/>
@@ -105,12 +105,12 @@
 										value="${fecha?.doble?.parejaVisitante?.doblista1?.id}" noSelection="['null': '']"/>
 							</td>
 							<td>
-								<g:field type="number" min='0' max='7' name="doble.primerSet.gamesGanador" value="${fecha?.doble?.primerSet?.gamesGanador}" class="sett"/>
-								<g:field type="number" min='0' max='7' name="doble.primerSet.gamesPerdedor" value="${fecha?.doble?.primerSet?.gamesPerdedor}" class="sett"/>
-								<g:field type="number" min='0' max='7' name="doble.segundoSet.gamesGanador" value="${fecha?.doble?.segundoSet?.gamesGanador}" class="sett"/>
-								<g:field type="number" min='0' max='7' name="doble.segundoSet.gamesPerdedor" value="${fecha?.doble?.segundoSet?.gamesPerdedor}" class="sett"/>
-								<g:field type="number" min='0' max='7' name="doble.tercerSet.gamesGanador" value="${fecha?.doble?.tercerSet?.gamesGanador}" class="sett"/>
-								<g:field type="number" min='0' max='7' name="doble.tercerSet.gamesPerdedor" value="${fecha?.doble?.tercerSet?.gamesPerdedor}" class="sett"/>
+								<g:field type="number" min='0' max='7' name="doble.primerSet.gamesGanador" value="${fecha?.doble?.primerSet?.gamesGanador}" class="sett" style='width:35%'/>
+								<g:field type="number" min='0' max='7' name="doble.primerSet.gamesPerdedor" value="${fecha?.doble?.primerSet?.gamesPerdedor}" class="sett" style='width:35%'/>
+								<g:field type="number" min='0' max='7' name="doble.segundoSet.gamesGanador" value="${fecha?.doble?.segundoSet?.gamesGanador}" class="sett" style='width:35%'/>
+								<g:field type="number" min='0' max='7' name="doble.segundoSet.gamesPerdedor" value="${fecha?.doble?.segundoSet?.gamesPerdedor}" class="sett" style='width:35%'/>
+								<g:field type="number" min='0' max='7' name="doble.tercerSet.gamesGanador" value="${fecha?.doble?.tercerSet?.gamesGanador}" class="sett" style='width:35%'/>
+								<g:field type="number" min='0' max='7' name="doble.tercerSet.gamesPerdedor" value="${fecha?.doble?.tercerSet?.gamesPerdedor}" class="sett" style='width:35%'/>
 							</td>
 							<td>
 								<g:checkBox name="abandonoDoble" value="${fecha?.doble?.abandono }"/>

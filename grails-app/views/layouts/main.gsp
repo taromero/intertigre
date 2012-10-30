@@ -96,8 +96,8 @@
 				  <li><g:link class="btn-large" controller="logout" action="index">Logout</g:link></li>
 				</ul>
 				<sec:ifAllGranted roles="ROLE_JUGADOR">
-					${Jugador.get(sec.loggedInUserInfo(field:'id').toLong())?.nombreCompleto + ' - ' +
-					  Jugador.get(sec.loggedInUserInfo(field:'id').toLong())?.role}
+					${Jugador.get(sec.loggedInUserInfo(field:'id').toLong())?.nombreCompleto}
+<%--					   + ' - ' + Jugador.get(sec.loggedInUserInfo(field:'id').toLong())?.role}--%>
 				</sec:ifAllGranted>
 		    </div>
 		  </div>

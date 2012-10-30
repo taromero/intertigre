@@ -1,5 +1,8 @@
 package intertigre.domain;
 
+import org.antlr.runtime.DFA;
+
+import spock.lang.Ignore;
 import grails.plugin.spock.IntegrationSpec;
 
 public class EquipoControllerSpec extends BaseControllerSpec{
@@ -13,11 +16,7 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 		when: 'cambio el capitan'
 			controller.params.idNuevoCapitan = canottoTeam.jugadores.find { it.nombre == 'Roger' }.id
 			controller.params.idEquipo = canottoTeam.id
-	        try{
-				controller.cambiarCapitanEquipoAjax()
-	        }catch(Exception e){
-				//Cuando llame al 'as JSON' en el return del metodo va a tirar una excepcion que no me interesa
-	        }
+			controller.cambiarCapitanEquipoAjax()
 		then: 'veo reflejado el cambio'
 			canottoTeam.capitan == Jugador.findAll().find { it.nombre == 'Roger' } //El find de GORM no funcionaba bien
 	}
@@ -102,24 +101,25 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 	
 	def 'crear equipo'(){
 		given: 'un usuario loggeado'
-			loggedUser = new Jugador(username: 'canotto90@gmail.com', password: 't', dni: '1', club: domainFactoryTestService.crearClubCanotto())
+			loggedUser = new Jugador(username: 'canotto90@gmail.com', password: 't', dni: '1', club: df.crearClubCanotto())
 			loggedUser.save()
-			new Categoria(nombre: '+19', sexo: 'M', edadLimiteInferior: 19, edadLimiteSuperior: 25)
+			def categoria = new Categoria(nombre: '+19', sexo: 'M', edadLimiteInferior: 19, edadLimiteSuperior: 25)
 							.save(failOnError: true, flush: true)
 		when: 'creo un equipo nuevo'
-			controller.params.categoria = ['id': 1]
+			controller.params.categoria = ['id': categoria.id]
 			controller.params.jerarquia = 'A'
 			controller.save()
-			def equipoNuevo = Equipo.get(1)
+			def equipoNuevo = Equipo.findAll().get(0)
 		then: 'se debe crear el equipo'
-			equipoNuevo.categoria == Categoria.get(1)
+			equipoNuevo.categoria == Categoria.get(categoria.id)
 			equipoNuevo.jerarquia == 'A'
-			controller.response.redirectedUrl == '/equipo/show/1'
+			controller.response.redirectedUrl == '/equipo/show/' + equipoNuevo.id
 	}
-	
+    
+	@Ignore	
 	def 'crear equipo, para una categoria/jerarquia/club existente'(){
 		given: 'un usuario loggeado'
-			loggedUser = new Jugador(username: 'canotto90@gmail.com', password: 't', club: domainFactoryTestService.crearClubCanotto())
+			loggedUser = new Jugador(username: 'canotto90@gmail.com', password: 't', club: df.crearClubCanotto())
 			loggedUser.save()
 		and: 'un equipo con categoria x y jerarquia y'
 			def cat = new Categoria(nombre: '+19', sexo: 'M', edadLimiteInferior: 19, edadLimiteSuperior: 25)
@@ -128,12 +128,43 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 		when: 'creo un equipo nuevo con la misma categoria/jerarquia/club'
 			controller.params.categoria = ['id': cat.id]
 			controller.params.jerarquia = 'A'
-			controller.params.single1 = [primerSet: [gamesGanador: 7]]
 			controller.save()
-			def equipoNuevo = Equipo.get(2)
+			Equipo equipo1 = Equipo.findAll().get(0)
+			Equipo equipo2 = Equipo.findAll().get(1)
+			Club club1 = equipo1.club
+			Club club2 = equipo2.club
 		then: 'no se debe crear el equipo, y se debe volver a la vista de creacion con un mensaje indicativo'
-			equipoNuevo == null
+			equipo1.jerarquia == equipo2.jerarquia
+			club1 == club2
+			equipo1.club == equipo2.club 
+			equipo1.categoria == equipo2.categoria
+			Equipo.count() == 1
 			renderMap.view == '/equipo/create'
 			renderMap.model.equipoInstance.errors.getAt('club').code == 'unique'
+	}
+	
+	def 'buscar equipos'(){
+		given:
+//			def canotto = df.crearClubCanotto()
+//			def mas25 = Categoria.build()
+			for(i in 1..20){
+				Equipo.build()
+			}
+//			for(i in 1..5){
+//				Equipo.build(club: canotto, mas25, 'A')
+//			}
+		when:
+			controller.params.club = ['id': clubId]
+			controller.params.categoria = ['id': categoriaId]
+			controller.params.jerarquia = jerarquiaId
+			controller.params.offset = 0
+			controller.params.max = 10
+			controller.list()
+		then:
+			renderMap.view == 'list'
+			renderMap.model.equipoInstanceList.size() == 10
+		where:
+			clubId | categoriaId | jerarquiaId
+			  ''   |     ''      |      ''
 	}
 }

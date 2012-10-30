@@ -85,17 +85,11 @@ class DomainFactoryTestService {
 
 		if(jugadores == null){
 			jugadores = [
-				new Jugador(club: canotto, sexo: 'M', nacimiento: new DateTime(1990,3,3,0,0,0).toDate(), nombre: 'Tomas', apellido: 'Romero', 
-								dni: '12345678', email: 'canotto90@gmail.com', password: 't'),
-				new Jugador(club: canotto, sexo: 'M', nacimiento: new DateTime(1987,8,23,0,0,0).toDate(), nombre: 'Juan Martin', apellido: 'Del Potro', 
-								dni: '12345676', email: 'delpotro@gmail.com', password: 't'),
-				new Jugador(club: canotto, sexo: 'M', nacimiento: new DateTime(1990,9,14,0,0,0).toDate(), nombre: 'Roger', apellido: 'Federer', 
-								dni: '12345675', email: 'federer@gmail.com', password: 't'),
-//				Jugador.build(nombre: 'Roger', dni: '12345675'),
-				new Jugador(club: canotto, sexo: 'M', nacimiento: new DateTime(1990,2,15,0,0,0).toDate(), nombre: 'Chucho', apellido: 'Acasusso', 
-								dni: '12345674', email: 'acasusso@gmail.com', password: 't'),
-				new Jugador(club: canotto, sexo: 'M', nacimiento: new DateTime(1989,6,27,0,0,0).toDate(), nombre: 'Guillermo', apellido: 'Cañas', 
-								dni: '12345673', email: 'canas@gmail.com', password: 't')
+				Jugador.build(club: canotto, nombre: 'Tomas', dni: '12345678'),
+				Jugador.build(club: canotto, nombre: 'Roger', dni: '12345675'),
+				Jugador.build(club: canotto, nombre: 'Juan Martin', dni: '12345676'),
+				Jugador.build(club: canotto, nombre: 'Chucho', dni: '12345674'),
+				Jugador.build(club: canotto, nombre: 'Guillermo', dni: '12345673'),
 			]
 		}
 

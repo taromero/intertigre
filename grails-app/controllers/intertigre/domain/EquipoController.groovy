@@ -1,6 +1,7 @@
 package intertigre.domain
 
 import grails.converters.JSON
+import grails.gorm.DetachedCriteria
 import grails.plugins.springsecurity.Secured
 
 import org.springframework.dao.DataIntegrityViolationException
@@ -15,14 +16,14 @@ class EquipoController extends BaseDomainController{
     }
 
     def list() {
-        def idClub = params.club?.id != 'false' ? params.club?.id as Long : false
-        def idCategoria = params.categoria?.id != 'false' ? params.categoria?.id as Long : false
-        def jerarquiaParam = params.jerarquia != 'false' ? params.jerarquia : false
+        def idClub = !['false', ''].contains(params.club?.id) ? params.club?.id as Long : false
+        def idCategoria = !['false', ''].contains(params.categoria?.id) ? params.categoria?.id as Long : false
+        def jerarquiaParam = !['false', ''].contains(params.jerarquia) ? params.jerarquia : false
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
 
         def esBusqueda = idClub || idCategoria || jerarquiaParam
 
-        def filtro = Equipo.where {
+        DetachedCriteria filtro = Equipo.where {
                         if (idClub)
                             club.id == idClub
                         if (idCategoria)
@@ -33,8 +34,8 @@ class EquipoController extends BaseDomainController{
 
         def equiposList = esBusqueda ? filtro.list(params) : Equipo.list(params)
         def equiposTotal = esBusqueda ? filtro.list().size() : Equipo.count
-        [view: 'list', model: [equipoInstanceList: equiposList, equipoInstanceTotal: equiposTotal, idClubSeleccionado: idClub,
-                                    idCategoriaSeleccionada: idCategoria, jerarquiaSeleccionada: jerarquiaParam]]
+        render(view: 'list', model: [equipoInstanceList: equiposList, equipoInstanceTotal: equiposTotal, idClubSeleccionado: idClub,
+                                    idCategoriaSeleccionada: idCategoria, jerarquiaSeleccionada: jerarquiaParam])
     }
 
 	@Secured(['ROLE_JUGADOR'])

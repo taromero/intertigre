@@ -7,7 +7,6 @@ class Categoria {
 	String sexo
 
 	def boolean equals(categoria){
-		return true
 		if (this.is(categoria)) return true
 		
 		if (!categoria || getClass() != categoria.class) return false

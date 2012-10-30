@@ -1,7 +1,5 @@
 package intertigre.domain
 
-import java.util.List;
-
 class Club {
 	static hasMany = [equipos: Equipo, horariosPreferidosParaLocal: Integer]
 	List<Equipo> equipos = new ArrayList<Equipo>()
@@ -32,9 +30,9 @@ class Club {
 	}
 	
 	def boolean equals(club) {
-		if (this.is(club)) return true;
+		if (this.is(club)) return true
 		
-		if (!club || getClass() != club.class) return false;
+		if (!club || getClass() != club.class) return false
 		
 		return this.nombre == club.nombre && this.localidad == club.localidad
 	}

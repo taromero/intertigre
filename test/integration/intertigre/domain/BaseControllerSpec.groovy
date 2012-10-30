@@ -13,7 +13,7 @@ abstract class BaseControllerSpec extends IntegrationSpec{
 	def static roleAdmin = new SecRole(authority: 'ROLE_ADMIN').save()
 	def static roleCapitanClub = new SecRole(authority: 'ROLE_CAPITAN_CLUB').save()
 	def static roleCapitanEquipo = new SecRole(authority: 'ROLE_CAPITAN_EQUIPO').save()
-	def static roleJugador = new SecRole(authority: 'ROLE_JUGADOR').save()
+	def static roleJugador = new SecRole(authority: 'ROLE_JUGADOR').save(flush: true, failOnError: true)
 	
 	def loggedUser
 	Map renderMap

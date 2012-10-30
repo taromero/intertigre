@@ -10,6 +10,7 @@ class Equipo {
 	Categoria categoria
 	String jerarquia
 	Jugador capitan
+	Club club
 	
 	//TreeSet me asegura no tener items repetidos, no tener items con la misma posicion y
 	//me mantiene los items ordenados

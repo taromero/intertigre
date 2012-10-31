@@ -1,5 +1,7 @@
-package intertigre.domain
+package intertigre.controllers
 
+import intertigre.domain.Jugador;
+import intertigre.domain.JugadorController;
 import intertigre.security.SecUserSecRole
 
 class JugadorControllerSpec extends BaseControllerSpec{

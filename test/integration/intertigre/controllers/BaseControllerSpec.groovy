@@ -1,8 +1,9 @@
-package intertigre.domain
+package intertigre.controllers
 
 import grails.plugin.spock.IntegrationSpec
 import grails.plugins.springsecurity.SpringSecurityService;
 import intertigre.security.SecRole
+import intertigre.test.utils.DomainFactoryTestService;
 
 abstract class BaseControllerSpec extends IntegrationSpec{
 	

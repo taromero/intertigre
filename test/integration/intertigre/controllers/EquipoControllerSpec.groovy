@@ -1,4 +1,11 @@
-package intertigre.domain;
+package intertigre.controllers;
+
+import intertigre.domain.Categoria;
+import intertigre.domain.Club;
+import intertigre.domain.Equipo;
+import intertigre.domain.EquipoController;
+import intertigre.domain.ItemListaBuenaFe;
+import intertigre.domain.Jugador;
 
 import org.antlr.runtime.DFA;
 
@@ -166,5 +173,7 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 		where:
 			clubId | categoriaId | jerarquiaId
 			  ''   |     ''      |      ''
+		   'false' |   'false'   |   'false'
+//		   'false' |   Categoria.build(nombre: '+25')
 	}
 }

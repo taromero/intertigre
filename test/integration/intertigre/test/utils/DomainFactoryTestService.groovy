@@ -1,4 +1,4 @@
-package intertigre.domain
+package intertigre.test.utils
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ class DomainFactoryTestService {
 		categoria = categoria ?: new Categoria().save()
 		List<Equipo> equipos = new ArrayList<Equipo>()
 		def clubes = []
-		cantClubes.times { clubes.add(new Club(triosDeCanchasDisponibles: 1)) }
+		cantClubes.times { i -> clubes.add(new Club(triosDeCanchasDisponibles: 1, nombre: 'club' + i)) }
 		def clubIndex = 0
 		for(i in 1..cantidad){
 			def club = clubes.get(clubIndex)

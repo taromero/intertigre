@@ -1,4 +1,8 @@
-package intertigre.domain
+package intertigre.controllers
+
+import intertigre.domain.Fecha;
+import intertigre.domain.FechaController;
+import intertigre.domain.Jugador;
 
 import java.util.Map;
 

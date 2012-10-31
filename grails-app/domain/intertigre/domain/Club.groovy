@@ -15,7 +15,7 @@ class Club {
 		nombre blank:false, unique: ['localidad']
 		direccion blank:false
 		telefono blank:false
-		email blank:false
+		email blank:false, email: true
 		localidad blank:false
 		triosDeCanchasDisponibles matches:'[0-9]'
 		equipos display:false, editable:false

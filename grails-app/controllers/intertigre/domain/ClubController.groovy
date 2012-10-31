@@ -1,9 +1,8 @@
 package intertigre.domain
 
-import intertigre.domain.Club
 import grails.plugins.springsecurity.Secured
 
-import org.springframework.dao.DataIntegrityViolationException
+import javax.naming.LimitExceededException
 
 class ClubController extends BaseDomainController{
 
@@ -24,9 +23,24 @@ class ClubController extends BaseDomainController{
     }
 
     def save() {
-		def horariosPreferidosParaLocal = params.horariosPreferidosParaLocal as List
+		List<Integer> horariosAux = params.horariosPreferidosParaLocal
+															.replaceAll(' ', '').split(",")
+		List<Integer> horariosPreferidosParaLocal = new ArrayList<Integer>()
+		def triosDeCanchasDisponibles = new Integer(params.triosDeCanchasDisponibles)
 		params.remove('horariosPreferidosParaLocal')
+		params.remove('triosDeCanchasDisponibles')
         def clubInstance = new Club(params)
+		clubInstance.triosDeCanchasDisponibles = triosDeCanchasDisponibles
+		for(horarioString in horariosAux) { 
+			def horario = new Integer(horarioString)
+			horariosPreferidosParaLocal.add(horario) 
+			if(horario > 24 || horario < 1){
+				render(view: "create", model: [clubInstance: clubInstance])
+				flash.message = 'Ingresaste un numero mayor a 24 o menor a 0 para los horarios'
+				return
+			}	
+			
+		}
 		clubInstance.horariosPreferidosParaLocal = horariosPreferidosParaLocal
 		
         if (!clubInstance.save(flush: true)) {

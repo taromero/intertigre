@@ -24,4 +24,14 @@ class ClubSpec extends IntegrationSpec{
 			Club.findAll().size() == 1
 			thrown(ValidationException)
 	}
+	
+	def 'no deberia permitir crear un club con email incorrecto'(){
+		given:
+			def club = new Club(nombre: 'Canottieri', email: 'a')
+		when:
+			club.save(flush: true, failOnError: true)
+		then: 'no se permite la eliminacion'
+			Exception ex = thrown(ValidationException)
+			ex.message.contains('Club.email.email.invalid')
+	}
 }

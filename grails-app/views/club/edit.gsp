@@ -7,11 +7,11 @@
 		<title><g:message code="default.edit.label" args="[entityName]" /></title>
 		<script type="text/javascript">
 			function checkHorariosFormat(){
-				if($('#horariosPreferidosParaLocal').val().match(/\[([0-9]*, )*[0-9]*\]/) != null &&
-						$('#horariosPreferidosParaLocal').val().match(/\[([0-9]*, )*[0-9]*\]/)[0] == $('#horariosPreferidosParaLocal').val()){
+				if($('#horariosPreferidosParaLocal').val().match(/([0-9]*,[ ]*)*[0-9]*/) != null &&
+						$('#horariosPreferidosParaLocal').val().match(/([0-9]*,[ ]*)*[0-9]*/)[0] == $('#horariosPreferidosParaLocal').val()){
 					return true
 				}else{
-					alert('Los horarios deben respetar el formato "[hora1, hora2, horan]", por ejemplo: [10, 16, 14], los corchetes son importantes')
+					alert('Los horarios deben ser separados por comas unicamente')
 					return false
 				}
 			}

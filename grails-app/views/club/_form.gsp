@@ -55,6 +55,6 @@
 		Horarios disponibles de canchas
 		
 	</label>
-	<g:field type="text" id="horariosPreferidosParaLocal" name="horariosPreferidosParaLocal" value="${fieldValue(bean: clubInstance, field: 'horariosPreferidosParaLocal')}"/>
+	<g:field type="text" id="horariosPreferidosParaLocal" name="horariosPreferidosParaLocal"/>
 </div>
 

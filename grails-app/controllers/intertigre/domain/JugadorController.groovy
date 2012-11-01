@@ -174,7 +174,7 @@ class JugadorController extends BaseDomainController{
 		def esAdmin = esAdmin()
 		SecUserSecRole.findAll().findAll { it.secUser == jugador }.each { it.delete() }
 		
-		rol = (rol == '' || rol == null) ? jugador.role : rol
+		rol = (rol == null) ? jugador.role : rol
 		
 		def roleString
 		switch (rol) {
@@ -188,6 +188,9 @@ class JugadorController extends BaseDomainController{
 				roleString = 'ROLE_CAPITAN_EQUIPO'
 				break
 			case 'Jugador nomal':
+				roleString = 'ROLE_JUGADOR'
+				break
+			default:
 				roleString = 'ROLE_JUGADOR'
 				break
 		}

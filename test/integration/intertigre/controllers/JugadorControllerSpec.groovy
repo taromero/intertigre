@@ -135,7 +135,7 @@ class JugadorControllerSpec extends BaseControllerSpec{
 			jugadorNuevo.username == usernameCorregido
 			jugadorNuevo.password != 't'
 			jugadorNuevo.password == springSecurityService.encodePassword('t')
-			jugadorNuevo.role == role
+			jugadorNuevo.role == (role) ? 'Jugador normal' : role
 			jugadorNuevo.dni == '2'
 			jugadorNuevo.authority == rolePosta
 		where:
@@ -146,6 +146,7 @@ class JugadorControllerSpec extends BaseControllerSpec{
 			'Pepe@gmail.com' | 'pepe@gmail.com'  | 'Capitan equipo'  | roleCapitanEquipo | roleAdmin
 			'Pepe@gmail.com' | 'pepe@gmail.com'  | 'Capitan club'    | roleCapitanClub   | roleAdmin
 			'Pepe@gmail.com' | 'pepe@gmail.com'  | 'Administrador'   | roleAdmin         | roleAdmin
+			'Pepe@gmail.com' | 'pepe@gmail.com'  | ''                | roleJugador       | roleAdmin
 	}
 	
 	def 'caso no permitido, crear un jugador'(){

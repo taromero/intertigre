@@ -32,7 +32,8 @@
 			<g:message code="jugador.role.label" default="Role" />
 			
 		</label>
-		<g:select name="role" from="${jugadorInstance.constraints.role.inList}" value="${jugadorInstance?.role}" valueMessagePrefix="jugador.role" noSelection="['': '']"/>
+		<g:select name="role" from="${jugadorInstance.constraints.role.inList}" value="${jugadorInstance?.role}" valueMessagePrefix="jugador.role" 
+		noSelection="['': 'Elegi el rol']"/>
 	</div>
 </sec:ifAllGranted>
 

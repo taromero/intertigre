@@ -2,14 +2,14 @@ package intertigre.domain
 import grails.plugin.spock.IntegrationSpec
 import grails.validation.ValidationException
 
+import org.hibernate.impl.SessionImpl;
 import org.joda.time.DateTime
 
 class JugadorSpec extends IntegrationSpec{
 
 	def 'no deberia permitir eliminar un jugador'(){
 		given:
-			def jugador = new Jugador(nombre: 'roger')
-			jugador.save()
+			def jugador = Jugador.build(nombre: 'roger')
 		when:
 			jugador.delete(flush: true)
 		then: 'no se permite la eliminacion'
@@ -32,13 +32,32 @@ class JugadorSpec extends IntegrationSpec{
 	
 	def 'crear jugador con dni existente'(){
 		given: 'un jugador con dni x'
-			new Jugador(dni: '1').save(failOnError: true, flush: true)
+			Jugador.build(dni: '1')
 		when: 'creo otro jugador con el mismo dni'
-			new Jugador(dni: '1').save(failOnError:true, flush: true)
+			Jugador.build(dni: '1')
 		then:
 			Jugador.findAll().size() == 1
-			Exception ex = thrown(ValidationException)
-			ex.message.contains('Jugador.dni.unique.error')
 	}
 	
+	def 'no deberia dejar crear un jugador con atributos nulos'(){
+		given: 'un jugador con atributos nulos'
+			def jugador = new Jugador(nombre: nombre, apellido: apellido, email: email, password: password, 
+										telefono: telefono, dni: dni, club: club, sexo: sexo, role: role)
+		when: 'intento guardar al jugador'
+			jugador.save(flush: true)
+		then: 'no se deberia guardar'
+			Jugador.findAll().size() == 0
+		where:
+			nombre | apellido | email | password | telefono | dni | club          | sexo | role
+			null   |   'ab'   | 'ab'  | 'ab'     | 'ab'     | 'ab'|Club.build()   |'M'   |'Jugador normal'
+			'ab'   |   null   | 'ab'  | 'ab'     | 'ab'     | 'ab'|Club.build()   |'M'   |'Jugador normal'
+			'ab'   |   'ab'   | null  | 'ab'     | 'ab'     | 'ab'|Club.build()   |'M'   |'Jugador normal'
+			'ab'   |   'ab'   | 'ab'  | null     | 'ab'     | 'ab'|Club.build()   |'M'   |'Jugador normal'
+			'ab'   |   'ab'   | 'ab'  | 'ab'     | null     | 'ab'|Club.build()   |'M'   |'Jugador normal'
+			'ab'   |   'ab'   | 'ab'  | 'ab'     | 'ab'     | null|Club.build()   |'M'   |'Jugador normal'
+			'ab'   |   'ab'   | 'ab'  | 'ab'     | 'ab'     | 'ab'|        null   |'M'   |'Jugador normal'
+			'ab'   |   'ab'   | 'ab'  | 'ab'     | 'ab'     | 'ab'|Club.build()   | null |'Jugador normal'
+			'ab'   |   'ab'   | 'ab'  | 'ab'     | 'ab'     | 'ab'|Club.build()   |'M'   |null
+			
+	}
 }

@@ -31,12 +31,15 @@ class Jugador extends SecUser{
 	}
 	
 	static constraints = {
-		role editable:false, inList: ['Administrador', 'Capitan club', 'Capitan equipo', 'Jugador normal']
-		dni unique:true, matches:'[0-9]*'
-		nombre matches: '[a-zA-ZñÑ ]*', unique:true
-		apellido matches: '[a-zA-ZñÑ ]*'
-		sexo inList:['M', 'F'], editable:false
-		password password:true
+		role editable:false, inList: ['Administrador', 'Capitan club', 'Capitan equipo', 'Jugador normal'], nullable:false
+		dni unique:true, matches:'[0-9]*', nullable:false
+		nombre matches: '[a-zA-ZñÑ ]*', nullable:false
+		apellido matches: '[a-zA-ZñÑ ]*', nullable:false
+		sexo inList:['M', 'F'], editable:false, nullable:false
+		password password:true, nullable:false
+		telefono nullable:false
+		nacimiento nullable:false
+		club nullable:false
 	}
 
 	def List<Equipo> getEquipos(){

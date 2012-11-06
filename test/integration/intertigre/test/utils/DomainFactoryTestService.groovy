@@ -16,7 +16,7 @@ class DomainFactoryTestService {
 	def List<Jugador> crearXJugadores(Integer cantJugadores){
 		def jugadores = new ArrayList<Jugador>()
 		for(i in 0..(cantJugadores-1)){
-			def jugador = new Jugador(dni: i)
+			def jugador = Jugador.build(dni: i)
 			jugadores.add(jugador)
 		}
 		return jugadores
@@ -37,12 +37,11 @@ class DomainFactoryTestService {
 		categoria = categoria ?: new Categoria().save()
 		List<Equipo> equipos = new ArrayList<Equipo>()
 		def clubes = []
-		cantClubes.times { i -> clubes.add(new Club(triosDeCanchasDisponibles: 1, nombre: 'club' + i)) }
+		cantClubes.times { i -> clubes.add(Club.build(triosDeCanchasDisponibles: 1, nombre: 'club' + i)) }
 		def clubIndex = 0
 		for(i in 1..cantidad){
 			def club = clubes.get(clubIndex)
-			club.id = clubIndex
-			def equipo = new Equipo(id: i, categoria: categoria, club: club)
+			def equipo = new Equipo(categoria: categoria, club: club)
 			equipo.id = i
 			equipos.add(equipo)
 			club.equipos.add(equipo)
@@ -56,7 +55,7 @@ class DomainFactoryTestService {
 		def jugadores = []
 		nombres.eachWithIndex{
 			nombre, i ->
-			jugadores.add(new Jugador(nombre: nombre, dni: i))
+			jugadores.add(Jugador.build(nombre: nombre, dni: i))
 		}
 		return crearEquipoCanotto(jugadores)
 	}
@@ -75,9 +74,9 @@ class DomainFactoryTestService {
 	}
 	
 	def Club crearClubElChasqui(){
-		def club = Club.find { nombre == 'El Chasqui' && localidad == 'El Talar' }
+		def club = Club.findAll().find { it.nombre == 'El Chasqui' && it.localidad == 'El Talar' }
 		return club ?: new Club(nombre: 'El Chasqui', localidad: 'El Talar', direccion: 'Belgrano 467',
-					email: 'elchasqui@gmail.com', telefono: 9085).save(failOnError: true, flush:true)
+					email: 'elchasqui@gmail.com', telefono: 9085, triosDeCanchasDisponibles: 1).save(failOnError: true, flush:true)
 	}
 	
 	def Equipo crearEquipoCanotto(List<Jugador> jugadores){
@@ -85,11 +84,17 @@ class DomainFactoryTestService {
 
 		if(jugadores == null){
 			jugadores = [
-				Jugador.build(club: canotto, nombre: 'Tomas', dni: '12345678'),
-				Jugador.build(club: canotto, nombre: 'Roger', dni: '12345675'),
-				Jugador.build(club: canotto, nombre: 'Juan Martin', dni: '12345676'),
-				Jugador.build(club: canotto, nombre: 'Chucho', dni: '12345674'),
-				Jugador.build(club: canotto, nombre: 'Guillermo', dni: '12345673'),
+				Jugador.build(club: canotto, sexo: 'M', nacimiento: new DateTime(1990,3,3,0,0,0).toDate(), nombre: 'Tomas', apellido: 'Romero', 
+							dni: '12345678', email: 'canotto90@gmail.com', password: 't', 
+							urlImagen: 'http://a7.sphotos.ak.fbcdn.net/hphotos-ak-snc6/251940_3763810087241_391676411_n.jpg'),
+				Jugador.build(club: canotto, sexo: 'M', nacimiento: new DateTime(1987,8,23,0,0,0).toDate(), nombre: 'Juan Martin', apellido: 'Del Potro', 
+								dni: '12345676', email: 'delpotro@gmail.com', password: 'd'),
+				Jugador.build(club: canotto, sexo: 'M', nacimiento: new DateTime(1990,9,14,0,0,0).toDate(), nombre: 'Roger', apellido: 'Federer', 
+								dni: '12345675', email: 'federer@gmail.com', password: 'f'),
+				Jugador.build(club: canotto, sexo: 'M', nacimiento: new DateTime(1990,2,15,0,0,0).toDate(), nombre: 'Chucho', apellido: 'Acasusso', 
+								dni: '12345674', email: 'acasusso@gmail.com', password: 'a'),
+				Jugador.build(club: canotto, sexo: 'M', nacimiento: new DateTime(1989,6,27,0,0,0).toDate(), nombre: 'Guillermo', apellido: 'Cañas', 
+								dni: '12345673', email: 'canas@gmail.com', password: 'c')
 			]
 		}
 
@@ -115,14 +120,14 @@ class DomainFactoryTestService {
 		def elChasqui = crearClubElChasqui()
 
 		def jugadores = [
-			new Jugador(club: elChasqui, sexo: 'M', nacimiento: new DateTime(1990,1,8,0,0,0).toDate(), nombre: 'Rafael', apellido: 'Nadal', 
-							dni: '87654321', email: 'nadal@gmail.com'),
-			new Jugador(club: elChasqui, sexo: 'M', nacimiento: new DateTime(1989,9,23,0,0,0).toDate(), nombre: 'David', apellido: 'nalbandian', 
-							dni: '87654323', email: 'nalbandian@gmail.com'),
-			new Jugador(club: elChasqui, sexo: 'M', nacimiento: new DateTime(1989,7,4,0,0,0).toDate(), nombre: 'Charlie', apellido: 'Berlocq', 
-							dni: '87654324', email: 'berlocq@gmail.com'),
-			new Jugador(club: elChasqui, sexo: 'M', nacimiento: new DateTime(1990,2,15,0,0,0).toDate(), nombre: 'Carlos', apellido: 'Moya', 
-							dni: '87654325', email: 'moya@gmail.com')
+			Jugador.build(club: elChasqui, sexo: 'M', nacimiento: new DateTime(1990,1,8,0,0,0).toDate(), nombre: 'Rafael', apellido: 'Nadal', 
+							dni: '87654321', email: 'nadal@gmail.com', password: 'n'),
+			Jugador.build(club: elChasqui, sexo: 'M', nacimiento: new DateTime(1989,9,23,0,0,0).toDate(), nombre: 'David', apellido: 'nalbandian', 
+							dni: '87654323', email: 'nalbandian@gmail.com', password: 'n'),
+			Jugador.build(club: elChasqui, sexo: 'M', nacimiento: new DateTime(1989,7,4,0,0,0).toDate(), nombre: 'Charlie', apellido: 'Berlocq', 
+							dni: '87654324', email: 'berlocq@gmail.com', password: 'b'),
+			Jugador.build(club: elChasqui, sexo: 'M', nacimiento: new DateTime(1990,2,15,0,0,0).toDate(), nombre: 'Carlos', apellido: 'Moya', 
+							dni: '87654325', email: 'moya@gmail.com', password: 'm')
 		]
 
 		def equipo = new Equipo(club: elChasqui, categoria: new Categoria(nombre: '+19', sexo: 'M').save(), jerarquia: 'A', capitan: jugadores.get(0), estaConfirmado: false)
@@ -159,13 +164,13 @@ class DomainFactoryTestService {
 				email: 'nahuel@gmail.com', telefono: 9084).save()
 
 		def jugadores = [
-			new Jugador(club: nahuel, sexo: 'M', nacimiento: new DateTime(1990,1,8,0,0,0).toDate(), nombre: 'Robin', apellido: 'Soderling', 
+			Jugador.build(club: nahuel, sexo: 'M', nacimiento: new DateTime(1990,1,8,0,0,0).toDate(), nombre: 'Robin', apellido: 'Soderling', 
 							dni: '87654637', email: 'soderling@gmail.com'),
-			new Jugador(club: nahuel, sexo: 'M', nacimiento: new DateTime(1989,9,23,0,0,0).toDate(), nombre: 'Pete', apellido: 'Sampras', 
+			Jugador.build(club: nahuel, sexo: 'M', nacimiento: new DateTime(1989,9,23,0,0,0).toDate(), nombre: 'Pete', apellido: 'Sampras', 
 							dni: '87659463', email: 'sampras@gmail.com'),
-			new Jugador(club: nahuel, sexo: 'M', nacimiento: new DateTime(1989,7,4,0,0,0).toDate(), nombre: 'Andre', apellido: 'Agassi', 
+			Jugador.build(club: nahuel, sexo: 'M', nacimiento: new DateTime(1989,7,4,0,0,0).toDate(), nombre: 'Andre', apellido: 'Agassi', 
 							dni: '32154324', email: 'agassi@gmail.com'),
-			new Jugador(club: nahuel, sexo: 'M', nacimiento: new DateTime(1990,2,15,0,0,0).toDate(), nombre: 'Dominic', apellido: 'Hrbati', 
+			Jugador.build(club: nahuel, sexo: 'M', nacimiento: new DateTime(1990,2,15,0,0,0).toDate(), nombre: 'Dominic', apellido: 'Hrbati', 
 							dni: '32154325', email: 'hrbati@gmail.com')
 		]
 

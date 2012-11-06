@@ -14,7 +14,7 @@ class SecUser {
 	boolean passwordExpired
 
 	static constraints = {
-		username email:true, blank: false, unique: true
+		username email:true, blank: false, unique: true, nullable: false
 		password blank: false
 	}
 

@@ -22,15 +22,22 @@ class Equipo {
 		club nullable:true, editable:false, unique: ['categoria', 'jerarquia']
 		categoria nullable:false, editable:false
 		jerarquia matches:'[A-Z]', size:0..1, editable:false
-		capitan blank:false
+		capitan blank:false, nullable: true
 		estaBienFormado blank:false, editable:false
 		estaConfirmado blank:false
+		grupo nullable: true
+		fechasLocal nullable: true
+		fechasVisitante nullable: true
 	}
 	
 	def beforeDelete() {
 		if(this.participaEnAlgunaFecha()){
 			throw new UnsupportedOperationException('No se puede eliminar el equipo porque participan en al menos 1 fecha.')
 		}
+	}
+	
+	def Equipo(){
+		estaConfirmado = false
 	}
 	
 	def boolean participaEnAlgunaFecha(){

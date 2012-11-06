@@ -66,7 +66,7 @@ class JugadorController extends BaseDomainController{
 		}
 		jugadorInstance.club = getLoggedUser().club
 		
-		if (!jugadorInstance.save(flush: true)) {
+		if (!jugadorInstance.save(flush: true, failOnError: true)) {
 			render(view: "create", model: [jugadorInstance: jugadorInstance])
 			return
 		}

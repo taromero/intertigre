@@ -7,8 +7,7 @@ class ClubSpec extends IntegrationSpec{
 
 	def 'no deberia permitir eliminar un club'(){
 		given:
-			def club = new Club(nombre: 'Canottieri')
-			club.save()
+			def club = Club.build(nombre: 'Canottieri')
 		when:
 			club.delete(flush: true)
 		then: 'no se permite la eliminacion'
@@ -17,12 +16,13 @@ class ClubSpec extends IntegrationSpec{
 	
 	def 'no deberia permitir crear dos clubes con el mismo nombre/localidad'(){
 		given: 'un club'
-			new Club(nombre: 'Canottieri', localidad: 'Tigre').save(failOnError: true, flush: true)
+			Club.build(nombre: 'Canottieri', localidad: 'Tigre').save(failOnError: true, flush: true)
 		when: 'creo otro club con el mismo nombre y localidad'
-			new Club(nombre: 'Canottieri', localidad: 'Tigre').save(failOnError: true, flush: true)
+			Club.build(nombre: 'Canottieri', localidad: 'Tigre')
 		then:
 			Club.findAll().size() == 1
-			thrown(ValidationException)
+			Exception ex = thrown(Exception)
+			ex.message.contains("Club.nombre.unique")
 	}
 	
 	def 'no deberia permitir crear un club con email incorrecto'(){

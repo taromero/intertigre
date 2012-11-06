@@ -40,6 +40,7 @@ class Jugador extends SecUser{
 		telefono nullable:false
 		nacimiento nullable:false
 		club nullable:false
+		urlImagen nullable: true
 	}
 
 	def List<Equipo> getEquipos(){

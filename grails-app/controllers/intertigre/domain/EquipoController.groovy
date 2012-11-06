@@ -69,7 +69,7 @@ class EquipoController extends BaseDomainController{
 		def loggedUser = getLoggedUser()
 		equipoInstance.club = loggedUser.club
 		loggedUser.club.equipos.add(equipoInstance)
-        if (!equipoInstance.save(flush: true)) {
+        if (!equipoInstance.save(flush: true, failOnError: true)) {
             render(view: "create", model: [equipoInstance: equipoInstance])
             return
         }

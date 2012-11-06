@@ -96,7 +96,7 @@ grails.gorm.default.constraints = {
 //	email email:true, unique:true, blank: false
 //	nombre blank:false
 //	sexo inList:['M', 'F']
-	'*'(nullable:true)
+//	'*'(nullable:true)
 }
 
 //grails.gorm.failOnError = true

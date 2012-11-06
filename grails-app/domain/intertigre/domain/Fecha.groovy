@@ -23,6 +23,14 @@ class Fecha implements Comparable<Fecha>{
 	Boolean formacionIncorrectaVisitante = false
 	Boolean wo = false
 
+	static constraints = {
+		single1 nullable: true
+		single2 nullable: true
+		doble nullable: true
+		grupo nullable: true
+		fixture nullable: true
+	}
+	
 	def beforeDelete() {
 		if(aprobadoPorRival || aprobadoPorAdmin || desaprobadoPorRival){
 			throw new UnsupportedOperationException('Delete not allowed')	

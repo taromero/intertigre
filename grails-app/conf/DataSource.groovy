@@ -17,7 +17,7 @@ environments {
     }
     test {
         dataSource {
-//            dbCreate = "update"
+//            dbCreate = "create-drop"
 //            url = "jdbc:h2:mem:testDb;MVCC=TRUE"
 			driverClassName = "org.postgresql.Driver"
 			username = "postgres"

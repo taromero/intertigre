@@ -92,11 +92,9 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 	
 	def 'obtener los equipos de mi club'() {
 		given: 'un jugador de un club. El club tiene 4 equipos'
-			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't')
 			def equiposClubes = df.crearXCantidadEquiposDeCategoriaDeXClubesDistintos(4)
-			equiposClubes.equipos.each { it.save(failOnError:true) }
-			equiposClubes.clubes.get(0).save(flush: true, failOnError:true)
-			loggedUser.club = equiposClubes.equipos.get(0).club
+			def club = equiposClubes.equipos.get(0).club
+			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't', club: club)
 		when: 'pido los equipos del club'
 			controller.listEquiposClub()
 		then: 'me debe traer los equipos'
@@ -106,8 +104,7 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 	def 'crear equipo'(){
 		given: 'un usuario loggeado'
 			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't', dni: '1', club: df.crearClubCanotto())
-			def categoria = new Categoria(nombre: '+19', sexo: 'M', edadLimiteInferior: 19, edadLimiteSuperior: 25)
-							.save(failOnError: true, flush: true)
+			def categoria = Categoria.build(nombre: '+19', sexo: 'M', edadLimiteInferior: 19, edadLimiteSuperior: 25)
 		when: 'creo un equipo nuevo'
 			controller.params.categoria = ['id': categoria.id]
 			controller.params.jerarquia = 'A'

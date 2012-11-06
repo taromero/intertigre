@@ -1,9 +1,9 @@
 package intertigre.controllers
 
 import grails.plugin.spock.IntegrationSpec
-import grails.plugins.springsecurity.SpringSecurityService;
+import grails.plugins.springsecurity.SpringSecurityService
 import intertigre.security.SecRole
-import intertigre.test.utils.DomainFactoryTestService;
+import intertigre.test.utils.DomainFactoryTestService
 
 abstract class BaseControllerSpec extends IntegrationSpec{
 	
@@ -26,6 +26,7 @@ abstract class BaseControllerSpec extends IntegrationSpec{
 		controller.metaClass.render = {Map m ->
 		  renderMap = m
 		}
+		grails.buildtestdata.TestDataConfigurationHolder.reset()
 	}
 
 	abstract getController();

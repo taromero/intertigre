@@ -16,7 +16,7 @@ class FixtureServiceSpec extends Specification{
 
 	def 'generateFixture test'(){
 		given: '16 equipos de una categoria, de 7 clubes distintos'
-			def categoria = new Categoria(nombre: 'libre', edadLimiteInferior: 5, edadLimiteSuperior: 1000, sexo: 'M')
+			def categoria = Categoria.build(nombre: 'libre', edadLimiteInferior: 5, edadLimiteSuperior: 1000, sexo: 'M')
 			def clubesEquipos = domainFactoryTestService.crearXCantidadEquiposDeCategoriaDeXClubesDistintos(16, categoria, 7)
 			List<Equipo> equipos = clubesEquipos.equipos
 			List<Club> clubes = clubesEquipos.clubes
@@ -226,7 +226,7 @@ class FixtureServiceSpec extends Specification{
 
 	def 'devuelve fechas disponibles de acuerdo a preferencias de horarios de los clubes'() {
 		given: '2 equipos'
-			def equipos = domainFactoryTestService.crearXCantidadEquiposDeCategoriaDeXClubesDistintos(2, new Categoria(), 2).equipos
+			def equipos = domainFactoryTestService.crearXCantidadEquiposDeCategoriaDeXClubesDistintos(2, Categoria.build(), 2).equipos
 			def e1 = equipos.get(0)
 			def e2 = equipos.get(1)
 			e1.club.horariosPreferidosParaLocal = horariosE1

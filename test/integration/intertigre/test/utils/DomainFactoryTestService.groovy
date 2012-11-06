@@ -34,15 +34,14 @@ class DomainFactoryTestService {
 	}
 
 	def Map crearXCantidadEquiposDeCategoriaDeXClubesDistintos(Integer cantidad, Categoria categoria = null, Integer cantClubes = 1){
-		categoria = categoria ?: new Categoria().save()
+		categoria = categoria ?: Categoria.build()
 		List<Equipo> equipos = new ArrayList<Equipo>()
 		def clubes = []
 		cantClubes.times { i -> clubes.add(Club.build(triosDeCanchasDisponibles: 1, nombre: 'club' + i)) }
 		def clubIndex = 0
 		for(i in 1..cantidad){
 			def club = clubes.get(clubIndex)
-			def equipo = new Equipo(categoria: categoria, club: club)
-			equipo.id = i
+			def equipo = Equipo.build(categoria: categoria, club: club)
 			equipos.add(equipo)
 			club.equipos.add(equipo)
 			clubIndex++
@@ -52,10 +51,11 @@ class DomainFactoryTestService {
 	}
 	
 	def Equipo crearEquipoAPartirDeNombres(String... nombres){
+		def canotto = crearClubCanotto()
 		def jugadores = []
 		nombres.eachWithIndex{
 			nombre, i ->
-			jugadores.add(Jugador.build(nombre: nombre, dni: i))
+			jugadores.add(Jugador.build(nombre: nombre, dni: i, club: canotto))
 		}
 		return crearEquipoCanotto(jugadores)
 	}
@@ -68,7 +68,7 @@ class DomainFactoryTestService {
 	}
 	
 	def Club crearClubCanotto(){
-		def club = Club.find { nombre == 'Canottieri' && localidad == 'Tigre' }
+		def club = Club.findAll().find { it.nombre == 'Canottieri' && it.localidad == 'Tigre' }
 		return  club ?: new Club(nombre: 'Canottieri', localidad: 'Tigre', direccion: 'Mitre 123',
 							email: 'canottieri@gmail.com', telefono: 1234, triosDeCanchasDisponibles: 1).save(failOnError: true, flush:true)
 	}
@@ -77,6 +77,12 @@ class DomainFactoryTestService {
 		def club = Club.findAll().find { it.nombre == 'El Chasqui' && it.localidad == 'El Talar' }
 		return club ?: new Club(nombre: 'El Chasqui', localidad: 'El Talar', direccion: 'Belgrano 467',
 					email: 'elchasqui@gmail.com', telefono: 9085, triosDeCanchasDisponibles: 1).save(failOnError: true, flush:true)
+	}
+	
+	def Club crearClubNahuel(){
+		def club = Club.findAll().find { it.nombre == 'Nahuel' && it.localidad == 'Tigre' }
+		return club ?: new Club(nombre: 'Nahuel', localidad: 'Tigre', direccion: 'Lavalle 467',
+				email: 'nahuel@gmail.com', telefono: 9084, triosDeCanchasDisponibles: 1).save(failOnError: true, flush:true)
 	}
 	
 	def Equipo crearEquipoCanotto(List<Jugador> jugadores){
@@ -98,20 +104,22 @@ class DomainFactoryTestService {
 			]
 		}
 
-		def equipo = new Equipo(club: canotto.save(), categoria: new Categoria(nombre: '+19', sexo: 'M').save(), jerarquia: 'A', capitan: jugadores.get(0), estaConfirmado: false)
-
-		def itemsListaBuenaFe = new TreeSet()
-
-		jugadores.eachWithIndex { jugador, index -> 
-										itemsListaBuenaFe.add(new ItemListaBuenaFe(equipo: equipo, jugador: jugador, posicion: index)) 
-										jugador.save(failOnError:true)		
-								}
+		def equipo = setUpEquipo(jugadores, canotto)
 		
-		itemsListaBuenaFe.each { it.jugador.itemsListasBuenaFe.add(it) }
-		
-		equipo.itemsListaBuenaFe = itemsListaBuenaFe;
-		
-		equipo.save(failOnError: true, flush:true)
+//		def equipo = new Equipo(club: canotto.save(), categoria: Categoria.build(nombre: '+19', sexo: 'M'), jerarquia: 'A', capitan: jugadores.get(0), estaConfirmado: false)
+//
+//		def itemsListaBuenaFe = new TreeSet()
+//
+//		jugadores.eachWithIndex { jugador, index -> 
+//										itemsListaBuenaFe.add(new ItemListaBuenaFe(equipo: equipo, jugador: jugador, posicion: index)) 
+//										jugador.save(failOnError:true)		
+//								}
+//		
+//		itemsListaBuenaFe.each { it.jugador.itemsListasBuenaFe.add(it) }
+//		
+//		equipo.itemsListaBuenaFe = itemsListaBuenaFe;
+//		
+//		equipo.save(failOnError: true, flush:true)
 		
 		return equipo
 	}
@@ -130,23 +138,27 @@ class DomainFactoryTestService {
 							dni: '87654325', email: 'moya@gmail.com', password: 'm')
 		]
 
-		def equipo = new Equipo(club: elChasqui, categoria: new Categoria(nombre: '+19', sexo: 'M').save(), jerarquia: 'A', capitan: jugadores.get(0), estaConfirmado: false)
-
-		def itemsListaBuenaFe = new TreeSet()
-
-		jugadores.eachWithIndex { jugador, index -> 
-										itemsListaBuenaFe.add(new ItemListaBuenaFe(equipo: equipo, jugador: jugador, posicion: index)) 
-										jugador.save(failOnError:true)
-								}
-
-		equipo.itemsListaBuenaFe = itemsListaBuenaFe;
-
-		equipo.save(failOnError: true, flush: true)
+		def equipo = setUpEquipo(jugadores, elChasqui)
+		
+//		def equipo = new Equipo(club: elChasqui, categoria: new Categoria(nombre: '+19', sexo: 'M').save(), jerarquia: 'A', capitan: jugadores.get(0), estaConfirmado: false)
+//
+//		def itemsListaBuenaFe = new TreeSet()
+//
+//		jugadores.eachWithIndex { jugador, index -> 
+//										itemsListaBuenaFe.add(new ItemListaBuenaFe(equipo: equipo, jugador: jugador, posicion: index)) 
+//										jugador.save(failOnError:true)
+//								}
+//
+//		equipo.itemsListaBuenaFe = itemsListaBuenaFe;
+//
+//		equipo.save(failOnError: true, flush: true)
 		
 		return equipo
 	}
 
-	private void setUpEquipo(Equipo equipo, jugadores){
+	private Equipo setUpEquipo(jugadores, club){
+		def equipo = new Equipo(club: club, categoria: Categoria.build(nombre: '+19', sexo: 'M'), jerarquia: 'A', capitan: jugadores.get(0), estaConfirmado: false)
+		
 		def itemsListaBuenaFe = new TreeSet()
 		
 		jugadores.eachWithIndex { jugador, index ->
@@ -157,11 +169,12 @@ class DomainFactoryTestService {
 		equipo.itemsListaBuenaFe = itemsListaBuenaFe;
 
 		equipo.save(failOnError: true, flush: true)
+		
+		return equipo
 	}
 	
 	def Equipo crearEquipoNahuel(){
-		def nahuel = new Club(nombre: 'Nahuel', localidad: 'Tigre', direccion: 'Lavalle 467',
-				email: 'nahuel@gmail.com', telefono: 9084).save()
+		def nahuel = crearClubNahuel()
 
 		def jugadores = [
 			Jugador.build(club: nahuel, sexo: 'M', nacimiento: new DateTime(1990,1,8,0,0,0).toDate(), nombre: 'Robin', apellido: 'Soderling', 
@@ -174,9 +187,7 @@ class DomainFactoryTestService {
 							dni: '32154325', email: 'hrbati@gmail.com')
 		]
 
-		def equipo = new Equipo(club: nahuel, categoria: new Categoria(nombre: '+19', sexo: 'M').save(), jerarquia: 'A', capitan: jugadores.get(0), estaConfirmado: false)
-
-		setUpEquipo(equipo, jugadores)
+		def equipo = setUpEquipo(jugadores, nahuel)
 		
 		return equipo
 	}

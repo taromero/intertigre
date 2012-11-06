@@ -2,7 +2,6 @@ package intertigre.domain
 import grails.plugin.spock.IntegrationSpec
 import grails.validation.ValidationException
 
-import org.hibernate.impl.SessionImpl;
 import org.joda.time.DateTime
 
 class JugadorSpec extends IntegrationSpec{
@@ -34,9 +33,13 @@ class JugadorSpec extends IntegrationSpec{
 		given: 'un jugador con dni x'
 			Jugador.build(dni: '1')
 		when: 'creo otro jugador con el mismo dni'
-			Jugador.build(dni: '1')
+			Jugador j = Jugador.buildWithoutSave(dni: '1')
+			j.club.save(flush: true, failOnError: true)
+			j.save(flush: true, failOnError: true)
 		then:
 			Jugador.findAll().size() == 1
+			def ex = thrown(ValidationException)
+			ex.message.contains('Jugador.dni.unique.error')
 	}
 	
 	def 'no deberia dejar crear un jugador con atributos nulos'(){

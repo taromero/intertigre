@@ -1,11 +1,12 @@
 
-import org.joda.time.DateTime
-
-import intertigre.domain.Categoria;
+import intertigre.domain.Categoria
+import intertigre.domain.Fixture
 import intertigre.domain.Jugador
 import intertigre.domain.Notificacion
 import intertigre.security.SecRole
 import intertigre.security.SecUserSecRole
+
+import org.joda.time.DateTime
 
 class BootStrap {
 
@@ -30,10 +31,11 @@ class BootStrap {
 					
 					domainFactoryService.crearCategorias()
 					domainFactoryService.crearClubes()
-					domainFactoryService.crearXCantidadEquiposDeCategoria(35, Categoria.find{ nombre == '+19' && sexo == 'M' })
+					domainFactoryService.crearXCantidadEquiposDeCategoria(35, Categoria.find{ nombre == '+25' && sexo == 'M' })
 					domainFactoryService.crearEquipoMas19MCanotto()
 					domainFactoryService.crearEquipoMas19MElChasqui()
-					fixtureService.generarFixture(Categoria.find{ nombre == '+25' && sexo == 'M' }).save()
+					Fixture fixture = fixtureService.generarFixture(Categoria.find{ nombre == '+19' && sexo == 'M' })
+					fixture.save()
 					
 					def tomas = Jugador.findByUsername('canotto90@gmail.com')
 					SecUserSecRole.create tomas, adminRole

@@ -53,7 +53,7 @@ grails.project.dependency.resolution = {
         build ":tomcat:$grailsVersion"
 		test ":spock:0.6"
 		compile ":spring-security-core:1.2.7.1"
-		test ":build-test-data:2.0.3"
+		compile ":build-test-data:2.0.3"
 		compile ":mail:1.0"
 		compile ":lesscss-resources:1.3.0.3"
     }

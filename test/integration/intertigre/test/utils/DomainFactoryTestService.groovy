@@ -106,21 +106,6 @@ class DomainFactoryTestService {
 
 		def equipo = setUpEquipo(jugadores, canotto)
 		
-//		def equipo = new Equipo(club: canotto.save(), categoria: Categoria.build(nombre: '+19', sexo: 'M'), jerarquia: 'A', capitan: jugadores.get(0), estaConfirmado: false)
-//
-//		def itemsListaBuenaFe = new TreeSet()
-//
-//		jugadores.eachWithIndex { jugador, index -> 
-//										itemsListaBuenaFe.add(new ItemListaBuenaFe(equipo: equipo, jugador: jugador, posicion: index)) 
-//										jugador.save(failOnError:true)		
-//								}
-//		
-//		itemsListaBuenaFe.each { it.jugador.itemsListasBuenaFe.add(it) }
-//		
-//		equipo.itemsListaBuenaFe = itemsListaBuenaFe;
-//		
-//		equipo.save(failOnError: true, flush:true)
-		
 		return equipo
 	}
 	
@@ -140,24 +125,11 @@ class DomainFactoryTestService {
 
 		def equipo = setUpEquipo(jugadores, elChasqui)
 		
-//		def equipo = new Equipo(club: elChasqui, categoria: new Categoria(nombre: '+19', sexo: 'M').save(), jerarquia: 'A', capitan: jugadores.get(0), estaConfirmado: false)
-//
-//		def itemsListaBuenaFe = new TreeSet()
-//
-//		jugadores.eachWithIndex { jugador, index -> 
-//										itemsListaBuenaFe.add(new ItemListaBuenaFe(equipo: equipo, jugador: jugador, posicion: index)) 
-//										jugador.save(failOnError:true)
-//								}
-//
-//		equipo.itemsListaBuenaFe = itemsListaBuenaFe;
-//
-//		equipo.save(failOnError: true, flush: true)
-		
 		return equipo
 	}
 
 	private Equipo setUpEquipo(jugadores, club){
-		def equipo = new Equipo(club: club, categoria: Categoria.build(nombre: '+19', sexo: 'M'), jerarquia: 'A', capitan: jugadores.get(0), estaConfirmado: false)
+		def equipo = new Equipo(club: club, categoria: Categoria.build(nombre: '+25', sexo: 'M'), jerarquia: 'A', capitan: jugadores.get(0), estaConfirmado: false)
 		
 		def itemsListaBuenaFe = new TreeSet()
 		

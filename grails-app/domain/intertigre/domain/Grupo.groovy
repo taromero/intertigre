@@ -7,6 +7,10 @@ class Grupo {
 	Fixture fixture
 	String nombre
 
+	static constraints = {
+		fixture nullable: true
+	}
+	
 	def String toString(){
 		return nombre
 	}

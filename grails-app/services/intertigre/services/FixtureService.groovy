@@ -23,7 +23,7 @@ class FixtureService {
 	def Fixture generarFixture(Categoria categoria, maxEquiposPorGrupo = MAX_EQUIPOS_POR_GRUPO, LocalDate inicio = INICIO, LocalDate fin = FIN, List<BigDecimal> horarios = HORARIOS){
 		def equipos = Equipo.findAllByCategoria(categoria)
 		Fixture fixture =  this.generarFixture(categoria, equipos, maxEquiposPorGrupo, inicio, fin, horarios)
-		fixture.grupos.each{ it.save() }
+		fixture.grupos.each{ it.save(flush: true, failOnError: true) }
 
 		return fixture
 	}
@@ -50,7 +50,8 @@ class FixtureService {
 				for(visitante in equiposRivalesOrdenados){
 					if(!hayFechaEntreEquipos(local, visitante)){
 						def fecha = new Fecha(categoria: categoria, grupo: grupo,equipoLocal: local, equipoVisitante: visitante,
-									fechaDeJuego: getDiaHorarioDisponibleParaAmbos(local, visitante, diasJugables).toDate())
+									fechaDeJuego: getDiaHorarioDisponibleParaAmbos(local, visitante, diasJugables).toDate(), 
+									fechaSubidaResultado: new Date())
 						agregoFechaAListaYaEquiposYaGrupo(fechas, fecha, local, visitante, grupo)
 						cantidadLocalias++
 					}
@@ -61,7 +62,7 @@ class FixtureService {
 			}
 			cantGruposTratados++
 		}
-		return new Fixture(fechas: fechas, grupos: grupos)
+		return new Fixture(fechas: fechas, grupos: grupos, categoria: categoria)
 	}
 
 	private List<Equipo> darlePrioridadALosEquiposQueNoVisito(Equipo local, equiposGrupo){

@@ -116,8 +116,7 @@ class JugadorControllerSpec extends BaseControllerSpec{
 	
 	def 'crear un jugador'(){
 		given: 'un usuario loggeado'
-			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't',
-										role: role, dni: '1', club: df.crearClubCanotto())
+			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't', dni: '1', club: df.crearClubCanotto())
 			SecUserSecRole.create loggedUser, roleLoggedUser
 		when: 'crea un jugador nuevo'
 			controller.params.nacimiento_day = '03'
@@ -139,7 +138,7 @@ class JugadorControllerSpec extends BaseControllerSpec{
 			jugadorNuevo.username == usernameCorregido
 			jugadorNuevo.password != 't'
 			jugadorNuevo.password == springSecurityService.encodePassword('t')
-			jugadorNuevo.role == (role) ? 'Jugador normal' : role
+			jugadorNuevo.role == ([null, ''].contains(role) ? 'Jugador normal' : role)
 			jugadorNuevo.dni == '2'
 			jugadorNuevo.authority == rolePosta
 		where:
@@ -151,6 +150,9 @@ class JugadorControllerSpec extends BaseControllerSpec{
 			'Pepe@gmail.com' | 'pepe@gmail.com'  | 'Capitan club'    | roleCapitanClub   | roleAdmin
 			'Pepe@gmail.com' | 'pepe@gmail.com'  | 'Administrador'   | roleAdmin         | roleAdmin
 			'Pepe@gmail.com' | 'pepe@gmail.com'  | ''                | roleJugador       | roleAdmin
+			'Pepe@gmail.com' | 'pepe@gmail.com'  | null              | roleJugador       | roleAdmin
+			'Pepe@gmail.com' | 'pepe@gmail.com'  | null              | roleJugador       | roleCapitanEquipo
+			'Pepe@gmail.com' | 'pepe@gmail.com'  | null              | roleJugador       | roleCapitanClub
 	}
 	
 	

@@ -48,6 +48,7 @@ class JugadorController extends BaseDomainController{
     def save() {
 		params.username = params.username.toLowerCase()
 		
+		params.role = [null, ''].contains(params.role) ? 'Jugador normal' : params.role
         def jugadorInstance = new Jugador(params)
 		if(params.password == null || params.password == ''){
 			flash.message = 'El password no puede estar vacio'

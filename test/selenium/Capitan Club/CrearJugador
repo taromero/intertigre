@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:8080/" />
+<title>CrearJugador</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">CrearJugador</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/intertigre/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Jugadores</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Inscribir jugador</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=username</td>
+	<td>german_piloto@gmail.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=password</td>
+	<td>g</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=passwordConfirm</td>
+	<td>g</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=dni</td>
+	<td>123456745</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=nombre</td>
+	<td>German</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=apellido</td>
+	<td>Patelepen</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=sexo</td>
+	<td>label=M</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=nacimiento_day</td>
+	<td>label=8</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=nacimiento_month</td>
+	<td>label=January</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=nacimiento_year</td>
+	<td>label=1990</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=telefono</td>
+	<td>1234</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=urlImagen</td>
+	<td>https://fbcdn-sphotos-d-a.akamaihd.net/hphotos-ak-ash4/396512_4752541177484_2036201470_n.jpg</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=create</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

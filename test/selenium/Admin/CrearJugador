@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:8080/" />
+<title>CrearJugadorConTodosLosDatos</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">CrearJugadorConTodosLosDatos</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/intertigre/;jsessionid=15C305BBC22A6B3159EDCBA28398FFEE</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Jugadores</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Inscribir jugador</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=username</td>
+	<td>german_piloto@gmail.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=password</td>
+	<td>g</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=passwordConfirm</td>
+	<td>g</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=role</td>
+	<td>label=Jugador normal</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=dni</td>
+	<td>123456734</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=nombre</td>
+	<td>German</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=apellido</td>
+	<td>Patelepen</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=sexo</td>
+	<td>label=M</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=nacimiento_day</td>
+	<td>label=8</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=nacimiento_month</td>
+	<td>label=March</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=nacimiento_month</td>
+	<td>label=January</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=nacimiento_year</td>
+	<td>label=1990</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=telefono</td>
+	<td>123456677</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=urlImagen</td>
+	<td>https://fbcdn-sphotos-f-a.akamaihd.net/hphotos-ak-ash4/296347_4748211269239_787599150_n.jpg</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=create</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

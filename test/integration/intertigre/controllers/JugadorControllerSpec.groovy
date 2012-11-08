@@ -153,8 +153,8 @@ class JugadorControllerSpec extends BaseControllerSpec{
 			'Pepe@gmail.com' | 'pepe@gmail.com'  | ''                | roleJugador       | roleAdmin
 	}
 	
-	//Este test tiene que ser funcional
-	@Ignore()
+	
+	
 	def 'caso no permitido, crear un jugador'(){
 		given: 'un usuario loggeado'
 			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't',

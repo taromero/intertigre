@@ -95,6 +95,11 @@ class JugadorController extends BaseDomainController{
 	@Secured(['ROLE_CAPITAN_EQUIPO'])
     def edit() {
         def jugadorInstance = Jugador.get(params.id)
+		if(jugadorInstance != getLoggedUser() && !esAdmin()){
+			flash.message = 'Solo podes editar tus datos'
+			redirect (action: "show", model: [jugadorInstance: jugadorInstance])
+			return
+		}
         this.checkIsUsuarioEsDelClub(Club.get(jugadorInstance.club.id))
 
         if (!jugadorInstance) {

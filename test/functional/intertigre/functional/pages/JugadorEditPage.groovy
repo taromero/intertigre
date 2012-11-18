@@ -6,5 +6,11 @@ class JugadorEditPage extends Page{
 	static url = 'jugador/edit/'
 	static at = { waitFor { title == 'Edit Jugador' } }
 	
-	static content = { }
+	static content = { 
+		dniField { $('#dni') }
+		passwordField { $('#password') }
+		passwordConfirmField { $('#passwordConfirm') }
+		usernameField { $('#username') }
+		submitButton { $('.save') }
+	}
 }

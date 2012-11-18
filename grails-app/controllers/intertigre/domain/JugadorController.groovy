@@ -78,10 +78,9 @@ class JugadorController extends BaseDomainController{
         redirect(action: "show", id: jugadorInstance.id)
     }
 	
-	@Secured(['ROLE_CAPITAN_EQUIPO'])
+	@Secured(['ROLE_JUGADOR'])
     def show() {
         def jugadorInstance = Jugador.get(params.id) ?: getLoggedUser()
-        this.checkIsUsuarioEsDelClub(Club.get(jugadorInstance.club.id))
 
         if (!jugadorInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [message(code: 'jugador.label', default: 'Jugador'), params.id])
@@ -92,7 +91,7 @@ class JugadorController extends BaseDomainController{
         [jugadorInstance: jugadorInstance]
     }
 
-	@Secured(['ROLE_CAPITAN_EQUIPO'])
+	@Secured(['ROLE_JUGADOR'])
     def edit() {
         def jugadorInstance = Jugador.get(params.id)
 		if(jugadorInstance != getLoggedUser() && !esAdmin()){
@@ -100,7 +99,6 @@ class JugadorController extends BaseDomainController{
 			redirect (action: "show", model: [jugadorInstance: jugadorInstance])
 			return
 		}
-        this.checkIsUsuarioEsDelClub(Club.get(jugadorInstance.club.id))
 
         if (!jugadorInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'jugador.label', default: 'Jugador'), params.id])

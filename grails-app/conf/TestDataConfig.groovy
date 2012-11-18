@@ -5,6 +5,7 @@ testDataConfig {
 			def i = 0
 			email = { "a${i++}@b.com" }
 			role = 'Jugador normal'
+			dni = { "${i++}" }
 //			club = Club.build() no puedo hacer que esto funcione
 		}
 		'intertigre.domain.Club' {

@@ -7,6 +7,9 @@ grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
 grails.project.dependency.resolution = {
+	def gebVersion = "0.7.2"
+	def seleniumVersion = "2.21.0"
+	
     // inherit Grails' default dependencies
     inherits("global") {
         // uncomment to disable ehcache
@@ -36,6 +39,13 @@ grails.project.dependency.resolution = {
 		test 'mysql:mysql-connector-java:5.1.18'
 		runtime 'postgresql:postgresql:8.4-702.jdbc3'
 		compile 'joda-time:joda-time:2.1'
+		
+		test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
+			exclude "xml-apis"
+		}
+		test("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion")
+		test("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion")
+		test "org.codehaus.geb:geb-spock:$gebVersion"
     }
 
     plugins {
@@ -51,6 +61,7 @@ grails.project.dependency.resolution = {
         //runtime ":yui-minify-resources:0.1.4"
 
         build ":tomcat:$grailsVersion"
+		test ":geb:0.9.0-RC-1"
 		test ":spock:0.6"
 		compile ":spring-security-core:1.2.7.1"
 		compile ":build-test-data:2.0.3"

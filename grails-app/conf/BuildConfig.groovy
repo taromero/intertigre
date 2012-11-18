@@ -40,11 +40,12 @@ grails.project.dependency.resolution = {
 		runtime 'postgresql:postgresql:8.4-702.jdbc3'
 		compile 'joda-time:joda-time:2.1'
 		
-		test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
+		//Si pongo las dependencias de selenium en 'test', la aplicacion funciona sin problemas pero eclipse tira un par de errores
+		compile("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
 			exclude "xml-apis"
 		}
-		test("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion")
-		test("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion")
+		compile("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion")
+		compile("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion")
 		test "org.codehaus.geb:geb-spock:$gebVersion"
     }
 

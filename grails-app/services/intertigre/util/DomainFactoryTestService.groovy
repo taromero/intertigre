@@ -1,4 +1,4 @@
-package intertigre.test.utils
+package intertigre.util
 
 import java.util.List;
 
@@ -33,21 +33,50 @@ class DomainFactoryTestService {
 		return equipo
 	}
 
-	def Map crearXCantidadEquiposDeCategoriaDeXClubesDistintos(Integer cantidad, Categoria categoria = null, Integer cantClubes = 1){
+	def Map crearXCantidadEquiposDeCategoriaDeXClubesDistintos(Integer cantidadEquipos, Categoria categoria = null, Integer cantClubes = 1){
 		categoria = categoria ?: Categoria.build()
 		List<Equipo> equipos = new ArrayList<Equipo>()
 		def clubes = []
-		cantClubes.times { i -> clubes.add(Club.build(triosDeCanchasDisponibles: 1, nombre: 'club' + i)) }
+		cantClubes.times { clubes.add(Club.build(triosDeCanchasDisponibles: 1)) }
 		def clubIndex = 0
-		for(i in 1..cantidad){
+		cantidadEquipos.times {
 			def club = clubes.get(clubIndex)
-			def equipo = Equipo.build(categoria: categoria, club: club)
+			def jerarquia = getJerarquiaDisponibleParaElClubCategoria(club, categoria)
+			def equipo = Equipo.build(categoria: categoria, club: club, jerarquia: jerarquia)
 			equipos.add(equipo)
 			club.equipos.add(equipo)
 			clubIndex++
 			if(clubIndex == cantClubes){ clubIndex = 0 }
 		}
 		return [equipos: equipos, clubes: clubes]
+	}
+	
+	private String getJerarquiaDisponibleParaElClubCategoria(club, categoria) {
+		def jerarquias = Equipo.findAll().findAll { it.categoria == categoria && it.club == club }*.jerarquia
+		def jerarquiaPosibles = getPosiblesJerarquias()
+		def jerarquia = jerarquiaPosibles.get(0)
+		for(int i = 1; jerarquias.contains(jerarquia); i++) {
+			jerarquia = jerarquiaPosibles.get(i)
+		}
+		return jerarquia
+	}
+	
+	private List<String> getPosiblesJerarquias(){
+		List<String> jerarquias = []
+		char jerarquia = 'A'
+        char jerarquiaAux = jerarquia
+        24.times { i -> 
+            jerarquias.add(jerarquiaAux.toString())
+            jerarquiaAux = jerarquia + 1
+            jerarquia++
+        }
+        jerarquia = 'A'
+        24.times { i ->
+            jerarquias.add(jerarquiaAux.toString() + jerarquiaAux.toString())
+            jerarquiaAux = jerarquia + 1
+            jerarquia++
+        }
+		return jerarquias
 	}
 	
 	def Equipo crearEquipoAPartirDeNombres(String... nombres){

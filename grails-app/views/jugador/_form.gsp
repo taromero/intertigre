@@ -7,7 +7,7 @@
 		<g:message code="jugador.username.label" default="Usuario (usar tu email)" />
 		
 	</label>
-	<g:field type="email" name="username" value="${jugadorInstance?.username}"/>
+	<g:field type="email" name="username" id="username"value="${jugadorInstance?.username}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: jugadorInstance, field: 'password', 'error')} ">
@@ -15,7 +15,7 @@
 		<g:message code="jugador.password.label" default="Password" />
 		
 	</label>
-	<g:field type="password" name="password" name="password"/>
+	<g:field type="password" name="password" name="password" id="password"/>
 </div>
 
 <div class="fieldcontain">

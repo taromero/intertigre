@@ -100,6 +100,7 @@ grails.gorm.default.constraints = {
 }
 
 //grails.gorm.failOnError = true
+//grails.gorm.autoFlush = true
 
 // Added by the Spring Security Core plugin:
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'intertigre.security.SecUser'

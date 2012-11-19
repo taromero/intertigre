@@ -17,6 +17,7 @@ class LoginControllerGebSpec extends GebReportingSpec{
 			j.save(flush: true, failOnError: true)
 		when: 'voy a la pantalla de login e ingreso los datos del usuario'
 			to LoginPage
+			at LoginPage
 		    emailField.value(email)
 			passwordField.value(password)
 			submitButton.click()
@@ -31,6 +32,7 @@ class LoginControllerGebSpec extends GebReportingSpec{
 			Jugador.build(email: email, password: password)
 		when: 'voy a la pantalla de login e ingreso datos incorrectos'
 			to LoginPage
+			at LoginPage
 			emailField.value(email + 'blah')
 			passwordField.value(password)
 			submitButton.click()

@@ -14,7 +14,6 @@ class LoginControllerGebSpec extends GebReportingSpec{
 			def email = 'a@b.com'
 			def password = 'p'
 			def j = Jugador.build(email: email, password: password)
-			j.save(flush: true, failOnError: true)
 		when: 'voy a la pantalla de login e ingreso los datos del usuario'
 			to LoginPage
 			at LoginPage

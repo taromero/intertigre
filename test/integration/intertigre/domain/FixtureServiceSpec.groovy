@@ -1,14 +1,13 @@
 package intertigre.domain
 
+import grails.plugin.spock.IntegrationSpec
 import intertigre.services.FixtureService
-import intertigre.test.utils.DomainFactoryTestService
+import intertigre.util.DomainFactoryTestService
 
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 
-import spock.lang.Specification
-
-class FixtureServiceSpec extends Specification{
+class FixtureServiceSpec extends IntegrationSpec{
 
 	DomainFactoryTestService domainFactoryTestService = new DomainFactoryTestService()
 
@@ -90,7 +89,7 @@ class FixtureServiceSpec extends Specification{
 
 	def 'generateGrupos test'(){
 		given: '16 equipos de una categoria, de 7 clubes distintos'
-			def categoria = new Categoria(nombre: 'libre', edadLimiteInferior: 5, edadLimiteSuperior: 1000, sexo: 'M')
+			def categoria = Categoria.build(nombre: 'libre', edadLimiteInferior: 5, edadLimiteSuperior: 1000, sexo: 'M')
 			List<Equipo> equipos = domainFactoryTestService.crearXCantidadEquiposDeCategoriaDeXClubesDistintos(16, categoria, 7).equipos
 		and: 'una cantidad maxima de equipos por grupo = 6'
 			def equiposPorGrupo = 6

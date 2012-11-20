@@ -22,8 +22,7 @@ class JugadorControllerGebSpec extends GebReportingSpec{
 	def 'un usuario no administrador quiere editar informacion de otro jugador'() {
 		given: 'un usuario no administrador logeado'
 			Jugador usuarioNoAdmin = Jugador.build(password: passwordDefault)
-			SecUserSecRole.create usuarioNoAdmin, role
-			usuarioNoAdmin.save(flush: true, failOnError: true)
+			SecUserSecRole.create(usuarioNoAdmin, role).save()
 			logearse(usuarioNoAdmin.email, passwordDefault)
 		and: 'un usuario x a editar'
 			def jugadorAEditar = Jugador.buildLazy(dni: '2')
@@ -39,12 +38,10 @@ class JugadorControllerGebSpec extends GebReportingSpec{
 	def 'un usuario administrador quiere editar informacion de otro jugador'() {
 		given: 'un usuario administrador logeado'
 			Jugador usuarioNoAdmin = Jugador.build(password: passwordDefault)
-			SecUserSecRole.create usuarioNoAdmin, roleAdmin
-			usuarioNoAdmin.save(flush: true, failOnError: true)
+			SecUserSecRole.create(usuarioNoAdmin, roleAdmin).save()
 			logearse(usuarioNoAdmin.email, passwordDefault)
 		and: 'un usuario x a editar'
 			def jugadorAEditar = Jugador.buildLazy(dni: '2')
-			jugadorAEditar.save(flush: true, failOnError: true)
 		when: 'quiere editar informacion de otro jugador'
 			to JugadorEditPage, jugadorAEditar.id
 		then: 'deberia poder acceder a la pagina de edicion'

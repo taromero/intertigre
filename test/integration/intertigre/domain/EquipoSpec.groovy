@@ -1,12 +1,12 @@
 package intertigre.domain
 
 import grails.plugin.spock.IntegrationSpec
-import intertigre.test.utils.DomainFactoryTestService
+import intertigre.util.DomainFactoryTestService;
 import spock.lang.Ignore
 
 class EquipoSpec extends IntegrationSpec{
 
-	DomainFactoryTestService domainFactoryTestService = new DomainFactoryTestService()
+	DomainFactoryTestService domainFactoryTestService
 	
 	//tengo que lograr que se me cree la fecha con equipo_visitante_id != null
 	@Ignore()
@@ -24,7 +24,7 @@ class EquipoSpec extends IntegrationSpec{
 		given: 'un equipo sin fechas'
 			Equipo canottoTeam = Equipo.build()
 		when: 'intento eliminar el equipo'
-			canottoTeam.delete(flush: true)
+			canottoTeam.delete()
 		then: 'el equipo es eliminado'
 			Equipo.findAll().isEmpty()
 	}

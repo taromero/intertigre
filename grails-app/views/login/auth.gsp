@@ -96,7 +96,7 @@
 		<form action='${postUrl}' method='POST' id='loginForm' class='cssform' autocomplete='off'>
 			<p>
 				<label for='email'>Email:</label>
-				<input type='text' class='text_' name='j_username' id='username'/>
+				<input type='text' class='text_' name='j_username' id='email'/>
 			</p>
 
 			<p>

@@ -170,7 +170,9 @@ class DomainFactoryTestService {
 		equipo.itemsListaBuenaFe = itemsListaBuenaFe;
 
 		equipo.save(failOnError: true, flush: true)
-		
+
+		club.equipos.add(equipo)
+				
 		return equipo
 	}
 	

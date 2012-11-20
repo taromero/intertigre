@@ -118,6 +118,8 @@ class DomainFactoryService {
 
 		equipo.save(failOnError: true, flush: true)
 		
+		club.equipos.add(equipo)
+		
 		return equipo
 	}
 	

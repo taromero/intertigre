@@ -17,16 +17,17 @@ class JugadorControllerGebSpec extends GebReportingSpec{
 	def static roleCapitanClub = SecRole.build(authority: 'ROLE_CAPITAN_CLUB')
 	def static roleCapitanEquipo = SecRole.build(authority: 'ROLE_CAPITAN_EQUIPO')
 	def static roleJugador = SecRole.build(authority: 'ROLE_JUGADOR')
-	
+	def static passwordDefault = 'p'
+		
 	def 'un usuario no administrador quiere editar informacion de otro jugador'() {
-		given: 'un usuario no administrador logeado y otro jugador a editar'
-			def password = 'p'
-			Jugador usuarioNoAdmin = Jugador.build(password: password)
+		given: 'un usuario no administrador logeado'
+			Jugador usuarioNoAdmin = Jugador.build(password: passwordDefault)
 			SecUserSecRole.create usuarioNoAdmin, role
 			usuarioNoAdmin.save(flush: true, failOnError: true)
-			logearse(usuarioNoAdmin.email, password)
+			logearse(usuarioNoAdmin.email, passwordDefault)
+		and: 'un usuario x a editar'
 			def jugadorAEditar = Jugador.buildLazy(dni: '2')
-		when: 'quiere editar informacion de otro jugador'
+		when: 'quiere editar informacion x'
 			to JugadorEditPage, jugadorAEditar.id
 		then: 'no deberia poder acceder a la pagina de edicion, y deberia ser redirigido al show'
 			at JugadorShowPage
@@ -36,12 +37,12 @@ class JugadorControllerGebSpec extends GebReportingSpec{
 	}
 	
 	def 'un usuario administrador quiere editar informacion de otro jugador'() {
-		given: 'un usuario administrador logeado y otro jugador a editar'
-			def password = 'p'
-			Jugador usuarioNoAdmin = Jugador.build(password: password)
+		given: 'un usuario administrador logeado'
+			Jugador usuarioNoAdmin = Jugador.build(password: passwordDefault)
 			SecUserSecRole.create usuarioNoAdmin, roleAdmin
 			usuarioNoAdmin.save(flush: true, failOnError: true)
-			logearse(usuarioNoAdmin.email, password)
+			logearse(usuarioNoAdmin.email, passwordDefault)
+		and: 'un usuario x a editar'
 			def jugadorAEditar = Jugador.buildLazy(dni: '2')
 			jugadorAEditar.save(flush: true, failOnError: true)
 		when: 'quiere editar informacion de otro jugador'

@@ -7,7 +7,7 @@ class LoginPage extends Page{
 	static at = { waitFor { title == "Login" } }
 	
 	static content = {
-		emailField { $('#username') }
+		emailField { $('#email') }
 		passwordField { $('#password') }
 		submitButton { $('#submit') }
 	}

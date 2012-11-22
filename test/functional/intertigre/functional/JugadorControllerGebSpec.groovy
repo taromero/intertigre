@@ -12,12 +12,7 @@ import intertigre.security.SecUserSecRole
 
 import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
-class JugadorControllerGebSpec extends GebReportingSpec{
-	def static roleAdmin = SecRole.build(authority: 'ROLE_ADMIN')
-	def static roleCapitanClub = SecRole.build(authority: 'ROLE_CAPITAN_CLUB')
-	def static roleCapitanEquipo = SecRole.build(authority: 'ROLE_CAPITAN_EQUIPO')
-	def static roleJugador = SecRole.build(authority: 'ROLE_JUGADOR')
-	def static passwordDefault = 'p'
+class JugadorControllerGebSpec extends BaseControllerGebSpec{
 		
 	def 'un usuario no administrador quiere editar informacion de otro jugador'() {
 		given: 'un usuario no administrador logeado'

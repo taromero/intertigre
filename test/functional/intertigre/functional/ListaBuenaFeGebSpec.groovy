@@ -1,13 +1,39 @@
 package intertigre.functional
 
+import intertigre.domain.Jugador
+import intertigre.functional.pages.ListaBuenaFeEditPage
+import intertigre.security.SecUserSecRole
+import intertigre.util.DomainFactoryService
+
+import java.lang.invoke.MethodHandleImpl.BindCaller.T
+
 class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 
-	def 'cambiar las posiciones de la lista de buena fe'() {
-		given: 'un equipo con jugadores'
-		when: 'cambio el orden de la lista'
-		then: 'la lista se actualiza con las posiciones indicadas'
+	DomainFactoryService domainFactoryService = new DomainFactoryService()
+	
+	Jugador admin
+	
+	def setup() {
+		admin = Jugador.build(password: passwordDefault)
+		SecUserSecRole.create(admin, roleAdmin).save()
+		logearse(admin.email, passwordDefault)
 	}
 	
+	def 'cambiar las posiciones de la lista de buena fe'() {
+		given: 'un equipo con jugadores'
+			def equipo = domainFactoryService.crearEquipoMas19MCanotto()
+			domainFactoryService.crearJugadoresLibresCanotto()
+		when: 'cambio el orden de la lista'
+			to ListaBuenaFeEditPage, equipo.id
+			at ListaBuenaFeEditPage
+			def jugadorAMover = $('li#TomasRomero')
+			interact {
+				dragAndDropBy(jugadorAMover, 0, 50)
+			}
+		then: 'la lista se actualiza con las posiciones indicadas'
+			true
+	}
+	/*
 	def 'agregar jugadores a la lista de buena fe'() {
 		given: 'un club con jugadores'
 		and: 'un equipo con jugadores de ese club'
@@ -37,5 +63,5 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 				'que sean de sexo S y pertenezcan a la categoria C'
 		and: 'los jugadores deberian estar ordenados alfabeticamente'
 	}
-	
+*/	
 }

@@ -52,12 +52,4 @@ class JugadorControllerGebSpec extends BaseControllerGebSpec{
 			dniField.text() == '5000'
 	}
 	
-	private void logearse(email, password){
-		to LoginPage
-		at LoginPage
-		emailField.value(email)
-		passwordField.value(password)
-		submitButton.click()
-		at HomePage
-	}
 }

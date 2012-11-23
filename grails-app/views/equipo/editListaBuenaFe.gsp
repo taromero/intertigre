@@ -72,13 +72,17 @@
 				
 				<ul id="jugadoresClub" class="connectedSortable" style="float: left;height: 300px;overflow:auto">
 					<g:each in="${jugadoresClub}" var="j">
-						<li id="${j.dni }" title="${j.dni }" class="ui-state-default jugadores jugadoresClub">${j.nombre + ' ' + j.apellido }</li>
+						<li id="${j.nombre + j.apellido }" title="${j.dni }" class="ui-state-default jugadores jugadoresClub">
+							${j.nombre + ' ' + j.apellido }
+						</li>
 					</g:each>
 				</ul>
 
 				<ul id="jugadoresEquipo" class="connectedSortable" style="float: left;height: 300px;overflow:auto">
 					<g:each in="${equipoInstance.itemsListaBuenaFe*.jugador}" var="j">
-						<li id="${j.dni }" title="${j.dni }" class="ui-state-highlight jugadores">${j.nombre + ' ' + j.apellido }</li>
+						<li id="${j.nombre + j.apellido }" title="${j.dni }" class="ui-state-highlight jugadores">
+							${j.nombre + ' ' + j.apellido }
+						</li>
 					</g:each>
 				</ul>
 

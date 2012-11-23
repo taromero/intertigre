@@ -1,7 +1,11 @@
 package intertigre.functional
 
 import geb.spock.GebReportingSpec
+import intertigre.functional.pages.HomePage
+import intertigre.functional.pages.LoginPage
 import intertigre.security.SecRole
+
+import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
 class BaseControllerGebSpec extends GebReportingSpec{
 	def static roleAdmin = SecRole.build(authority: 'ROLE_ADMIN')
@@ -10,4 +14,12 @@ class BaseControllerGebSpec extends GebReportingSpec{
 	def static roleJugador = SecRole.build(authority: 'ROLE_JUGADOR')
 	def static passwordDefault = 'p'
 	
+	def logearse(email, password){
+		to LoginPage
+		at LoginPage
+		emailField.value(email)
+		passwordField.value(password)
+		submitButton.click()
+		at HomePage
+	}
 }

@@ -135,13 +135,13 @@ class DomainFactoryService {
 		return equipo
 	}
 
-	def crearJugadoresLibresCanotto() {
+	def crearJugadoresLibresCanotto(List dnis = [111, 222, 333, 444, 555]) {
 		def canotto = crearClubCanotto()
-		Jugador.build(apellido: 'Djokovic', nombre: 'Novak', club: canotto)
-		Jugador.build(apellido: 'Murray', nombre: 'Andy', club: canotto)
-		Jugador.build(apellido: 'Tsonga', nombre: 'Wilfred', club: canotto)
-		Jugador.build(apellido: 'Ferrer', nombre: 'David', club: canotto)
-		Jugador.build(apellido: 'Almagro', nombre: 'Nicolas', club: canotto)
+		Jugador.build(apellido: 'Djokovic', nombre: 'Novak', dni: dnis.get(0), club: canotto)
+		Jugador.build(apellido: 'Murray', nombre: 'Andy', dni: dnis.get(1), club: canotto)
+		Jugador.build(apellido: 'Tsonga', nombre: 'Wilfred', dni: dnis.get(2), club: canotto)
+		Jugador.build(apellido: 'Ferrer', nombre: 'David', dni: dnis.get(3), club: canotto)
+		Jugador.build(apellido: 'Almagro', nombre: 'Nicolas', dni: dnis.get(4), club: canotto)
 	}
 	
 	def Equipo crearEquipoMas19MElChasqui(){

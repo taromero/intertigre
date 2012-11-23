@@ -125,7 +125,7 @@ class EquipoController extends BaseDomainController{
     def update() {
         def equipoInstance = Equipo.get(params.id)
 		redirectIfNotAllowedEdit(equipoInstance)
-		def listaBuenaFeDnis = params.listaEditada.split(',')
+		def listaBuenaFeDnis = params.listaEditada.replaceAll('dni', '').split(',')
 		
 		def i = 0
 		for(dni in listaBuenaFeDnis){

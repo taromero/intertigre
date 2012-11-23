@@ -1,6 +1,8 @@
 package intertigre.functional
 
+import intertigre.domain.Equipo
 import intertigre.domain.Jugador
+import intertigre.functional.pages.EquipoShowPage
 import intertigre.functional.pages.ListaBuenaFeEditPage
 import intertigre.security.SecUserSecRole
 import intertigre.util.DomainFactoryService
@@ -21,17 +23,22 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 	
 	def 'cambiar las posiciones de la lista de buena fe'() {
 		given: 'un equipo con jugadores'
-			def equipo = domainFactoryService.crearEquipoMas19MCanotto()
+			Equipo equipo = domainFactoryService.crearEquipoMas19MCanotto()
 			domainFactoryService.crearJugadoresLibresCanotto()
 		when: 'cambio el orden de la lista'
 			to ListaBuenaFeEditPage, equipo.id
 			at ListaBuenaFeEditPage
-			def jugadorAMover = $('li#TomasRomero')
+			def jugadorAMover = $("li#dni" + equipo.jugadores.find { it.apellido = 'Romero'}.dni)
 			interact {
 				dragAndDropBy(jugadorAMover, 0, 50)
 			}
+			submitButton.click()
+			at EquipoShowPage
+			def equipoAux = Equipo.findAll().find { it.id == equipo.id }
 		then: 'la lista se actualiza con las posiciones indicadas'
-			true
+			equipo.itemsListaBuenaFe.first().jugador.apellido == 'Del potro'
+			equipo.itemsListaBuenaFe.find { it.jugador.apellido == 'Romero'}.posicion == 2
+			equipo.itemsListaBuenaFe.find { it.jugador.apellido == 'Del Potro'}.posicion == 1
 	}
 	/*
 	def 'agregar jugadores a la lista de buena fe'() {

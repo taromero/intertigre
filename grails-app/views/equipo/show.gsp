@@ -117,7 +117,7 @@
 				<li class="fieldcontain">
 					<span id="itemsListaBuenaFe-label" class="property-label">Lista de Buena Fe</span>
 					<span class="property-value" aria-labelledby="grupo-label"><g:link action="editListaBuenaFe" id="${equipoInstance?.id}">Editar</g:link></span>
-						<table>
+						<table id="listaBuenaFe">
 							<thead>
 								<th>Nombre</th>
 								<th>Ver</th>
@@ -126,7 +126,7 @@
 							<tbody>
 								<g:each in="${equipoInstance.itemsListaBuenaFe*.jugador}" status="i" var="jugador">
 									<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-										<td>${jugador.nombre + ' ' + jugador.apellido }</td>
+										<td class="itemListaBuenaFe">${jugador.nombre + ' ' + jugador.apellido }</td>
 										<td>
 											<span class="property-value" aria-labelledby="fechas-label">
 												<g:link controller="jugador" action="show" id="${jugador.id}">Ver</g:link>

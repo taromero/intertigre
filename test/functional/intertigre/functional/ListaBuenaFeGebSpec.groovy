@@ -33,13 +33,12 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 				dragAndDropBy(jugadorAMover, 0, 50)
 			}
 			submitButton.click()
+		then: 'deberia llevarme a la pagina de show del equipo'
 			at EquipoShowPage
-			def equipoAux = Equipo.findAll().find { it.id == equipo.id }
-		then: 'la lista se actualiza con las posiciones indicadas'
-			equipo.itemsListaBuenaFe.first().jugador.apellido == 'Del potro'
-			equipo.itemsListaBuenaFe.find { it.jugador.apellido == 'Romero'}.posicion == 2
-			equipo.itemsListaBuenaFe.find { it.jugador.apellido == 'Del Potro'}.posicion == 1
+		and: 'la lista se deberia mostrar con las posiciones actualizadas'
+			itemsListaBuenaFeField.findIndexOf { it.text() == 'Juan Martin Del Potro'} < itemsListaBuenaFeField.findIndexOf { it.text() == 'Tomas Romero'}
 	}
+	
 	/*
 	def 'agregar jugadores a la lista de buena fe'() {
 		given: 'un club con jugadores'

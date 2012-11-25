@@ -9,6 +9,7 @@ class ListaBuenaFeEditPage extends Page{
 	static content = { 
 		jugadoresDelClub { $('#jugadoresClub') }
 		jugadoresDelEquipo { $('#jugadoresEquipo') }
+		filtroJugadoresClub { $('#busquedaJugador') }
 		submitButton { $('.save') }
 	}
 }

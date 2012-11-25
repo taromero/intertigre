@@ -24,7 +24,6 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 	def 'cambiar las posiciones de la lista de buena fe'() {
 		given: 'un equipo con jugadores'
 			Equipo equipo = domainFactoryService.crearEquipoMas19MCanotto()
-			domainFactoryService.crearJugadoresLibresCanotto()
 		when: 'cambio el orden de la lista'
 			to ListaBuenaFeEditPage, equipo.id
 			at ListaBuenaFeEditPage
@@ -37,6 +36,23 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 			at EquipoShowPage
 		and: 'la lista se deberia mostrar con las posiciones actualizadas'
 			itemsListaBuenaFeField.findIndexOf { it.text() == 'Juan Martin Del Potro'} < itemsListaBuenaFeField.findIndexOf { it.text() == 'Tomas Romero'}
+	}
+	
+	def 'filtrar jugadores de la lista de propuestos'() {
+		given: 'un club con jugadores'
+			def jugadores = domainFactoryService.crearJugadoresLibresCanotto()
+		and: 'un equipo con jugadores de ese club'
+			Equipo equipo = domainFactoryService.crearEquipoMas19MCanotto()
+		when: 'filtro la lista de jugadores disponibles para agregar con una palabra'
+			to ListaBuenaFeEditPage, equipo.id
+			at ListaBuenaFeEditPage
+			filtroJugadoresClub.value('Tommy') 
+		then: 'se deben mostrar solo los jugadores que pasan el filtro'
+			$('#dni' + jugadores.find { it.apellido == 'Robredo' }.dni).displayed
+			$('#dni' + jugadores.find { it.apellido == 'Haas' }.dni).displayed
+			for(jugador in jugadores.find { it.nombre != 'Tommy' }) {
+				$('#dni' + jugador.dni).displayed == false
+			}
 	}
 	
 	/*
@@ -52,13 +68,6 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 		when: 'saco un jugador de la lista de buena fe'
 		then: 'el equipo no debe poseer mas al jugador'
 		and: 'las posiciones de la lista se deben actualizar'
-	}
-	
-	def 'filtrar jugadores de la lista de propuestos'() {
-		given: 'un club con jugadores'
-		and: 'un equipo con jugadores de ese club'
-		when: 'filtro la lista de jugadores disponibles para agregar con una palabra'
-		then: 'se deben mostrar solo los jugadores que pasan el filtro'
 	}
 	
 	def 'ver jugadores disponibles para agregar al equipo'() {

@@ -113,8 +113,8 @@ class DomainFactoryService {
 	
 	def Equipo crearEquipoMas19MCanotto(jugadores = null){
 		def canotto = crearClubCanotto()
-
-		if(jugadores == null) {
+		def equipo = Equipo.find { club == canotto && categoria.nombre == '+19' && categoria.sexo == 'M' }
+		if(equipo == null || jugadores == null) {
 			jugadores = [
 				Jugador.build(club: canotto, sexo: 'M', nacimiento: new DateTime(1990,3,3,0,0,0).toDate(), nombre: 'Tomas', apellido: 'Romero', 
 							dni: '12345678', email: 'canotto90@gmail.com', password: 't', 
@@ -130,18 +130,31 @@ class DomainFactoryService {
 			]
 		}
 
-		def equipo = setUpEquipo(jugadores, canotto)
-		
+		equipo = setUpEquipo(jugadores, canotto)
 		return equipo
 	}
 
-	def crearJugadoresLibresCanotto(List dnis = [111, 222, 333, 444, 555]) {
+	def List<Jugador> crearJugadoresLibresCanotto(List dnis) {
 		def canotto = crearClubCanotto()
-		Jugador.build(apellido: 'Djokovic', nombre: 'Novak', dni: dnis.get(0), club: canotto)
-		Jugador.build(apellido: 'Murray', nombre: 'Andy', dni: dnis.get(1), club: canotto)
-		Jugador.build(apellido: 'Tsonga', nombre: 'Wilfred', dni: dnis.get(2), club: canotto)
-		Jugador.build(apellido: 'Ferrer', nombre: 'David', dni: dnis.get(3), club: canotto)
-		Jugador.build(apellido: 'Almagro', nombre: 'Nicolas', dni: dnis.get(4), club: canotto)
+		def jugadores
+		if(dnis != null) {
+			jugadores = [
+					Jugador.build(apellido: 'Djokovic', nombre: 'Novak', dni: dnis.get(0), club: canotto),
+					Jugador.build(apellido: 'Robredo', nombre: 'Tommy', dni: dnis.get(1), club: canotto),
+					Jugador.build(apellido: 'Ferrer', nombre: 'David', dni: dnis.get(3), club: canotto),
+					Jugador.build(apellido: 'Almagro', nombre: 'Nicolas', dni: dnis.get(4), club: canotto),
+					Jugador.build(apellido: 'Haas', nombre: 'Tommy', dni: dnis.get(2), club: canotto)
+				]
+		} else {
+			jugadores = [
+					Jugador.build(apellido: 'Djokovic', nombre: 'Novak', club: canotto),
+					Jugador.build(apellido: 'Robredo', nombre: 'Tommy', club: canotto),
+					Jugador.build(apellido: 'Ferrer', nombre: 'David', club: canotto),
+					Jugador.build(apellido: 'Almagro', nombre: 'Nicolas', club: canotto),
+					Jugador.build(apellido: 'Haas', nombre: 'Tommy', club: canotto)
+				]
+		}
+		return jugadores
 	}
 	
 	def Equipo crearEquipoMas19MElChasqui(){

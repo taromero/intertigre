@@ -1,4 +1,5 @@
 
+
 testDataConfig {
     sampleData {
 		'intertigre.domain.Jugador' {
@@ -6,6 +7,7 @@ testDataConfig {
 			email = { "a${i++}@b.com" }
 			role = 'Jugador normal'
 			dni = { "${i++}" }
+			sexo = 'M'
 //			club = Club.build() no puedo hacer que esto funcione
 		}
 		'intertigre.domain.Club' {

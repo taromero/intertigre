@@ -1,5 +1,6 @@
 package intertigre.functional
 
+import intertigre.domain.Club
 import intertigre.domain.Equipo
 import intertigre.domain.Jugador
 import intertigre.functional.pages.EquipoShowPage
@@ -9,17 +10,29 @@ import intertigre.util.DomainFactoryService
 
 import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import spock.lang.Stepwise
+
 class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 
 	DomainFactoryService domainFactoryService = new DomainFactoryService()
 	
-	Jugador admin
+	static Jugador admin
 	
-	def setup() {
+	def setupSpec() {
 		admin = Jugador.build(password: passwordDefault)
 		SecUserSecRole.create(admin, roleAdmin).save()
 		logearse(admin.email, passwordDefault)
 	}
+	
+//	def cleanup() { Tira una excepcion por algo de las transacciones
+//		Equipo.findAll().each { equipo -> 
+//			equipo.club.equipos.remove(equipo)
+//			equipo.delete() 
+//		}
+//	}
 	
 	def 'cambiar las posiciones de la lista de buena fe'() {
 		given: 'un equipo con jugadores'
@@ -37,7 +50,7 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 		and: 'la lista se deberia mostrar con las posiciones actualizadas'
 			itemsListaBuenaFeField.findIndexOf { it.text() == 'Juan Martin Del Potro'} < itemsListaBuenaFeField.findIndexOf { it.text() == 'Tomas Romero'}
 	}
-	
+
 	def 'filtrar jugadores de la lista de propuestos'() {
 		given: 'un club con jugadores'
 			def jugadores = domainFactoryService.crearJugadoresLibresCanotto()
@@ -55,28 +68,53 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 			}
 	}
 	
-	/*
 	def 'agregar jugadores a la lista de buena fe'() {
 		given: 'un club con jugadores'
+			def jugadores = domainFactoryService.crearJugadoresLibresCanotto()
 		and: 'un equipo con jugadores de ese club'
+			Equipo equipo = domainFactoryService.crearEquipoMas19MCanotto()
 		when: 'agrego un jugador nuevo a la lista en la posicion x'
-		then: 'el equipo debe contar con el jugador nuevo en la posicion correcta'
+			to ListaBuenaFeEditPage, equipo.id
+			at ListaBuenaFeEditPage
+			def jugadorAMover = $('#dni' + jugadores.find { it.nombre == 'Novak' }.dni)
+			interact {
+				dragAndDrop(jugadorAMover, jugadoresDelEquipo)
+			}
+			submitButton.click()
+		then: 'deberia llevarme a la pagina de show del equipo'
+			at EquipoShowPage
+		then: 'el equipo debe contar con el jugador nuevo'
+			itemsListaBuenaFeField.find { it.text() == 'Novak Djokovic'} != null
+		and: 'en la posicion correcta'
+			itemsListaBuenaFeField.findIndexOf { it.text() == 'Novak Djokovic'} == 5
 	}
 	
 	def 'sacar un jugador de la lista de buena de'() {
 		given: 'un equipo con jugadores'
+			Equipo equipo = domainFactoryService.crearEquipoMas19MCanotto()
 		when: 'saco un jugador de la lista de buena fe'
-		then: 'el equipo no debe poseer mas al jugador'
-		and: 'las posiciones de la lista se deben actualizar'
+			to ListaBuenaFeEditPage, equipo.id
+			at ListaBuenaFeEditPage
+			def jugadorAMover = $('#dni' + jugadores.find { it.nombre == 'Juan Martin' }.dni)
+			interact {
+				dragAndDrop(jugadorAMover, jugadoresDelEquipo)
+			}
+			submitButton.click()
+		then: 'deberia llevarme a la pagina de show del equipo'
+			at EquipoShowPage
+		and: 'el equipo no debe poseer mas al jugador'
+			itemsListaBuenaFeField.find { it.text() == 'Juan Martin Del Potro'} == null
 	}
 	
 	def 'ver jugadores disponibles para agregar al equipo'() {
-		given: 'un club con jugadores'
+		given: 'un club con jugadores hombres y mujeres'
+			def jugadores = domainFactoryService.crearJugadoresLibresCanotto()
+			def jugadorasMujeres = domainFactoryService.crearJugadorasMujeresLibresCanotto()
 		and: 'un equipo con jugadores de ese club de sexo S y categoria C'
+			Equipo equipo = domainFactoryService.crearEquipoMas19MCanotto()
 		when: 'voy a la pantalla de edicion de lista de buena fe'
 		then: 'solo deberia ver jugadores para agregar que sean del club,' +
 				'que sean de sexo S y pertenezcan a la categoria C'
 		and: 'los jugadores deberian estar ordenados alfabeticamente'
 	}
-*/	
 }

@@ -117,17 +117,20 @@ class DomainFactoryService {
 		if(equipo == null || jugadores == null) {
 			jugadores = [
 				Jugador.build(club: canotto, sexo: 'M', nacimiento: new DateTime(1990,3,3,0,0,0).toDate(), nombre: 'Tomas', apellido: 'Romero', 
-							dni: '12345678', email: 'canotto90@gmail.com', password: 't', 
+							dni: '12345678', email: 'canotto90@gmail.com',
 							urlImagen: 'http://a7.sphotos.ak.fbcdn.net/hphotos-ak-snc6/251940_3763810087241_391676411_n.jpg'),
-				Jugador.build(club: canotto, sexo: 'M', nacimiento: new DateTime(1987,8,23,0,0,0).toDate(), nombre: 'Juan Martin', apellido: 'Del Potro', 
-								dni: '12345676', email: 'delpotro@gmail.com', password: 'd'),
-				Jugador.build(club: canotto, sexo: 'M', nacimiento: new DateTime(1990,9,14,0,0,0).toDate(), nombre: 'Roger', apellido: 'Federer', 
-								dni: '12345675', email: 'federer@gmail.com', password: 'f'),
-				Jugador.build(club: canotto, sexo: 'M', nacimiento: new DateTime(1990,2,15,0,0,0).toDate(), nombre: 'Chucho', apellido: 'Acasusso', 
-								dni: '12345674', email: 'acasusso@gmail.com', password: 'a'),
-				Jugador.build(club: canotto, sexo: 'M', nacimiento: new DateTime(1989,6,27,0,0,0).toDate(), nombre: 'Guillermo', apellido: 'Cañas', 
-								dni: '12345673', email: 'canas@gmail.com', password: 'c')
+				Jugador.buildLazy(club: canotto, sexo: 'M', nacimiento: new DateTime(1987,8,23,0,0,0).toDate(), nombre: 'Juan Martin', apellido: 'Del Potro', 
+								dni: '12345676', username: 'delpotro@gmail.com'),
+				Jugador.buildLazy(club: canotto, sexo: 'M', nacimiento: new DateTime(1990,9,14,0,0,0).toDate(), nombre: 'Roger', apellido: 'Federer', 
+								dni: '12345675', username: 'federer@gmail.com'),
+				Jugador.buildLazy(club: canotto, sexo: 'M', nacimiento: new DateTime(1990,2,15,0,0,0).toDate(), nombre: 'Chucho', apellido: 'Acasusso', 
+								dni: '12345674', username: 'acasusso@gmail.com'),
+				Jugador.buildLazy(club: canotto, sexo: 'M', nacimiento: new DateTime(1989,6,27,0,0,0).toDate(), nombre: 'Guillermo', apellido: 'Cañas', 
+								dni: '12345673', username: 'canas@gmail.com')
 			]
+			jugadores.each { it.password = it.nombre.toLowerCase().getAt(0) }
+			
+			equipo = setUpEquipo(jugadores, canotto)
 		}
 
 		equipo = setUpEquipo(jugadores, canotto)
@@ -139,22 +142,35 @@ class DomainFactoryService {
 		def jugadores
 		if(dnis != null) {
 			jugadores = [
-					Jugador.build(apellido: 'Djokovic', nombre: 'Novak', dni: dnis.get(0), club: canotto),
-					Jugador.build(apellido: 'Robredo', nombre: 'Tommy', dni: dnis.get(1), club: canotto),
-					Jugador.build(apellido: 'Ferrer', nombre: 'David', dni: dnis.get(3), club: canotto),
-					Jugador.build(apellido: 'Almagro', nombre: 'Nicolas', dni: dnis.get(4), club: canotto),
-					Jugador.build(apellido: 'Haas', nombre: 'Tommy', dni: dnis.get(2), club: canotto)
+					Jugador.buildLazy(apellido: 'Djokovic', nombre: 'Novak', dni: dnis.get(0), club: canotto),
+					Jugador.buildLazy(apellido: 'Robredo', nombre: 'Tommy', dni: dnis.get(1), club: canotto),
+					Jugador.buildLazy(apellido: 'Ferrer', nombre: 'David', dni: dnis.get(3), club: canotto),
+					Jugador.buildLazy(apellido: 'Almagro', nombre: 'Nicolas', dni: dnis.get(4), club: canotto),
+					Jugador.buildLazy(apellido: 'Haas', nombre: 'Tommy', dni: dnis.get(2), club: canotto)
 				]
 		} else {
 			jugadores = [
-					Jugador.build(apellido: 'Djokovic', nombre: 'Novak', club: canotto),
-					Jugador.build(apellido: 'Robredo', nombre: 'Tommy', club: canotto),
-					Jugador.build(apellido: 'Ferrer', nombre: 'David', club: canotto),
-					Jugador.build(apellido: 'Almagro', nombre: 'Nicolas', club: canotto),
-					Jugador.build(apellido: 'Haas', nombre: 'Tommy', club: canotto)
+					Jugador.buildLazy(apellido: 'Djokovic', nombre: 'Novak', club: canotto),
+					Jugador.buildLazy(apellido: 'Robredo', nombre: 'Tommy', club: canotto),
+					Jugador.buildLazy(apellido: 'Ferrer', nombre: 'David', club: canotto),
+					Jugador.buildLazy(apellido: 'Almagro', nombre: 'Nicolas', club: canotto),
+					Jugador.buildLazy(apellido: 'Haas', nombre: 'Tommy', club: canotto)
 				]
 		}
 		return jugadores
+	}
+	
+	def List<Jugador> crearJugadorasMujeresLibresCanotto(List dnis) {
+		def canotto = crearClubCanotto()
+		def jugadoras
+		jugadoras = [
+				Jugador.buildLazy(apellido: 'Djokovic', nombre: 'Novak', dni: dnis.get(0), club: canotto),
+				Jugador.buildLazy(apellido: 'Robredo', nombre: 'Tommy', dni: dnis.get(1), club: canotto),
+				Jugador.buildLazy(apellido: 'Ferrer', nombre: 'David', dni: dnis.get(3), club: canotto),
+				Jugador.buildLazy(apellido: 'Almagro', nombre: 'Nicolas', dni: dnis.get(4), club: canotto),
+				Jugador.buildLazy(apellido: 'Haas', nombre: 'Tommy', dni: dnis.get(2), club: canotto)
+			]
+		return jugadoras
 	}
 	
 	def Equipo crearEquipoMas19MElChasqui(){
@@ -188,9 +204,9 @@ class DomainFactoryService {
 
 		equipo.itemsListaBuenaFe = itemsListaBuenaFe;
 
-		equipo.save(failOnError: true, flush: true)
-		
 		club.equipos.add(equipo)
+		
+		equipo.save(failOnError: true, flush: true)
 		
 		return equipo
 	}

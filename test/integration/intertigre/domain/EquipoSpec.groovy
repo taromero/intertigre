@@ -63,4 +63,14 @@ class EquipoSpec extends BaseIntegrationSpec{
 			thrown(Exception)
 	}
 	
+	def 'borrar un equipo'() {
+		given: 'un equipo'
+			def equipo = domainFactoryTestService.crearEquipoCanotto()
+		when: 'lo borro'
+			equipo.delete()
+		then: 'se deberian borrar todos los items de la lista de buena fe'
+			Equipo.count() == 0
+			ItemListaBuenaFe.count() == 0
+	}
+	
 }

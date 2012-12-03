@@ -18,7 +18,7 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 	
 	def 'cambiar capitan equipo'() {
 		given: 'un equipo con un capitan'
-		    def canottoTeam = df.crearEquipoCanotto()
+		    def canottoTeam = df.crearEquipoMas19MCanotto()
 		    controller.metaClass.esCapitanClub = { true }
 		when: 'cambio el capitan'
 			controller.params.idNuevoCapitan = canottoTeam.jugadores.find { it.nombre == 'Roger' }.id
@@ -63,7 +63,7 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 	def 'obtener mis equipos'() {
 		given: 'un jugador loggeado con equipos'
 			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't')
-			def equipoChasqui = df.crearEquipoElChasqui();
+			def equipoChasqui = df.crearEquipoMas19MElChasqui();
 			def equipoNahuel = df.crearEquipoNahuel();
 			def itemsListaBuenaFe = new TreeSet([new ItemListaBuenaFe(jugador: loggedUser, equipo: equipoNahuel, posicion: 4).save(),
 													new ItemListaBuenaFe(jugador: loggedUser, equipo: equipoChasqui, posicion: 4).save()])
@@ -80,7 +80,7 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 	def 'obtener mis equipos, cuando no tengo equipos'() {
 		given: 'un jugador loggeado sin equipos'
 			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't')
-			def equipoChasqui = df.crearEquipoElChasqui()
+			def equipoChasqui = df.crearEquipoMas19MElChasqui()
 			def equipoNahuel = df.crearEquipoNahuel()
 			def equipos = [equipoChasqui, equipoNahuel]
 		when: 'pido los equipos del jugador'
@@ -92,8 +92,8 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 	
 	def 'obtener los equipos de mi club'() {
 		given: 'un jugador de un club. El club tiene 4 equipos'
-			def equiposClubes = df.crearXCantidadEquiposDeCategoriaDeXClubesDistintos(4)
-			def club = equiposClubes.equipos.get(0).club
+			def equipos = df.crearXCantidadEquiposDeCategoriaDeXClubesDistintos(4)
+			def club = equipos.get(0).club
 			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't', club: club)
 		when: 'pido los equipos del club'
 			controller.listEquiposClub()

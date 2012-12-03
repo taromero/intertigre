@@ -1,24 +1,25 @@
 package intertigre.domain
 
-import grails.plugin.spock.IntegrationSpec
 import intertigre.services.FixtureService
-import intertigre.util.DomainFactoryTestService
+import intertigre.util.DomainFactoryService
+
+import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 
-class FixtureServiceSpec extends IntegrationSpec{
+import spock.lang.Ignore
+import spock.lang.IgnoreRest;
 
-	DomainFactoryTestService domainFactoryTestService = new DomainFactoryTestService()
+class FixtureServiceSpec extends BaseIntegrationSpec{
 
-	FixtureService fixtureService = new FixtureService()
+	FixtureService fixtureService
 
 	def 'generateFixture test'(){
 		given: '16 equipos de una categoria, de 7 clubes distintos'
 			def categoria = Categoria.build(nombre: 'libre', edadLimiteInferior: 5, edadLimiteSuperior: 1000, sexo: 'M')
-			def clubesEquipos = domainFactoryTestService.crearXCantidadEquiposDeCategoriaDeXClubesDistintos(16, categoria, 7)
-			List<Equipo> equipos = clubesEquipos.equipos
-			List<Club> clubes = clubesEquipos.clubes
+			List<Equipo> equipos = domainFactoryService.crearXCantidadEquiposDeCategoriaDeXClubesDistintos(16, categoria, 7)
+			List<Club> clubes = Club.findAll()
 		and: 'un inicio, fin y horarios del torneo'
 			LocalDate inicio = new DateTime(2012, 6, 2, 0,0,0).toLocalDate()
 			LocalDate fin = new DateTime(2012, 7, 30, 0,0,0).toLocalDate()
@@ -90,7 +91,7 @@ class FixtureServiceSpec extends IntegrationSpec{
 	def 'generateGrupos test'(){
 		given: '16 equipos de una categoria, de 7 clubes distintos'
 			def categoria = Categoria.build(nombre: 'libre', edadLimiteInferior: 5, edadLimiteSuperior: 1000, sexo: 'M')
-			List<Equipo> equipos = domainFactoryTestService.crearXCantidadEquiposDeCategoriaDeXClubesDistintos(16, categoria, 7).equipos
+			List<Equipo> equipos = domainFactoryService.crearXCantidadEquiposDeCategoriaDeXClubesDistintos(16, categoria, 7)
 		and: 'una cantidad maxima de equipos por grupo = 6'
 			def equiposPorGrupo = 6
 		when: 'genero los grupos'
@@ -114,7 +115,7 @@ class FixtureServiceSpec extends IntegrationSpec{
 
 	def 'calcularCantidadDeGrupos test'(){
 		given: 'una x cantidad de equipos'
-			List<Equipo> equipos = domainFactoryTestService.crearXCantidadEquiposDeCategoriaDeXClubesDistintos(ce).equipos
+			List<Equipo> equipos = domainFactoryService.crearXCantidadEquiposDeCategoriaDeXClubesDistintos(ce)
 		and: 'una cantidad maxima de equipos por grupo'
 			def cantMaximaEquiposPorGrupo = cantMaximaEquiposPorGrupoGrilla
 		when: 'calculo la cantidad de grupos'
@@ -225,7 +226,7 @@ class FixtureServiceSpec extends IntegrationSpec{
 
 	def 'devuelve fechas disponibles de acuerdo a preferencias de horarios de los clubes'() {
 		given: '2 equipos'
-			def equipos = domainFactoryTestService.crearXCantidadEquiposDeCategoriaDeXClubesDistintos(2, Categoria.build(), 2).equipos
+			def equipos = domainFactoryService.crearXCantidadEquiposDeCategoriaDeXClubesDistintos(2, Categoria.build(), 2)
 			def e1 = equipos.get(0)
 			def e2 = equipos.get(1)
 			e1.club.horariosPreferidosParaLocal = horariosE1

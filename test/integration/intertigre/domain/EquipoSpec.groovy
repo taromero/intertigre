@@ -4,10 +4,8 @@ import grails.plugin.spock.IntegrationSpec
 import intertigre.util.DomainFactoryTestService;
 import spock.lang.Ignore
 
-class EquipoSpec extends IntegrationSpec{
+class EquipoSpec extends BaseIntegrationSpec{
 
-	DomainFactoryTestService domainFactoryTestService
-	
 	//tengo que lograr que se me cree la fecha con equipo_visitante_id != null
 	@Ignore()
 	def 'no permitir borrar equipo si esta en alguna fecha'(){
@@ -31,8 +29,8 @@ class EquipoSpec extends IntegrationSpec{
 	
 	def 'obtener el equipo ganador de una fecha'(){
 		given: '2 equipos (canotto y elChasqui) y una fecha con 2 partidos ganados por canotto y 1 ganado por el Chasqui'
-			Equipo canotto = domainFactoryTestService.crearEquipoCanotto()
-			Equipo elChasqui = domainFactoryTestService.crearEquipoElChasqui()
+			Equipo canotto = domainFactoryService.crearEquipoMas19MCanotto()
+			Equipo elChasqui = domainFactoryService.crearEquipoMas19MElChasqui()
 			Fecha fecha = new Fecha(equipoLocal: canotto, equipoVisitante: elChasqui, 
 						single1: new Single(equipoGanador: canotto), single2: new Single(equipoGanador: elChasqui), 
 						doble: new Doble(equipoGanador: canotto))
@@ -43,8 +41,8 @@ class EquipoSpec extends IntegrationSpec{
 	
 	def 'obtener null si pregunto por ganador de una fecha'(){
 		given: '2 equipos (canotto y elChasqui) y una fecha sin partidos jugados'
-			Equipo canotto = domainFactoryTestService.crearEquipoCanotto()
-			Equipo elChasqui = domainFactoryTestService.crearEquipoElChasqui()
+			Equipo canotto = domainFactoryService.crearEquipoMas19MCanotto()
+			Equipo elChasqui = domainFactoryService.crearEquipoMas19MElChasqui()
 			Fecha fecha = new Fecha(equipoLocal: canotto, equipoVisitante: elChasqui)
 		expect: 'no deberia haber equipo ganador ni equipo perdedor'
 			fecha.equipoGanador == null
@@ -56,7 +54,7 @@ class EquipoSpec extends IntegrationSpec{
 		given: 'un equipo a con un club c, categoria ca y jerarquia j'
 			def cat = new Categoria(nombre: '+19', sexo: 'M', edadLimiteInferior: 19, edadLimiteSuperior: 25)
 							.save(failOnError: true, flush: true)
-			def canotto = domainFactoryTestService.crearClubCanotto()
+			def canotto = domainFactoryService.crearClubCanotto()
 			new Equipo(categoria: cat, jerarquia: 'A', club: canotto).save(flush: true)
 		when: 'quiero crear un club b con la misma clave categoria/jerarquia/club'
 			new Equipo(categoria: cat, jerarquia: 'A', club: canotto).save(failOnError:true, flush: true)

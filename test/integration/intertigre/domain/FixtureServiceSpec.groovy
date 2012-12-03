@@ -9,6 +9,7 @@ import org.joda.time.DateTime
 import org.joda.time.LocalDate
 
 import spock.lang.Ignore
+import spock.lang.IgnoreRest;
 
 class FixtureServiceSpec extends BaseIntegrationSpec{
 

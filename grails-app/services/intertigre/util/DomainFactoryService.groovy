@@ -71,9 +71,9 @@ class DomainFactoryService {
 		def clubes = []
 		cantClubes.times { clubes.add(Club.build(triosDeCanchasDisponibles: 1)) }
 		def clubIndex = 0
-		cantidadEquipos.times {
+		for(int i = 0; i < cantidadEquipos; i++) {
 			def club = clubes.get(clubIndex)
-			def equipo = Equipo.build(categoria: categoria, club: club)
+			def equipo = new Equipo(categoria: categoria, club: club, jerarquia: getJerarquiaDisponibleParaElClubCategoria(club, categoria))
 			equipos.add(equipo)
 			club.equipos.add(equipo)
 			equipo.save()
@@ -81,6 +81,34 @@ class DomainFactoryService {
 			if(clubIndex == cantClubes){ clubIndex = 0 }
 		}
 		return equipos
+	}
+	
+	private String getJerarquiaDisponibleParaElClubCategoria(club, categoria) {
+		def jerarquias = Equipo.findAll().findAll { it.categoria == categoria && it.club == club }*.jerarquia
+		def jerarquiaPosibles = getPosiblesJerarquias()
+		def jerarquia = jerarquiaPosibles.get(0)
+		for(int i = 1; jerarquias.contains(jerarquia); i++) {
+			jerarquia = jerarquiaPosibles.get(i)
+		}
+		return jerarquia
+	}
+	
+	private List<String> getPosiblesJerarquias(){
+		List<String> jerarquias = []
+		char jerarquia = 'A'
+		char jerarquiaAux = jerarquia
+		24.times { i ->
+			jerarquias.add(jerarquiaAux.toString())
+			jerarquiaAux = jerarquia + 1
+			jerarquia++
+		}
+		jerarquia = 'A'
+		24.times { i ->
+			jerarquias.add(jerarquiaAux.toString() + jerarquiaAux.toString())
+			jerarquiaAux = jerarquia + 1
+			jerarquia++
+		}
+		return jerarquias
 	}
 	
 	def Equipo crearEquipoMas19MCanotto(jugadores = null){

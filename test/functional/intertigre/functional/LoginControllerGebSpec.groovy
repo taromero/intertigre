@@ -9,6 +9,10 @@ import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
 class LoginControllerGebSpec extends BaseControllerGebSpec{
 
+	def cleanup() {
+		desloguearse()
+	}
+
 	def 'logearse bien'() {
 		given: 'un usuario del sistema'
 			def email = 'a@b.com'

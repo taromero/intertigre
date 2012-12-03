@@ -10,7 +10,7 @@ class Jugador extends SecUser{
 	
 	static hasMany = [itemsListasBuenaFe: ItemListaBuenaFe]
 	static transients = ['email']
-
+	static hasOne = [club: Club]
 	Club club
 	Set<ItemListaBuenaFe> itemsListasBuenaFe = new TreeSet<ItemListaBuenaFe>()
 	String sexo

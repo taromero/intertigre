@@ -1,19 +1,12 @@
 package intertigre.functional
 
-import intertigre.domain.Club
 import intertigre.domain.Equipo
 import intertigre.domain.Jugador
 import intertigre.functional.pages.EquipoShowPage
 import intertigre.functional.pages.ListaBuenaFeEditPage
 import intertigre.security.SecUserSecRole
 import intertigre.util.DomainFactoryService
-
-import java.lang.invoke.MethodHandleImpl.BindCaller.T
-
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import spock.lang.Stepwise
+import spock.lang.Ignore
 
 class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 
@@ -89,23 +82,25 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 			itemsListaBuenaFeField.findIndexOf { it.text() == 'Novak Djokovic'} == 5
 	}
 	
+	/*
 	def 'sacar un jugador de la lista de buena de'() {
 		given: 'un equipo con jugadores'
 			Equipo equipo = domainFactoryService.crearEquipoMas19MCanotto()
 		when: 'saco un jugador de la lista de buena fe'
 			to ListaBuenaFeEditPage, equipo.id
 			at ListaBuenaFeEditPage
-			def jugadorAMover = $('#dni' + jugadores.find { it.nombre == 'Juan Martin' }.dni)
+			def jugadorAMover = $('#dni' + equipo.jugadores.find { it.nombre == 'Juan Martin' }.dni)
 			interact {
-				dragAndDrop(jugadorAMover, jugadoresDelEquipo)
+				dragAndDrop(jugadorAMover, jugadoresDelClub)
 			}
 			submitButton.click()
 		then: 'deberia llevarme a la pagina de show del equipo'
 			at EquipoShowPage
 		and: 'el equipo no debe poseer mas al jugador'
 			itemsListaBuenaFeField.find { it.text() == 'Juan Martin Del Potro'} == null
-	}
+	}*/
 	
+	@Ignore
 	def 'ver jugadores disponibles para agregar al equipo'() {
 		given: 'un club con jugadores hombres y mujeres'
 			def jugadores = domainFactoryService.crearJugadoresLibresCanotto()

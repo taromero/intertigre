@@ -1,7 +1,6 @@
 package intertigre.domain
 
 import grails.plugin.spock.IntegrationSpec
-import intertigre.util.DomainFactoryTestService;
 import spock.lang.Ignore
 
 class EquipoSpec extends BaseIntegrationSpec{
@@ -65,8 +64,9 @@ class EquipoSpec extends BaseIntegrationSpec{
 	
 	def 'borrar un equipo'() {
 		given: 'un equipo'
-			def equipo = domainFactoryTestService.crearEquipoCanotto()
+			Equipo equipo = domainFactoryService.crearEquipoMas19MCanotto()
 		when: 'lo borro'
+			equipo.club.equipos.remove(equipo)
 			equipo.delete()
 		then: 'se deberian borrar todos los items de la lista de buena fe'
 			Equipo.count() == 0

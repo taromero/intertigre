@@ -114,10 +114,10 @@ class DomainFactoryService {
 	def Equipo crearEquipoMas19MCanotto(jugadores = null){
 		def canotto = crearClubCanotto()
 		def equipo = Equipo.find { club == canotto && categoria.nombre == '+19' && categoria.sexo == 'M' }
-		if(equipo == null || jugadores == null) {
+		if(jugadores == null) {
 			jugadores = [
-				Jugador.build(club: canotto, sexo: 'M', nacimiento: new DateTime(1990,3,3,0,0,0).toDate(), nombre: 'Tomas', apellido: 'Romero', 
-							dni: '12345678', email: 'canotto90@gmail.com',
+				Jugador.buildLazy(club: canotto, sexo: 'M', nacimiento: new DateTime(1990,3,3,0,0,0).toDate(), nombre: 'Tomas', apellido: 'Romero', 
+							dni: '12345678', username: 'canotto90@gmail.com',
 							urlImagen: 'http://a7.sphotos.ak.fbcdn.net/hphotos-ak-snc6/251940_3763810087241_391676411_n.jpg'),
 				Jugador.buildLazy(club: canotto, sexo: 'M', nacimiento: new DateTime(1987,8,23,0,0,0).toDate(), nombre: 'Juan Martin', apellido: 'Del Potro', 
 								dni: '12345676', username: 'delpotro@gmail.com'),
@@ -130,10 +130,10 @@ class DomainFactoryService {
 			]
 			jugadores.each { it.password = it.nombre.toLowerCase().getAt(0) }
 			
+		}
+		if(equipo == null) {
 			equipo = setUpEquipo(jugadores, canotto)
 		}
-
-		equipo = setUpEquipo(jugadores, canotto)
 		return equipo
 	}
 
@@ -157,6 +157,7 @@ class DomainFactoryService {
 					Jugador.buildLazy(apellido: 'Haas', nombre: 'Tommy', club: canotto)
 				]
 		}
+//		jugadores.each { canotto.jugadores.add(it) }
 		return jugadores
 	}
 	
@@ -192,8 +193,9 @@ class DomainFactoryService {
 		return equipo
 	}
 	
-	private Equipo setUpEquipo(jugadores, club){
-		def equipo = new Equipo(club: club, categoria: Categoria.buildLazy(nombre: '+19', sexo: 'M'), jerarquia: 'A', capitan: jugadores.get(0), estaConfirmado: false)
+	private Equipo setUpEquipo(jugadores, Club club){
+		def equipo = new Equipo(club: club, categoria: Categoria.buildLazy(nombre: '+19', sexo: 'M'), jerarquia: 'A', capitan: jugadores.get(0), 
+									estaConfirmado: false)
 		
 		def itemsListaBuenaFe = new TreeSet()
 		
@@ -206,7 +208,7 @@ class DomainFactoryService {
 
 		club.equipos.add(equipo)
 		
-		equipo.save(failOnError: true, flush: true)
+		equipo.save(failOnError: true)
 		
 		return equipo
 	}

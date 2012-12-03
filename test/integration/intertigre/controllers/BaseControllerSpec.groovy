@@ -3,13 +3,13 @@ package intertigre.controllers
 import grails.plugin.spock.IntegrationSpec
 import grails.plugins.springsecurity.SpringSecurityService
 import intertigre.security.SecRole
-import intertigre.util.DomainFactoryTestService;
+import intertigre.util.DomainFactoryService
 
 abstract class BaseControllerSpec extends IntegrationSpec{
 	
 	SpringSecurityService springSecurityService
 	
-	DomainFactoryTestService df = new DomainFactoryTestService()
+	DomainFactoryService df = new DomainFactoryService()
 	
 	def static roleAdmin = new SecRole(authority: 'ROLE_ADMIN').save()
 	def static roleCapitanClub = new SecRole(authority: 'ROLE_CAPITAN_CLUB').save()

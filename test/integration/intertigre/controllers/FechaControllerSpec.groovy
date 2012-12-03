@@ -16,7 +16,7 @@ class FechaControllerSpec extends BaseControllerSpec{
 			def canotto = df.crearClubCanotto()
 			def elChasqui = df.crearClubElChasqui()
 			Equipo equipoCanotto = df.crearEquipoCanotto()
-			Equipo equipoChasqui = df.crearEquipoElChasqui()
+			Equipo equipoChasqui = df.crearEquipoMas19MElChasqui()
 			def fecha = Fecha.build(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui, fechaDeJuego: new Date())
 			fecha.save(flush: true, failOnError: true)
 			loggedUser = equipoCanotto.jugadores.find { it.email == 'canotto90@gmail.com' }
@@ -42,7 +42,7 @@ class FechaControllerSpec extends BaseControllerSpec{
 			def canotto = df.crearClubCanotto()
 			def elChasqui = df.crearClubElChasqui()
 			def equipoCanotto = df.crearEquipoCanotto()
-			def equipoChasqui = df.crearEquipoElChasqui()
+			def equipoChasqui = df.crearEquipoMas19MElChasqui()
 			Fecha fecha = Fecha.build(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui,
 								fechaDeJuego: new Date())
 			loggedUser = equipoCanotto.jugadores.find { it.email == 'canotto90@gmail.com' }

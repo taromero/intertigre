@@ -16,7 +16,7 @@ class DomainFactoryTestService {
 	def List<Jugador> crearXJugadores(Integer cantJugadores){
 		def jugadores = new ArrayList<Jugador>()
 		for(i in 0..(cantJugadores-1)){
-			def jugador = Jugador.build(dni: i)
+			def jugador = Jugador.build()
 			jugadores.add(jugador)
 		}
 		return jugadores
@@ -86,12 +86,12 @@ class DomainFactoryTestService {
 			nombre, i ->
 			jugadores.add(Jugador.build(nombre: nombre, dni: i, club: canotto))
 		}
-		return crearEquipoCanotto(jugadores)
+		return crearEquipoMas19MCanotto(jugadores)
 	}
 	
 	def Fecha crearFechaCanottoChasqui(fecha){
-		def equipoCanotto = crearEquipoCanotto()
-		def equipoChasqui = crearEquipoElChasqui()
+		def equipoCanotto = crearEquipoMas19MCanotto()
+		def equipoChasqui = crearEquipoMas19MElChasqui()
 		return new Fecha(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui,
 							fechaDeJuego: fecha).save(flush: true)
 	}
@@ -114,7 +114,7 @@ class DomainFactoryTestService {
 				email: 'nahuel@gmail.com', telefono: 9084, triosDeCanchasDisponibles: 1).save(failOnError: true, flush:true)
 	}
 	
-	def Equipo crearEquipoCanotto(List<Jugador> jugadores){
+	def Equipo crearEquipoMas19MCanotto(List<Jugador> jugadores){
 		def canotto = crearClubCanotto()
 
 		if(jugadores == null){
@@ -138,7 +138,7 @@ class DomainFactoryTestService {
 		return equipo
 	}
 	
-	def Equipo crearEquipoElChasqui(){
+	def Equipo crearEquipoMas19MElChasqui(){
 		def elChasqui = crearClubElChasqui()
 
 		def jugadores = [

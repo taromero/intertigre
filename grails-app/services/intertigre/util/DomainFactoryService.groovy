@@ -133,7 +133,54 @@ class DomainFactoryService {
 		def equipo = setUpEquipo(jugadores, canotto)
 		return equipo
 	}
+	
+	def Equipo crearEquipoBMas19MCanotto(jugadores = null){
+		def canotto = crearClubCanotto()
+		if(jugadores == null) {
+			jugadores = [
+				Jugador.build(club: canotto, sexo: 'M', nacimiento: new DateTime(1990,3,3,0,0,0).toDate(), nombre: 'TomasB', apellido: 'RomeroB',
+							dni: '1111', username: 'canotto90B@gmail.com',
+							urlImagen: 'http://a7.sphotos.ak.fbcdn.net/hphotos-ak-snc6/251940_3763810087241_391676411_n.jpg'),
+				Jugador.build(club: canotto, sexo: 'M', nacimiento: new DateTime(1987,8,23,0,0,0).toDate(), nombre: 'Juan MartinB', apellido: 'Del PotroB',
+								dni: '2222', username: 'delpotroB@gmail.com'),
+				Jugador.build(club: canotto, sexo: 'M', nacimiento: new DateTime(1990,9,14,0,0,0).toDate(), nombre: 'RogerB', apellido: 'FedererB',
+								dni: '3333', username: 'federerB@gmail.com'),
+				Jugador.build(club: canotto, sexo: 'M', nacimiento: new DateTime(1990,2,15,0,0,0).toDate(), nombre: 'ChuchoB', apellido: 'AcasussoB',
+								dni: '4444', username: 'acasussoB@gmail.com'),
+				Jugador.build(club: canotto, sexo: 'M', nacimiento: new DateTime(1989,6,27,0,0,0).toDate(), nombre: 'GuillermoB', apellido: 'CañasB',
+								dni: '5555', username: 'canasB@gmail.com')
+			]
+			jugadores.each { it.password = it.nombre.toLowerCase().getAt(0) }
+			
+		}
+		def equipo = setUpEquipo(jugadores, canotto, 'B')
+		return equipo
+	}
 
+	def List<Jugador> crearJugadoresLibresNahuel(List dnis) {
+		def nahuel = crearClubNahuel()
+		def jugadores
+		if(dnis != null) {
+			jugadores = [
+					Jugador.build(apellido: 'A', nombre: 'A', dni: dnis.get(0), club: nahuel),
+					Jugador.build(apellido: 'B', nombre: 'B', dni: dnis.get(1), club: nahuel),
+					Jugador.build(apellido: 'C', nombre: 'C', dni: dnis.get(3), club: nahuel),
+					Jugador.build(apellido: 'D', nombre: 'D', dni: dnis.get(4), club: nahuel),
+					Jugador.build(apellido: 'E', nombre: 'E', dni: dnis.get(2), club: nahuel)
+				]
+		} else {
+			jugadores = [
+					Jugador.build(apellido: 'A', nombre: 'A', club: nahuel),
+					Jugador.build(apellido: 'B', nombre: 'B', club: nahuel),
+					Jugador.build(apellido: 'C', nombre: 'C', club: nahuel),
+					Jugador.build(apellido: 'D', nombre: 'D', club: nahuel),
+					Jugador.build(apellido: 'E', nombre: 'E', club: nahuel)
+				]
+		}
+//		jugadores.each { canotto.jugadores.add(it) }
+		return jugadores
+	}
+	
 	def List<Jugador> crearJugadoresLibresCanotto(List dnis) {
 		def canotto = crearClubCanotto()
 		def jugadores
@@ -161,13 +208,23 @@ class DomainFactoryService {
 	def List<Jugador> crearJugadorasMujeresLibresCanotto(List dnis) {
 		def canotto = crearClubCanotto()
 		def jugadoras
-		jugadoras = [
-				Jugador.build(apellido: 'Djokovic', nombre: 'Novak', dni: dnis.get(0), club: canotto),
-				Jugador.build(apellido: 'Robredo', nombre: 'Tommy', dni: dnis.get(1), club: canotto),
-				Jugador.build(apellido: 'Ferrer', nombre: 'David', dni: dnis.get(3), club: canotto),
-				Jugador.build(apellido: 'Almagro', nombre: 'Nicolas', dni: dnis.get(4), club: canotto),
-				Jugador.build(apellido: 'Haas', nombre: 'Tommy', dni: dnis.get(2), club: canotto)
+		if(dnis != null) {
+			jugadoras = [
+					Jugador.build(apellido: 'Dulko', nombre: 'Gisela', dni: dnis.get(0), club: canotto, sexo: 'F'),
+					Jugador.build(apellido: 'Sabatini', nombre: 'Gabriela', dni: dnis.get(1), club: canotto, sexo: 'F'),
+					Jugador.build(apellido: 'Williams', nombre: 'Serena', dni: dnis.get(3), club: canotto, sexo: 'F'),
+					Jugador.build(apellido: 'Williams', nombre: 'Venus', dni: dnis.get(4), club: canotto, sexo: 'F'),
+					Jugador.build(apellido: 'Henin', nombre: 'Justin', dni: dnis.get(2), club: canotto, sexo: 'F')
+				]
+		} else {
+			jugadoras = [
+				Jugador.build(apellido: 'Dulko', nombre: 'Gisela', club: canotto, sexo: 'F'),
+				Jugador.build(apellido: 'Sabatini', nombre: 'Gabriela', club: canotto, sexo: 'F'),
+				Jugador.build(apellido: 'Williams', nombre: 'Serena', club: canotto, sexo: 'F'),
+				Jugador.build(apellido: 'Williams', nombre: 'Venus', club: canotto, sexo: 'F'),
+				Jugador.build(apellido: 'Henin', nombre: 'Justin', club: canotto, sexo: 'F')
 			]
+		}
 		return jugadoras
 	}
 	
@@ -190,9 +247,9 @@ class DomainFactoryService {
 		return equipo
 	}
 	
-	private Equipo setUpEquipo(jugadores, Club club){
-		def equipo = new Equipo(club: club, categoria: Categoria.buildLazy(nombre: '+19', sexo: 'M'), jerarquia: 'A', capitan: jugadores.get(0), 
-									estaConfirmado: false)
+	private Equipo setUpEquipo(jugadores, Club club, String jerarquia = null){
+		def equipo = new Equipo(club: club, categoria: Categoria.buildLazy(nombre: '+19', sexo: 'M'), jerarquia: jerarquia ?: 'A', 
+									capitan: jugadores.get(0), estaConfirmado: false)
 		
 		def itemsListaBuenaFe = new TreeSet()
 		

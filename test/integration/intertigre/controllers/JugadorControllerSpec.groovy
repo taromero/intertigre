@@ -16,10 +16,10 @@ class JugadorControllerSpec extends BaseControllerSpec{
 	def 'editar informacion de un jugador, siendo administrador'(){
 		given: 'un administrador loggeado y un jugador de un club y'
 			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't',
-										role: 'Capitan equipo', dni: '1', club: df.crearClubCanotto())
+										role: 'Capitan equipo', dni: '1', club: domainFactoryService.crearClubCanotto())
 			SecUserSecRole.create loggedUser, roleAdmin
 			def jugador = Jugador.build(username: usernameOld, password: 'p',
-										role: roleOld, dni: '2', club: df.crearClubElChasqui())
+										role: roleOld, dni: '2', club: domainFactoryService.crearClubElChasqui())
 			SecUserSecRole.create jugador, rolePostaOld
 		when: 'quiero editar los datos del jugador'
 			controller.params.id = jugador.id
@@ -43,10 +43,10 @@ class JugadorControllerSpec extends BaseControllerSpec{
 	def 'caso no permitido, editar informacion de un jugador'(){
 		given: 'un usuario loggeado que no es administrador y un jugador de un club y'
 			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't',
-										role: 'Capitan equipo', dni: '1', club: df.crearClubCanotto())
+										role: 'Capitan equipo', dni: '1', club: domainFactoryService.crearClubCanotto())
 			SecUserSecRole.create loggedUser, roleLoggedUser
 			def jugador = Jugador.build(username: usernameOld, password: 'p',
-										role: roleOld, dni: '2', club: df.crearClubElChasqui())
+										role: roleOld, dni: '2', club: domainFactoryService.crearClubElChasqui())
 			SecUserSecRole.create jugador, roleJugador
 		when: 'quiero editar los datos del jugador'
 			controller.params.id = jugador.id
@@ -71,7 +71,7 @@ class JugadorControllerSpec extends BaseControllerSpec{
 	def 'el jugador loggeado edita su informacion'(){
 		given: 'un usuario loggeado con cualquier rol'
 			loggedUser = Jugador.build(username: usernameOld, password: 't',
-										role: roleOld, dni: '1', club: df.crearClubCanotto())
+										role: roleOld, dni: '1', club: domainFactoryService.crearClubCanotto())
 			SecUserSecRole.create loggedUser, rolePostaOld
 		when: 'quiere editar sus datos'
 			controller.params.id = loggedUser.id
@@ -95,7 +95,7 @@ class JugadorControllerSpec extends BaseControllerSpec{
 	def 'caso no permitido, el jugador loggeado edita su informacion queriendo cambiar de rol'(){
 		given: 'un usuario loggeado con cualquier rol menos el de administrador'
 			loggedUser = Jugador.build(username: usernameOld, password: 't',
-										role: roleOld, dni: '1', club: df.crearClubCanotto())
+										role: roleOld, dni: '1', club: domainFactoryService.crearClubCanotto())
 			SecUserSecRole.create loggedUser, rolePostaOld
 		when: 'quiere editar sus datos, cambiando de rol'
 			controller.params.id = loggedUser.id
@@ -116,7 +116,7 @@ class JugadorControllerSpec extends BaseControllerSpec{
 	
 	def 'crear un jugador'(){
 		given: 'un usuario loggeado'
-			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't', dni: '1', club: df.crearClubCanotto())
+			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't', dni: '1', club: domainFactoryService.crearClubCanotto())
 			SecUserSecRole.create loggedUser, roleLoggedUser
 		when: 'crea un jugador nuevo'
 			controller.params.nacimiento_day = '03'
@@ -160,7 +160,7 @@ class JugadorControllerSpec extends BaseControllerSpec{
 	def 'caso no permitido, crear un jugador'(){
 		given: 'un usuario loggeado'
 			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't',
-										role: role, dni: '1', club: df.crearClubCanotto())
+										role: role, dni: '1', club: domainFactoryService.crearClubCanotto())
 			SecUserSecRole.create loggedUser, roleLoggedUser
 		when: 'crea un jugador nuevo'
 			controller.params.nacimiento_day = '03'

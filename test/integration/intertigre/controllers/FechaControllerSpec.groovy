@@ -13,10 +13,10 @@ class FechaControllerSpec extends BaseControllerSpec{
 	@Ignore()
 	def 'crear partidos para una fecha'(){
 		given: 'un usuario loggeado que pertenece a alguno de los equipos de la fecha'
-			def canotto = df.crearClubCanotto()
-			def elChasqui = df.crearClubElChasqui()
-			Equipo equipoCanotto = df.crearEquipoCanotto()
-			Equipo equipoChasqui = df.crearEquipoMas19MElChasqui()
+			def canotto = domainFactoryService.crearClubCanotto()
+			def elChasqui = domainFactoryService.crearClubElChasqui()
+			Equipo equipoCanotto = domainFactoryService.crearEquipoCanotto()
+			Equipo equipoChasqui = domainFactoryService.crearEquipoMas19MElChasqui()
 			def fecha = Fecha.build(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui, fechaDeJuego: new Date())
 			fecha.save(flush: true, failOnError: true)
 			loggedUser = equipoCanotto.jugadores.find { it.email == 'canotto90@gmail.com' }
@@ -39,10 +39,10 @@ class FechaControllerSpec extends BaseControllerSpec{
 	@Ignore()
 	def 'crear partidos para una fecha con datos incorrectos para los games'(){
 		given: 'un usuario loggeado que pertenece a alguno de los equipos de la fecha'
-			def canotto = df.crearClubCanotto()
-			def elChasqui = df.crearClubElChasqui()
-			def equipoCanotto = df.crearEquipoCanotto()
-			def equipoChasqui = df.crearEquipoMas19MElChasqui()
+			def canotto = domainFactoryService.crearClubCanotto()
+			def elChasqui = domainFactoryService.crearClubElChasqui()
+			def equipoCanotto = domainFactoryService.crearEquipoCanotto()
+			def equipoChasqui = domainFactoryService.crearEquipoMas19MElChasqui()
 			Fecha fecha = Fecha.build(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui,
 								fechaDeJuego: new Date())
 			loggedUser = equipoCanotto.jugadores.find { it.email == 'canotto90@gmail.com' }

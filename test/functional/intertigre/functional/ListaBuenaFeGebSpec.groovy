@@ -6,7 +6,9 @@ import intertigre.functional.pages.EquipoShowPage
 import intertigre.functional.pages.ListaBuenaFeEditPage
 import intertigre.security.SecUserSecRole
 import intertigre.util.DomainFactoryService
-import spock.lang.Ignore
+
+import java.lang.invoke.MethodHandleImpl.BindCaller.T
+
 import spock.lang.IgnoreRest
 
 class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
@@ -65,7 +67,7 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 			at ListaBuenaFeEditPage
 			def jugadorAMover = $('#dni' + jugadores.find { it.nombre == 'Novak' }.dni)
 			interact {
-				dragAndDrop(jugadorAMover, jugadoresDelEquipo)
+				dragAndDrop(jugadorAMover, jugadoresDelEquipoDiv)
 			}
 			submitButton.click()
 		then: 'deberia llevarme a la pagina de show del equipo'
@@ -84,7 +86,7 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 			at ListaBuenaFeEditPage
 			def jugadorAMover = $('#dni' + equipo.jugadores.find { it.nombre == 'Juan Martin' }.dni)
 			interact {
-				dragAndDrop(jugadorAMover, jugadoresDelClub)
+				dragAndDrop(jugadorAMover, jugadoresDelClubDiv)
 			}
 			submitButton.click()
 		then: 'deberia llevarme a la pagina de show del equipo'
@@ -93,16 +95,30 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 			itemsListaBuenaFeField.find { it.text() == 'Juan Martin Del Potro'} == null
 	}
 	
-	@Ignore
 	def 'ver jugadores disponibles para agregar al equipo'() {
-		given: 'un club con jugadores hombres y mujeres'
-			def jugadores = domainFactoryService.crearJugadoresLibresCanotto()
-			def jugadorasMujeres = domainFactoryService.crearJugadorasMujeresLibresCanotto()
-		and: 'un equipo con jugadores de ese club de sexo S y categoria C'
-			Equipo equipo = domainFactoryService.crearEquipoMas19MCanotto()
+		given: 'jugadores libres de clubes distintos, de ambos sexos'
+			def jugadoresLibresHombresCanotto = domainFactoryService.crearJugadoresLibresCanotto()
+			def JugadorasLibresMujeresCanotto = domainFactoryService.crearJugadorasMujeresLibresCanotto()
+			def jugadoresLibresHombresNahuel = domainFactoryService.crearJugadoresLibresNahuel()
+		and: 'un equipo A y un equipo B del mismo club y categoria'
+			Equipo equipoCanottoHombresA = domainFactoryService.crearEquipoMas19MCanotto()
+			Equipo equipoCanottoHombresB = domainFactoryService.crearEquipoBMas19MCanotto()
 		when: 'voy a la pantalla de edicion de lista de buena fe'
-		then: 'solo deberia ver jugadores para agregar que sean del club,' +
-				'que sean de sexo S y pertenezcan a la categoria C'
-		and: 'los jugadores deberian estar ordenados alfabeticamente'
+			to ListaBuenaFeEditPage, equipoCanottoHombresA.id
+			at ListaBuenaFeEditPage
+		
+		then: 'deberia mostrar los jugadores libres del mismo club y sexo que el equipo'
+			jugadoresLibresHombresCanotto.each { jugadorLibreCanotto ->
+				jugadoresDelClub.find { it.text()== jugadorLibreCanotto.nombre + ' ' + jugadorLibreCanotto.apellido }
+			}
+		and: 'los jugadores del equipo B'
+			equipoCanottoHombresB.jugadores.each { jugadorEquipoBCanotto ->
+				jugadoresDelClub.find { it.text()== jugadorEquipoBCanotto.nombre + ' ' + jugadorEquipoBCanotto.apellido }
+			}
+			jugadoresDelClub.size() == (jugadoresLibresHombresCanotto.size() + equipoCanottoHombresB.jugadores.size())
+		and: 'que no pertenezcan al equipo'
+			!jugadoresDelClub*.text().any { nombreSugerido -> equipoCanottoHombresA.jugadores*.nombre.find { nombre -> nombre =~ nombreSugerido } }
+		and: 'los jugadores deberian estar ordenados alfabeticamente por nombre y apellido'
+			jugadoresDelClub*.text() == jugadoresDelClub*.text().sort { a,b -> a.compareToIgnoreCase(b) }
 	}
 }

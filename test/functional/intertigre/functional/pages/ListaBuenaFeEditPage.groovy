@@ -7,8 +7,10 @@ class ListaBuenaFeEditPage extends Page{
 	static at = { waitFor { title == "Lista de Buena Fe" } }
 	
 	static content = { 
-		jugadoresDelClub { $('#jugadoresClub') }
-		jugadoresDelEquipo { $('#jugadoresEquipo') }
+		jugadoresDelClubDiv { $('#jugadoresClub') }
+		jugadoresDelEquipoDiv { $('#jugadoresEquipo') }
+		jugadoresDelClub { $('.jugadoresClub') }
+		jugadoresDelEquipo { $('.jugadoresEquipo') }
 		filtroJugadoresClub { $('#busquedaJugador') }
 		submitButton { $('.save') }
 	}

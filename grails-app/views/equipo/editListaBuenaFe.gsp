@@ -80,7 +80,7 @@
 
 				<ul id="jugadoresEquipo" class="connectedSortable" style="float: left;height: 300px;overflow:auto">
 					<g:each in="${equipoInstance.itemsListaBuenaFe*.jugador}" var="j">
-						<li id="dni${j.dni }" title="${j.dni }" class="ui-state-highlight jugadores">
+						<li id="dni${j.dni }" title="${j.dni }" class="ui-state-highlight jugadores jugadoresEquipo">
 							${j.nombre + ' ' + j.apellido }
 						</li>
 					</g:each>

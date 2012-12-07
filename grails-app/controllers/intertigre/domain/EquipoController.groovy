@@ -109,7 +109,10 @@ class EquipoController extends BaseDomainController{
             return
         }
 		
-		def jugadoresClubQueNoEstanEnEquipo = Jugador.findAllByClub(equipoInstance.club).findAll{!equipoInstance.itemsListaBuenaFe*.jugador.contains(it)}
+		def jugadoresClubQueNoEstanEnEquipo = Jugador.findAll { club == equipoInstance.club && sexo == equipoInstance.categoria.sexo }
+														.findAll{ !equipoInstance.itemsListaBuenaFe*.jugador.contains(it) }
+														.sort { j1, j2 -> j1.nombre.compareToIgnoreCase(j2.nombre) ?: 
+																			j1.apellido.compareToIgnoreCase(j2.apellido) }
         render(view: "editListaBuenaFe", model: [equipoInstance: equipoInstance, jugadoresClub: jugadoresClubQueNoEstanEnEquipo])
     }
 

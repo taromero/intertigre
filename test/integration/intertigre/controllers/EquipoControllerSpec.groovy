@@ -1,16 +1,13 @@
 package intertigre.controllers;
 
-import intertigre.domain.Categoria;
-import intertigre.domain.Club;
-import intertigre.domain.Equipo;
-import intertigre.domain.EquipoController;
-import intertigre.domain.ItemListaBuenaFe;
-import intertigre.domain.Jugador;
-
-import org.antlr.runtime.DFA;
-
-import spock.lang.Ignore;
-import grails.plugin.spock.IntegrationSpec;
+import intertigre.domain.Categoria
+import intertigre.domain.Club
+import intertigre.domain.Equipo
+import intertigre.domain.EquipoController
+import intertigre.domain.ItemListaBuenaFe
+import intertigre.domain.Jugador
+import spock.lang.Ignore
+import spock.lang.IgnoreRest
 
 public class EquipoControllerSpec extends BaseControllerSpec{
 
@@ -18,7 +15,7 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 	
 	def 'cambiar capitan equipo'() {
 		given: 'un equipo con un capitan'
-		    def canottoTeam = df.crearEquipoMas19MCanotto()
+		    def canottoTeam = domainFactoryService.crearEquipoMas19MCanotto()
 		    controller.metaClass.esCapitanClub = { true }
 		when: 'cambio el capitan'
 			controller.params.idNuevoCapitan = canottoTeam.jugadores.find { it.nombre == 'Roger' }.id
@@ -30,7 +27,7 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 	
 	def 'cambiar orden de la lista de buena fe'() {
 		given: 'un equipo con una lista con orden determinado 1-tomas, 2-delpo, 3-roger'
-			def canottoTeam = df.crearEquipoAPartirDeNombres('tomas', 'delpo', 'roger', 'willy', 'chucho')
+			def canottoTeam = domainFactoryService.crearEquipoAPartirDeNombres('tomas', 'delpo', 'roger', 'willy', 'chucho')
 			
 			def sampras = Jugador.build(apellido: 'sampras', dni: '1234')
 			controller.metaClass.esCapitanClub = { true }
@@ -63,8 +60,8 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 	def 'obtener mis equipos'() {
 		given: 'un jugador loggeado con equipos'
 			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't')
-			def equipoChasqui = df.crearEquipoMas19MElChasqui();
-			def equipoNahuel = df.crearEquipoNahuel();
+			def equipoChasqui = domainFactoryService.crearEquipoMas19MElChasqui();
+			def equipoNahuel = domainFactoryService.crearEquipoNahuel();
 			def itemsListaBuenaFe = new TreeSet([new ItemListaBuenaFe(jugador: loggedUser, equipo: equipoNahuel, posicion: 4).save(),
 													new ItemListaBuenaFe(jugador: loggedUser, equipo: equipoChasqui, posicion: 4).save()])
 			loggedUser.itemsListasBuenaFe = itemsListaBuenaFe
@@ -80,8 +77,8 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 	def 'obtener mis equipos, cuando no tengo equipos'() {
 		given: 'un jugador loggeado sin equipos'
 			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't')
-			def equipoChasqui = df.crearEquipoMas19MElChasqui()
-			def equipoNahuel = df.crearEquipoNahuel()
+			def equipoChasqui = domainFactoryService.crearEquipoMas19MElChasqui()
+			def equipoNahuel = domainFactoryService.crearEquipoNahuel()
 			def equipos = [equipoChasqui, equipoNahuel]
 		when: 'pido los equipos del jugador'
 			controller.misEquipos()
@@ -92,7 +89,7 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 	
 	def 'obtener los equipos de mi club'() {
 		given: 'un jugador de un club. El club tiene 4 equipos'
-			def equipos = df.crearXCantidadEquiposDeCategoriaDeXClubesDistintos(4)
+			def equipos = domainFactoryService.crearXCantidadEquiposDeCategoriaDeXClubesDistintos(4)
 			def club = equipos.get(0).club
 			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't', club: club)
 		when: 'pido los equipos del club'
@@ -103,7 +100,7 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 	
 	def 'crear equipo'(){
 		given: 'un usuario loggeado'
-			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't', dni: '1', club: df.crearClubCanotto())
+			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't', dni: '1', club: domainFactoryService.crearClubCanotto())
 			def categoria = Categoria.build(nombre: '+19', sexo: 'M', edadLimiteInferior: 19, edadLimiteSuperior: 25)
 		when: 'creo un equipo nuevo'
 			controller.params.categoria = ['id': categoria.id]
@@ -119,7 +116,7 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 	@Ignore	
 	def 'crear equipo, para una categoria/jerarquia/club existente'(){
 		given: 'un usuario loggeado'
-			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't', club: df.crearClubCanotto())
+			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't', club: domainFactoryService.crearClubCanotto())
 		and: 'un equipo con categoria x y jerarquia y'
 			def cat = new Categoria(nombre: '+19', sexo: 'M', edadLimiteInferior: 19, edadLimiteSuperior: 25)
 							.save(failOnError: true, flush: true)
@@ -167,5 +164,29 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 			  ''   |     ''      |      ''
 		   'false' |   'false'   |   'false'
 //		   'false' |   Categoria.build(nombre: '+25')
+	}
+	
+	def 'mostrar jugadores sugeridos para LBF'() {
+		given: 'jugadores libres de clubes distintos, de ambos sexos'
+			def jugadoresLibresHombresCanotto = domainFactoryService.crearJugadoresLibresCanotto()
+			def JugadorasLibresMujeresCanotto = domainFactoryService.crearJugadorasMujeresLibresCanotto()
+			def jugadoresLibresHombresNahuel = domainFactoryService.crearJugadoresLibresNahuel()
+		and: 'un equipo A y un equipo B del mismo club y categoria'
+			Equipo equipoCanottoHombresA = domainFactoryService.crearEquipoMas19MCanotto()
+			Equipo equipoCanottoHombresB = domainFactoryService.crearEquipoBMas19MCanotto()
+		when: 'muestro los jugadores sugeridos a agregar a un equipo'
+			controller.params.id = equipoCanottoHombresA.id
+			controller.editListaBuenaFe()
+			List<Jugador> jugadoresSugeridos = renderMap.model.jugadoresClub
+		then: 'deberia mostrar los jugadores libres del mismo club y sexo que el equipo'
+			jugadoresSugeridos.containsAll(jugadoresLibresHombresCanotto)
+		and: 'los jugadores del equipo B'
+			jugadoresSugeridos.containsAll(equipoCanottoHombresB.jugadores)
+			jugadoresSugeridos.size() == (jugadoresLibresHombresCanotto.size() + equipoCanottoHombresB.jugadores.size())
+		and: 'que no pertenezcan al equipo'
+			!jugadoresSugeridos.any { equipoCanottoHombresA.jugadores.contains(it) }
+		and: 'deberian estar ordenados alfabeticamente por nombre y apellido'
+			jugadoresSugeridos == jugadoresSugeridos.sort { j1, j2 -> j1.nombre.compareToIgnoreCase(j2.nombre) ?: 
+																			j1.apellido.compareToIgnoreCase(j2.apellido) } 
 	}
 }

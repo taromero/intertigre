@@ -1,11 +1,13 @@
 
+
 testDataConfig {
     sampleData {
 		'intertigre.domain.Jugador' {
 			def i = 0
-			email = { "a${i++}@b.com" }
+			username = { "a${i++}@b.com" }
 			role = 'Jugador normal'
 			dni = { "${i++}" }
+			sexo = 'M'
 //			club = Club.build() no puedo hacer que esto funcione
 		}
 		'intertigre.domain.Club' {

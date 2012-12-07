@@ -1,7 +1,6 @@
 package intertigre.domain
 
 import grails.plugin.spock.IntegrationSpec
-import intertigre.util.DomainFactoryTestService;
 
 class ItemListaBuenaFeSpec extends BaseIntegrationSpec{
 

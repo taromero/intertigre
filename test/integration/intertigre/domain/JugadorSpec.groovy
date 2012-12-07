@@ -10,7 +10,8 @@ class JugadorSpec extends IntegrationSpec{
 		given:
 			def jugador = Jugador.build(nombre: 'roger')
 		when:
-			jugador.delete(flush: true)
+			jugador.club.jugadores.remove(jugador) //Para evitar que error de Hibernate
+			jugador.delete()
 		then: 'no se permite la eliminacion'
 			thrown(UnsupportedOperationException)
 	}

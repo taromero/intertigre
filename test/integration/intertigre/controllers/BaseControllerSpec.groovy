@@ -9,7 +9,7 @@ abstract class BaseControllerSpec extends IntegrationSpec{
 	
 	SpringSecurityService springSecurityService
 	
-	DomainFactoryService df = new DomainFactoryService()
+	DomainFactoryService domainFactoryService
 	
 	def static roleAdmin = new SecRole(authority: 'ROLE_ADMIN').save()
 	def static roleCapitanClub = new SecRole(authority: 'ROLE_CAPITAN_CLUB').save()
@@ -22,6 +22,7 @@ abstract class BaseControllerSpec extends IntegrationSpec{
 	def setup(){
 		controller.metaClass.getLoggedUser = { loggedUser }
 		controller.metaClass.esAdmin = { true }
+		controller.metaClass.esCapitanClub = { true }
 		
 		controller.metaClass.render = {Map m ->
 		  renderMap = m

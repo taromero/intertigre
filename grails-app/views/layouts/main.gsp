@@ -92,8 +92,8 @@
 					  </li>
 				  </sec:ifAllGranted>
 				  <li><a onclick="verCalendario()" href="#" class="btn-large">Calendario</a></li>
-				  <li><g:link class="btn-large" controller="login" action="index">Login</g:link></li>
-				  <li><g:link class="btn-large" controller="logout" action="index">Logout</g:link></li>
+				  <li><g:link class="btn-large" controller="login" action="index" id="login">Login</g:link></li>
+				  <li><g:link class="btn-large" controller="logout" action="index" id="logout">Logout</g:link></li>
 				</ul>
 				<sec:ifAllGranted roles="ROLE_JUGADOR">
 					${Jugador.get(sec.loggedInUserInfo(field:'id').toLong())?.nombreCompleto}

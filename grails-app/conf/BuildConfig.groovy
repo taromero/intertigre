@@ -62,7 +62,7 @@ grails.project.dependency.resolution = {
         //runtime ":yui-minify-resources:0.1.4"
 
         build ":tomcat:$grailsVersion"
-		test ":geb:0.9.0-RC-1"
+		test ":geb:$gebVersion"
 		test ":spock:0.6"
 		compile ":spring-security-core:1.2.7.1"
 		compile ":build-test-data:2.0.3"

@@ -109,7 +109,10 @@ class EquipoController extends BaseDomainController{
             return
         }
 		
-		def jugadoresClubQueNoEstanEnEquipo = Jugador.findAllByClub(equipoInstance.club).findAll{!equipoInstance.itemsListaBuenaFe*.jugador.contains(it)}
+		def jugadoresClubQueNoEstanEnEquipo = Jugador.findAll { club == equipoInstance.club && sexo == equipoInstance.categoria.sexo }
+														.findAll{ !equipoInstance.itemsListaBuenaFe*.jugador.contains(it) }
+														.sort { j1, j2 -> j1.nombre.compareToIgnoreCase(j2.nombre) ?: 
+																			j1.apellido.compareToIgnoreCase(j2.apellido) }
         render(view: "editListaBuenaFe", model: [equipoInstance: equipoInstance, jugadoresClub: jugadoresClubQueNoEstanEnEquipo])
     }
 
@@ -125,7 +128,7 @@ class EquipoController extends BaseDomainController{
     def update() {
         def equipoInstance = Equipo.get(params.id)
 		redirectIfNotAllowedEdit(equipoInstance)
-		def listaBuenaFeDnis = params.listaEditada.split(',')
+		def listaBuenaFeDnis = params.listaEditada.replaceAll('dni', '').split(',')
 		
 		def i = 0
 		for(dni in listaBuenaFeDnis){
@@ -156,7 +159,7 @@ class EquipoController extends BaseDomainController{
                 equipoInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
                           [message(code: 'equipo.label', default: 'Equipo')] as Object[],
                           "Another user has updated this Equipo while you were editing")
-                render(view: "edit", model: [equipoInstance: equipoInstance])
+                render(view: "show", model: [equipoInstance: equipoInstance])
                 return
             }
         }
@@ -164,7 +167,7 @@ class EquipoController extends BaseDomainController{
         equipoInstance.properties = params
 
         if (!equipoInstance.save(flush: true)) {
-            render(view: "edit", model: [equipoInstance: equipoInstance])
+            render(view: "show", model: [equipoInstance: equipoInstance])
             return
         }
 

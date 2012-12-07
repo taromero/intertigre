@@ -1,7 +1,8 @@
 package intertigre.domain
 
 class Club {
-	static hasMany = [equipos: Equipo, horariosPreferidosParaLocal: Integer]
+	static hasMany = [equipos: Equipo, horariosPreferidosParaLocal: Integer, jugadores: Jugador]
+	
 	List<Equipo> equipos = new ArrayList<Equipo>()
 	String nombre
 	String direccion

@@ -34,6 +34,7 @@ class BootStrap {
 					domainFactoryService.crearXCantidadEquiposDeCategoria(35, Categoria.find{ nombre == '+25' && sexo == 'M' })
 					domainFactoryService.crearEquipoMas19MCanotto()
 					domainFactoryService.crearEquipoMas19MElChasqui()
+					domainFactoryService.crearJugadoresLibresCanotto()
 					fixtureService.generarFixture(Categoria.find{ nombre == '+19' && sexo == 'M' })
 					
 					def tomas = Jugador.findByUsername('canotto90@gmail.com')
@@ -74,6 +75,7 @@ class BootStrap {
 					domainFactoryService.crearXCantidadEquiposDeCategoria(35, Categoria.find{ nombre == '+25' && sexo == 'M' })
 					domainFactoryService.crearEquipoMas19MCanotto()
 					domainFactoryService.crearEquipoMas19MElChasqui()
+					domainFactoryService.crearJugadoresLibresCanotto()
 					fixtureService.generarFixture(Categoria.find{ nombre == '+19' && sexo == 'M' }).save()
 					
 					def tomas = Jugador.findByUsername('canotto90@gmail.com')

@@ -7,7 +7,11 @@ import intertigre.functional.pages.LoginPage
 
 import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
-class LoginControllerGebSpec extends GebReportingSpec{
+class LoginControllerGebSpec extends BaseControllerGebSpec{
+
+	def cleanup() {
+		desloguearse()
+	}
 
 	def 'logearse bien'() {
 		given: 'un usuario del sistema'

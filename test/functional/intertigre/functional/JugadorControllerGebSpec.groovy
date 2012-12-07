@@ -12,20 +12,15 @@ import intertigre.security.SecUserSecRole
 
 import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
-class JugadorControllerGebSpec extends GebReportingSpec{
-	def static roleAdmin = SecRole.build(authority: 'ROLE_ADMIN')
-	def static roleCapitanClub = SecRole.build(authority: 'ROLE_CAPITAN_CLUB')
-	def static roleCapitanEquipo = SecRole.build(authority: 'ROLE_CAPITAN_EQUIPO')
-	def static roleJugador = SecRole.build(authority: 'ROLE_JUGADOR')
-	def static passwordDefault = 'p'
-		
+class JugadorControllerGebSpec extends BaseControllerGebSpec{
+	
 	def 'un usuario no administrador quiere editar informacion de otro jugador'() {
 		given: 'un usuario no administrador logeado'
 			Jugador usuarioNoAdmin = Jugador.build(password: passwordDefault)
 			SecUserSecRole.create(usuarioNoAdmin, role).save()
 			logearse(usuarioNoAdmin.email, passwordDefault)
 		and: 'un usuario x a editar'
-			def jugadorAEditar = Jugador.buildLazy(dni: '2')
+			def jugadorAEditar = Jugador.build(dni: '2')
 		when: 'quiere editar informacion x'
 			to JugadorEditPage, jugadorAEditar.id
 		then: 'no deberia poder acceder a la pagina de edicion, y deberia ser redirigido al show'
@@ -41,7 +36,7 @@ class JugadorControllerGebSpec extends GebReportingSpec{
 			SecUserSecRole.create(usuarioNoAdmin, roleAdmin).save()
 			logearse(usuarioNoAdmin.email, passwordDefault)
 		and: 'un usuario x a editar'
-			def jugadorAEditar = Jugador.buildLazy(dni: '2')
+			def jugadorAEditar = Jugador.build(dni: '2')
 		when: 'quiere editar informacion de otro jugador'
 			to JugadorEditPage, jugadorAEditar.id
 		then: 'deberia poder acceder a la pagina de edicion'
@@ -57,12 +52,4 @@ class JugadorControllerGebSpec extends GebReportingSpec{
 			dniField.text() == '5000'
 	}
 	
-	private void logearse(email, password){
-		to LoginPage
-		at LoginPage
-		emailField.value(email)
-		passwordField.value(password)
-		submitButton.click()
-		at HomePage
-	}
 }

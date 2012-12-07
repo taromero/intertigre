@@ -20,7 +20,7 @@ class JugadorControllerGebSpec extends BaseControllerGebSpec{
 			SecUserSecRole.create(usuarioNoAdmin, role).save()
 			logearse(usuarioNoAdmin.email, passwordDefault)
 		and: 'un usuario x a editar'
-			def jugadorAEditar = Jugador.buildLazy(dni: '2')
+			def jugadorAEditar = Jugador.build(dni: '2')
 		when: 'quiere editar informacion x'
 			to JugadorEditPage, jugadorAEditar.id
 		then: 'no deberia poder acceder a la pagina de edicion, y deberia ser redirigido al show'
@@ -36,7 +36,7 @@ class JugadorControllerGebSpec extends BaseControllerGebSpec{
 			SecUserSecRole.create(usuarioNoAdmin, roleAdmin).save()
 			logearse(usuarioNoAdmin.email, passwordDefault)
 		and: 'un usuario x a editar'
-			def jugadorAEditar = Jugador.buildLazy(dni: '2')
+			def jugadorAEditar = Jugador.build(dni: '2')
 		when: 'quiere editar informacion de otro jugador'
 			to JugadorEditPage, jugadorAEditar.id
 		then: 'deberia poder acceder a la pagina de edicion'

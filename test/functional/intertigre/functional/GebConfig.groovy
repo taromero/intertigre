@@ -18,7 +18,7 @@ import org.openqa.selenium.chrome.ChromeDriver
 
 driver = { new ChromeDriver() }
 
-autoClearCookies = false
+//autoClearCookies = false
 
 waiting {
 	timeout = 5

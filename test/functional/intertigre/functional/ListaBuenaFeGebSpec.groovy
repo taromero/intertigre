@@ -7,6 +7,7 @@ import intertigre.functional.pages.ListaBuenaFeEditPage
 import intertigre.security.SecUserSecRole
 import intertigre.util.DomainFactoryService
 import spock.lang.Ignore
+import spock.lang.IgnoreRest
 
 class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 
@@ -14,18 +15,11 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 	
 	static Jugador admin
 	
-	def setupSpec() {
-		admin = Jugador.build(password: passwordDefault)
+	def setup() {
+		admin = Jugador.build(email: adminMail, password: passwordDefault)
 		SecUserSecRole.create(admin, roleAdmin).save()
 		logearse(admin.email, passwordDefault)
 	}
-	
-//	def cleanup() { Tira una excepcion por algo de las transacciones
-//		Equipo.findAll().each { equipo -> 
-//			equipo.club.equipos.remove(equipo)
-//			equipo.delete() 
-//		}
-//	}
 	
 	def 'cambiar las posiciones de la lista de buena fe'() {
 		given: 'un equipo con jugadores'
@@ -66,7 +60,7 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 			def jugadores = domainFactoryService.crearJugadoresLibresCanotto()
 		and: 'un equipo con jugadores de ese club'
 			Equipo equipo = domainFactoryService.crearEquipoMas19MCanotto()
-		when: 'agrego un jugador nuevo a la lista en la posicion x'
+		when: 'agrego un jugador nuevo a la lista en ultima posicion'
 			to ListaBuenaFeEditPage, equipo.id
 			at ListaBuenaFeEditPage
 			def jugadorAMover = $('#dni' + jugadores.find { it.nombre == 'Novak' }.dni)
@@ -78,11 +72,10 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 			at EquipoShowPage
 		then: 'el equipo debe contar con el jugador nuevo'
 			itemsListaBuenaFeField.find { it.text() == 'Novak Djokovic'} != null
-		and: 'en la posicion correcta'
-			itemsListaBuenaFeField.findIndexOf { it.text() == 'Novak Djokovic'} == 5
+		and: 'en la ultima posicion'
+			itemsListaBuenaFeField.findIndexOf { it.text() == 'Novak Djokovic'} == (itemsListaBuenaFeField.size() -1)
 	}
 	
-	/*
 	def 'sacar un jugador de la lista de buena de'() {
 		given: 'un equipo con jugadores'
 			Equipo equipo = domainFactoryService.crearEquipoMas19MCanotto()
@@ -98,7 +91,7 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 			at EquipoShowPage
 		and: 'el equipo no debe poseer mas al jugador'
 			itemsListaBuenaFeField.find { it.text() == 'Juan Martin Del Potro'} == null
-	}*/
+	}
 	
 	@Ignore
 	def 'ver jugadores disponibles para agregar al equipo'() {

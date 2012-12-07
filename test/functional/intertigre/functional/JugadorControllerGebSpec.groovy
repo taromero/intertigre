@@ -14,10 +14,6 @@ import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
 class JugadorControllerGebSpec extends BaseControllerGebSpec{
 	
-	def cleanup() {
-		desloguearse()
-	}	
-
 	def 'un usuario no administrador quiere editar informacion de otro jugador'() {
 		given: 'un usuario no administrador logeado'
 			Jugador usuarioNoAdmin = Jugador.build(password: passwordDefault)

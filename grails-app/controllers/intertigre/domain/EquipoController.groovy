@@ -156,7 +156,7 @@ class EquipoController extends BaseDomainController{
                 equipoInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
                           [message(code: 'equipo.label', default: 'Equipo')] as Object[],
                           "Another user has updated this Equipo while you were editing")
-                render(view: "edit", model: [equipoInstance: equipoInstance])
+                render(view: "show", model: [equipoInstance: equipoInstance])
                 return
             }
         }
@@ -164,7 +164,7 @@ class EquipoController extends BaseDomainController{
         equipoInstance.properties = params
 
         if (!equipoInstance.save(flush: true)) {
-            render(view: "edit", model: [equipoInstance: equipoInstance])
+            render(view: "show", model: [equipoInstance: equipoInstance])
             return
         }
 

@@ -17,6 +17,7 @@
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}" type="text/css">
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'mobile.css')}" type="text/css">
 		<r:require modules="bootstrap"/>
+		<r:require modules="bootstrapDatepicker"/>
 		<g:javascript library="jquery"/>
 		<g:javascript library="jquery-ui"/>
 		<g:layoutHead/>
@@ -42,6 +43,7 @@
 				$('#navbar').mouseleave(function(){
 					$('.active').not('.home').removeClass('active')
 				})
+				$('.datepicker').datepicker()
 			})
 		</script>
 		<div id="navbar" class="navbar navbar-fixed-top">

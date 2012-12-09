@@ -15,7 +15,8 @@
 		<g:message code="notificacion.fecha.label" default="Fecha" />
 		
 	</label>
-	<g:datePicker name="fecha" precision="day"  value="${notificacionInstance?.fecha}" default="none" noSelection="['': '']" />
+	<input type="text" class="span2 datepicker" name="nacimiento" data-date-format="dd-mm-yyyy"
+		value="<g:formatDate format="dd-MM-yyyy" date="${notificacionInstance?.fecha}"/>">
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: notificacionInstance, field: 'titulo', 'error')} ">

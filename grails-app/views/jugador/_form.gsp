@@ -74,8 +74,11 @@
 		<g:message code="jugador.nacimiento.label" default="Nacimiento" />
 		
 	</label>
-	<g:datePicker name="nacimiento" precision="day"  value="${jugadorInstance?.nacimiento}" default="none" noSelection="['': '']" />
+	<input type="text" class="span2 datepicker" name="nacimiento" data-date-format="dd-mm-yyyy"
+		value="<g:formatDate format="dd-MM-yyyy" date="${jugadorInstance?.nacimiento}"/>">
 </div>
+
+
 
 <div class="fieldcontain ${hasErrors(bean: jugadorInstance, field: 'telefono', 'error')} ">
 	<label for="telefono">

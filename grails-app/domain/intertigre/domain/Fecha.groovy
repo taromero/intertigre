@@ -14,6 +14,7 @@ class Fecha implements Comparable<Fecha>{
 	Single single2
 	Doble doble
 	Date fechaDeJuego
+	Date fechaReprogramacion
 	List<String> observaciones
 	Date fechaSubidaResultado
 	Boolean aprobadoPorRival = false
@@ -22,6 +23,7 @@ class Fecha implements Comparable<Fecha>{
 	Boolean formacionIncorrectaLocal = false
 	Boolean formacionIncorrectaVisitante = false
 	Boolean wo = false
+	Boolean pedidoCambioDeFecha = false
 
 	static constraints = {
 		single1 nullable: true
@@ -29,6 +31,7 @@ class Fecha implements Comparable<Fecha>{
 		doble nullable: true
 		grupo nullable: true
 		fixture nullable: true
+		fechaReprogramacion nullable: true
 	}
 	
 	def beforeDelete() {

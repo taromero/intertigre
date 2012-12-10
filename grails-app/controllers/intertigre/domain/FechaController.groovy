@@ -2,6 +2,7 @@ package intertigre.domain
 
 import grails.plugins.springsecurity.Secured;
 import intertigre.security.SecRole;
+import intertigre.services.FixtureService;
 
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -10,6 +11,8 @@ class FechaController extends BaseDomainController{
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+	FixtureService fixtureService
+	
     def index() {
         redirect(action: "list", params: params)
     }
@@ -222,6 +225,14 @@ class FechaController extends BaseDomainController{
 		flash.message = 'Resultado desaprobado. Contacta al equipo rival para que corrijan el resultado. ' + 
 							'Si el resultado no se corrige, deberas traer a la administracion tu copia de la planilla firmada'
 		redirect(action: "show", id: fecha.id)
+	}
+	
+	def pedirReprogramacionFecha() {
+		def fecha = Fecha.get(params.id)
+		def fechaReprogramacion = fixtureService.getPrimeraFechaDeJuegoDisponible(fecha)
+		fecha.pedidoCambioDeFecha = true
+		fecha.fechaReprogramacion = fechaReprogramacion
+		fecha.save()
 	}
 	
 	def void redirectIfNotAllowedEdit(Fecha fecha){

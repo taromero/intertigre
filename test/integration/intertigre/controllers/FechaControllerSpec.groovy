@@ -1,22 +1,35 @@
 package intertigre.controllers
 
+import intertigre.domain.Categoria
 import intertigre.domain.Equipo
 import intertigre.domain.Fecha
 import intertigre.domain.FechaController
+
+import java.lang.invoke.MethodHandleImpl.BindCaller.T
+
+import org.joda.time.DateTime
+import org.joda.time.LocalDate
+
 import spock.lang.Ignore
 
 class FechaControllerSpec extends BaseControllerSpec{
 
 	FechaController controller = new FechaController()
 	
+	Equipo equipoCanotto
+	Equipo equipoChasqui
+	
+	def setup() {
+		equipoCanotto = domainFactoryService.crearEquipoMas19MCanotto()
+		equipoChasqui = domainFactoryService.crearEquipoMas19MElChasqui()
+	}
+
 	//tengo que lograr que se me cree la fecha con equipo_visitante_id != null
 	@Ignore()
 	def 'crear partidos para una fecha'(){
 		given: 'un usuario loggeado que pertenece a alguno de los equipos de la fecha'
 			def canotto = domainFactoryService.crearClubCanotto()
 			def elChasqui = domainFactoryService.crearClubElChasqui()
-			Equipo equipoCanotto = domainFactoryService.crearEquipoCanotto()
-			Equipo equipoChasqui = domainFactoryService.crearEquipoMas19MElChasqui()
 			def fecha = Fecha.build(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui, fechaDeJuego: new Date())
 			fecha.save(flush: true, failOnError: true)
 			loggedUser = equipoCanotto.jugadores.find { it.email == 'canotto90@gmail.com' }
@@ -41,8 +54,6 @@ class FechaControllerSpec extends BaseControllerSpec{
 		given: 'un usuario loggeado que pertenece a alguno de los equipos de la fecha'
 			def canotto = domainFactoryService.crearClubCanotto()
 			def elChasqui = domainFactoryService.crearClubElChasqui()
-			def equipoCanotto = domainFactoryService.crearEquipoCanotto()
-			def equipoChasqui = domainFactoryService.crearEquipoMas19MElChasqui()
 			Fecha fecha = Fecha.build(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui,
 								fechaDeJuego: new Date())
 			loggedUser = equipoCanotto.jugadores.find { it.email == 'canotto90@gmail.com' }
@@ -67,6 +78,37 @@ class FechaControllerSpec extends BaseControllerSpec{
 		where:
 			  s1ps  | s1ss | s1ts
 			 '123-4'  | '3-6'| '6-2'
+	}
+
+	def 'pedir reprogramacion de fecha'() {
+		given: '3 fechas entre 2 equipos, para hoy, una antes y otra despues'
+			loggedUser = equipoCanotto.jugadores.find { it.email == 'canotto90@gmail.com' }
+			def fechaDeJuego = new Date()
+			Fecha fecha = new Fecha(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui,
+								fechaDeJuego: fechaDeJuego, fechaSubidaResultado: new Date(), categoria: Categoria.build())
+			Fecha fechaPrevia = new Fecha(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui,
+								fechaDeJuego: new DateTime().minusWeeks(1).toDate(), fechaSubidaResultado: new Date(), categoria: Categoria.build())
+			Fecha fechaPosterior = new Fecha(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui,
+								fechaDeJuego: fechaDeJuegoPosterior, fechaSubidaResultado: new Date(), categoria: Categoria.build())
+			equipoCanotto.fechasLocal = [fecha, fechaPrevia, fechaPosterior]
+			equipoChasqui.fechasVisitante = [fecha, fechaPrevia, fechaPosterior]
+			equipoCanotto.save()
+			equipoChasqui.save()
+		when: 'pido reprogramar la fecha la fecha'
+			controller.params.id = fecha.id
+			controller.pedirReprogramacionFecha()
+		then: 'la fecha debe quedar en estado de pedido de cambio de fecha'
+			fecha.pedidoCambioDeFecha == true
+		and: 'la fecha de reprogramacion debe ser la primera disponible, dejando pasar por lo menos una semana'
+			new LocalDate(fecha.fechaReprogramacion) == diaDeReprogramacionEsperado
+		and: 'respetando en lo posible los horarios disponibles del club local'
+			fecha.equipoLocal.club.horariosPreferidosParaLocal.contains(new DateTime(fecha.fechaReprogramacion).hourOfDay)
+		where:
+			fechaDeJuegoPosterior         		   | diaDeReprogramacionEsperado
+		     new DateTime().plusWeeks(1).toDate()  |  new LocalDate().plusWeeks(2)
+			 new DateTime().plusWeeks(2).toDate()  |  new LocalDate().plusWeeks(1)
+			 new DateTime().plusWeeks(3).toDate()  |  new LocalDate().plusWeeks(1)
+			
 	}
 	
 	private Map crearPartido(jugadorLocalId, jugadorVisitanteId, primerSet, segundoSet, tercerSet, equipoGanadorId){

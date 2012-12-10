@@ -174,7 +174,7 @@ class FixtureService {
 		def horariosPreferidosLocal = local.club.horariosPreferidosParaLocal
 		def diasHorariosPriorizados = diasDisponibles.grep { horariosPreferidosLocal.contains(it.getHourOfDay()) }
 													  .sort { horariosPreferidosLocal.indexOf(it.getHourOfDay()) }
-		def diasHorarios = diasHorariosPriorizados.isEmpty() ? diasDisponibles : diasHorariosPriorizados
+		List<DateTime> diasHorarios = diasHorariosPriorizados.isEmpty() ? diasDisponibles : diasHorariosPriorizados
 		for(diaHora in diasHorarios){
 			if(!juegaAlgunoEseDia(local, visitante, diaHora)){
 				if(hayCanchasDisponiblesEnClubLocalEnEseDiaHora(local.club, diaHora)){
@@ -202,4 +202,8 @@ class FixtureService {
 		return (local.fechas.find { it.equipoVisitante == visitante || it.equipoLocal == visitante} != null)
 	}
 	
+	def Date getPrimeraFechaDeJuegoDisponible(Fecha fecha) {
+		def diasDisponibles = getDiasJugables(new LocalDate().plusWeeks(1), new LocalDate().plusMonths(2))
+		return getDiaHorarioDisponibleParaAmbos(fecha.equipoLocal, fecha.equipoVisitante, diasDisponibles).toDate()
+	}
 }

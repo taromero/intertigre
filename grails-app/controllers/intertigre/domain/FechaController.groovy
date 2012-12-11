@@ -242,6 +242,13 @@ class FechaController extends BaseDomainController{
 		fecha.save()
 	}
 	
+	@Secured(['ROLE_ADMIN'])
+	def rechazarReprogramacionFecha() {
+		def fecha = Fecha.get(params.id)
+		fecha.fechaReprogramacion = null
+		fecha.save()
+	}
+	
 	def void redirectIfNotAllowedEdit(Fecha fecha){
 		if(fecha.aprobadoPorRival){
 			flash.message = 'Los datos de los partidos no pueden modificarse porque ya han sido aprobados por el rival'

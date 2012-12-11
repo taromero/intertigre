@@ -116,12 +116,21 @@ class FechaControllerSpec extends BaseControllerSpec{
 //		when: 'el administrador acepta las reprogramaciones'
 //		then: 'las fechas de reprogramacion pasan a ser las fechas de juego'
 //	}
-//	
-//	def 'rechazar la reprogramacion de la fecha'() {
-//		given: '1 fecha con pedido de reprogramacion'
-//		when: 'el administrador rechaza la reprogramacion'
-//		then: 'la fecha de juego debe seguir siendo la misma'
-//	}
+	
+	def 'rechazar la reprogramacion de la fecha'() {
+		given: '1 fecha con pedido de reprogramacion'
+			loggedUser = equipoCanotto.jugadores.find { it.email == 'canotto90@gmail.com' }
+			def fechaDeJuego = new Date()
+			Fecha fecha = createFecha(equipoCanotto, equipoChasqui, fechaDeJuego)
+		when: 'el administrador rechaza la reprogramacion'
+			controller.params.id = fecha.id
+			controller.rechazarReprogramacionFecha()
+			fecha = Fecha.get(fecha.id)
+		then: 'la fecha de juego debe seguir siendo la misma'
+			fecha.fechaDeJuego == fechaDeJuego
+		and: 'la fecha de reprogramacion debe quedar nula'
+			fecha.fechaReprogramacion == null
+	}
 	
 	private Map crearPartido(jugadorLocalId, jugadorVisitanteId, primerSet, segundoSet, tercerSet, equipoGanadorId){
 		def ps = primerSet.tokenize('-').toArray()

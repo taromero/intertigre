@@ -11,6 +11,7 @@ import org.joda.time.DateTime
 import org.joda.time.LocalDate
 
 import spock.lang.IgnoreRest;
+import static intertigre.util.DomainFactoryService.createFecha
 
 class FechaControllerSpec extends BaseControllerSpec{
 
@@ -111,6 +112,17 @@ class FechaControllerSpec extends BaseControllerSpec{
 			fecha.fechaReprogramacion == null
 	}
 	
+//	def 'ver todas las fechas con pedido de reprogramacion'() {
+//		given: 'fechas con y sin pedido de reprogramacion'
+//			loggedUser = equipoCanotto.jugadores.find { it.email == 'canotto90@gmail.com' }
+//			def fechaDeJuego = new Date()
+//			def fechaDeReprogramacion = new DateTime(fechaDeJuego).plusWeeks(1).toDate()
+//			Fecha fechaR1 = createFecha(equipoCanotto, equipoChasqui, fechaDeJuego, fechaDeReprogramacion)
+//			Fecha fechaR1 = createFecha(equipoCanotto, equipoChasqui, fechaDeJuego, fechaDeReprogramacion)
+//		when: 'pido ver las fechas con pedido de reprogramacion'
+//		then: 'solo deberia mostrarme las que tienen pedido de reprogramacion'
+//	}
+	
 //	def 'aceptar reprogramacion masiva de fechas'() {
 //		given: 'x fechas con pedido de reprogramacion'
 //		when: 'el administrador acepta las reprogramaciones'
@@ -151,16 +163,5 @@ class FechaControllerSpec extends BaseControllerSpec{
 				parejaLocal: [doblista1: [id: jugadorLocalId[0]], doblista2: [id: jugadorLocalId[1]]],
 				parejaVisitante: [doblista1: [id: jugadorVisitanteId[0]], doblista2: [id: jugadorVisitanteId[1]]]]
 		}
-	}
-	
-	private Fecha createFecha(Equipo equipoLocal, Equipo equipoVisitante, Date fechaDeJuego, fechaReprogramacion = null){
-		Fecha fecha = new Fecha(equipoLocal: equipoLocal, equipoVisitante: equipoVisitante,
-								fechaDeJuego: fechaDeJuego, fechaSubidaResultado: new Date(), categoria: Categoria.build(), 
-								fechaReprogramacion: fechaReprogramacion)
-		equipoLocal.fechasLocal.add(fecha)
-		equipoVisitante.fechasVisitante.add(fecha)
-		equipoLocal.save()
-		equipoVisitante.save()
-		return fecha
 	}
 }

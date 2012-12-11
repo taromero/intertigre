@@ -1,5 +1,6 @@
 package intertigre.util
 
+import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime
@@ -7,6 +8,7 @@ import org.joda.time.DateTime
 import intertigre.domain.Categoria
 import intertigre.domain.Club
 import intertigre.domain.Equipo
+import intertigre.domain.Fecha;
 import intertigre.domain.ItemListaBuenaFe
 import intertigre.domain.Jugador
 
@@ -323,5 +325,17 @@ class DomainFactoryService {
 			jugadores.add(Jugador.build(nombre: nombre, dni: i, club: canotto))
 		}
 		return crearEquipoMas19MCanotto(jugadores)
+	}
+	
+	public static Fecha createFecha(Equipo equipoLocal, Equipo equipoVisitante, Date fechaDeJuego, fechaReprogramacion = null){
+		Fecha fecha = new Fecha(equipoLocal: equipoLocal, equipoVisitante: equipoVisitante,
+								fechaDeJuego: fechaDeJuego, fechaSubidaResultado: new Date(), categoria: Categoria.build(),
+								fechaReprogramacion: fechaReprogramacion)
+		equipoLocal.fechasLocal.add(fecha)
+		equipoVisitante.fechasVisitante.add(fecha)
+		fecha.save(failOnError: true)
+		equipoLocal.save()
+		equipoVisitante.save()
+		return fecha
 	}
 }

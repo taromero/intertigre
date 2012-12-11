@@ -1,6 +1,6 @@
 package intertigre.domain
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate
 
 
 class Fecha implements Comparable<Fecha>{
@@ -38,6 +38,14 @@ class Fecha implements Comparable<Fecha>{
 			throw new UnsupportedOperationException('Delete not allowed')	
 		}
 	}
+	
+	def beforeInsert() {
+		if(equipoLocal.fechas.find { new LocalDate(it.fechaDeJuego) == new LocalDate(fechaDeJuego)  && !it.equals(this) }){
+			throw new UnsupportedOperationException("El equipo '$equipoLocal' ya tiene una fecha para ese dia")
+		}else if(equipoVisitante.fechas.find { new LocalDate(it.fechaDeJuego) == new LocalDate(fechaDeJuego) && !it.equals(this) }){
+			throw new UnsupportedOperationException("El equipo '$equipoVisitante' ya tiene una fecha para ese dia")
+		}
+	}
 
 	def Equipo getEquipoGanador(){
 		def ganadores = [single1?.equipoGanador, single2?.equipoGanador, doble?.equipoGanador]
@@ -69,6 +77,14 @@ class Fecha implements Comparable<Fecha>{
 	
 	public int compareTo(fecha) {
 		return this.fechaDeJuego <=> fecha.fechaDeJuego
+	}
+	
+	def boolean equals(fecha){
+		if (this.is(fecha)) return true
+				
+		if (!fecha || getClass() != fecha.class) return false
+						
+		return this.id == fecha.id
 	}
 	
 	def String toString(){

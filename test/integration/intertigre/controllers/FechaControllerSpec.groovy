@@ -136,11 +136,27 @@ class FechaControllerSpec extends BaseControllerSpec{
 			!renderMap.model.fechas.any { fechasSinPedidoReprogramacion.contains(it) }
 	}
 	
-//	def 'aceptar reprogramacion masiva de fechas'() {
-//		given: 'x fechas con pedido de reprogramacion'
-//		when: 'el administrador acepta las reprogramaciones'
-//		then: 'las fechas de reprogramacion pasan a ser las fechas de juego'
-//	}
+	def 'aceptar reprogramacion masiva de fechas'() {
+		given: 'x fechas con pedido de reprogramacion'
+			loggedUser = equipoCanotto.jugadores.find { it.email == 'canotto90@gmail.com' }
+			def fechaDeJuego = new Date()
+			def fechaDeReprogramacion = new DateTime(fechaDeJuego).plusWeeks(1)
+			Fecha fecha1 = createFecha(equipoCanotto, equipoChasqui, fechaDeJuego, fechaDeReprogramacion.toDate())
+			Fecha fecha2 = createFecha(equipoCanotto, equipoChasqui, fechaDeReprogramacion.plusWeeks(1).toDate(), 
+														fechaDeReprogramacion.plusWeeks(3).toDate())
+			Fecha fecha3 = createFecha(equipoCanotto, equipoChasqui, fechaDeReprogramacion.plusWeeks(4).toDate(), fechaDeReprogramacion.toDate())
+		when: 'el administrador acepta las reprogramaciones de x-y de las reprogramaciones'
+			controller.params.ids = [fecha1.id, fecha2.id]
+			controller.reprogramarFechasMasivamente()
+		then: 'las fechas de reprogramacion pasan a ser las fechas de juego en las fechas reprogramadas'
+			fecha1.fechaDeJuego == fechaDeReprogramacion.toDate()
+			fecha1.fechaReprogramacion == null
+			fecha2.fechaDeJuego == fechaDeReprogramacion.plusWeeks(3).toDate()
+			fecha2.fechaReprogramacion == null
+		and: 'las fechas no seleccionadas para reprogramar se quedan igual'
+			fecha3.fechaDeJuego == fechaDeReprogramacion.plusWeeks(4).toDate()
+			fecha3.fechaReprogramacion == fechaDeReprogramacion.toDate()
+	}
 	
 	def 'rechazar la reprogramacion de la fecha'() {
 		given: '1 fecha con pedido de reprogramacion'

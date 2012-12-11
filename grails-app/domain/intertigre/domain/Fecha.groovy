@@ -47,6 +47,11 @@ class Fecha implements Comparable<Fecha>{
 		}
 	}
 
+	def void reprogramar() {
+		fechaDeJuego = fechaReprogramacion
+		fechaReprogramacion = null
+	}
+	
 	def Equipo getEquipoGanador(){
 		def ganadores = [single1?.equipoGanador, single2?.equipoGanador, doble?.equipoGanador]
 		if(ganadores.get(0) == null){

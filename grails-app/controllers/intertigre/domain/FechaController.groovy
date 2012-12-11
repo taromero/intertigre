@@ -237,8 +237,7 @@ class FechaController extends BaseDomainController{
 	@Secured(['ROLE_ADMIN'])
 	def aceptarReprogramacionFecha() {
 		def fecha = Fecha.get(params.id)
-		fecha.fechaDeJuego = fecha.fechaReprogramacion
-		fecha.fechaReprogramacion = null
+		fecha.reprogramar()
 		fecha.save()
 	}
 	
@@ -253,6 +252,16 @@ class FechaController extends BaseDomainController{
 	def getFechasConPedidoDeReprogramacion() {
 		def fechasConPedidoReprogramacion = Fecha.findAll { fechaReprogramacion != null }
 		render(view: "listPedidosReprogramaciones", model: [fechas: fechasConPedidoReprogramacion])
+	}
+	
+	@Secured(['ROLE_ADMIN'])
+	def reprogramarFechasMasivamente() {
+		def idsFechasAReprogramar = params.ids
+		for(idFechaAReprogramar in idsFechasAReprogramar) {
+			def fechaAReprogramar = Fecha.find { id == idFechaAReprogramar }
+			fechaAReprogramar.reprogramar()
+			fechaAReprogramar.save()
+		}
 	}
 	
 	def void redirectIfNotAllowedEdit(Fecha fecha){

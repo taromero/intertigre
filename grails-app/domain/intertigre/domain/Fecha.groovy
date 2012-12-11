@@ -23,7 +23,6 @@ class Fecha implements Comparable<Fecha>{
 	Boolean formacionIncorrectaLocal = false
 	Boolean formacionIncorrectaVisitante = false
 	Boolean wo = false
-	Boolean pedidoCambioDeFecha = false
 
 	static constraints = {
 		single1 nullable: true

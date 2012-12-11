@@ -10,6 +10,8 @@ import java.lang.invoke.MethodHandleImpl.BindCaller.T
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 
+import spock.lang.IgnoreRest;
+
 class FechaControllerSpec extends BaseControllerSpec{
 
 	FechaController controller = new FechaController()
@@ -24,17 +26,12 @@ class FechaControllerSpec extends BaseControllerSpec{
 
 	def 'crear partidos para una fecha'(){
 		given: 'un usuario loggeado que pertenece a alguno de los equipos de la fecha'
-			def fecha = new Fecha(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui, 
-				fechaDeJuego: new Date(), fechaSubidaResultado: new Date(), categoria: Categoria.build())
-			equipoCanotto.fechasLocal.add(fecha)
-			equipoChasqui.fechasVisitante.add(fecha)
-			equipoCanotto.save()
-			equipoChasqui.save()
+			def fecha = createFecha(equipoCanotto, equipoChasqui, new Date()) 
 			loggedUser = equipoCanotto.jugadores.find { it.email == 'canotto90@gmail.com' }
-			
+		when: 'creo partidos para la fecha'
 			def idsJresCanotto = equipoCanotto.jugadores*.id.toArray()
 			def idsJresChasqui = equipoChasqui.jugadores*.id.toArray()
-		when: 'creo partidos para la fecha'
+
 			controller.params.id = fecha.id
 			controller.params.wo = false
 			controller.params.single1 = crearPartido(idsJresCanotto[0], idsJresChasqui[0], '7-5', '3-6', '6-2', equipoCanotto.id)
@@ -49,17 +46,12 @@ class FechaControllerSpec extends BaseControllerSpec{
 
 	def 'crear partidos para una fecha con datos incorrectos para los games'(){
 		given: 'un usuario loggeado que pertenece a alguno de los equipos de la fecha'
-			Fecha fecha = new Fecha(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui,
-								fechaDeJuego: new Date(), fechaSubidaResultado: new Date(), categoria: Categoria.build())
-			equipoCanotto.fechasLocal.add(fecha)
-			equipoChasqui.fechasVisitante.add(fecha)
-			equipoCanotto.save()
-			equipoChasqui.save()
+			Fecha fecha = createFecha(equipoCanotto, equipoChasqui, new Date())
 			loggedUser = equipoCanotto.jugadores.find { it.email == 'canotto90@gmail.com' }
-			
+		when: 'creo partidos para la fecha con datos incorrectos para los games'
 			def idsJresCanotto = equipoCanotto.jugadores*.id.toArray()
 			def idsJresChasqui = equipoChasqui.jugadores*.id.toArray()
-		when: 'creo partidos para la fecha con datos incorrectos para los games'
+
 			controller.params.id = fecha.id
 			controller.params.wo = false
 			controller.params.single1 = crearPartido(idsJresCanotto[0], idsJresChasqui[0], s1ps, s1ss, s1ts, equipoCanotto.id)
@@ -86,22 +78,13 @@ class FechaControllerSpec extends BaseControllerSpec{
 		given: '3 fechas entre 2 equipos, para hoy, una antes y otra despues'
 			loggedUser = equipoCanotto.jugadores.find { it.email == 'canotto90@gmail.com' }
 			def fechaDeJuego = new Date()
-			Fecha fecha = new Fecha(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui,
-								fechaDeJuego: fechaDeJuego, fechaSubidaResultado: new Date(), categoria: Categoria.build())
-			Fecha fechaPrevia = new Fecha(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui,
-								fechaDeJuego: new DateTime().minusWeeks(1).toDate(), fechaSubidaResultado: new Date(), categoria: Categoria.build())
-			Fecha fechaPosterior = new Fecha(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui,
-								fechaDeJuego: fechaDeJuegoPosterior, fechaSubidaResultado: new Date(), categoria: Categoria.build())
-			equipoCanotto.fechasLocal = [fecha, fechaPrevia, fechaPosterior]
-			equipoChasqui.fechasVisitante = [fecha, fechaPrevia, fechaPosterior]
-			equipoCanotto.save()
-			equipoChasqui.save()
+			Fecha fecha = createFecha(equipoCanotto, equipoChasqui, fechaDeJuego)
+			Fecha fechaPrevia = createFecha(equipoCanotto, equipoChasqui, new DateTime().minusWeeks(1).toDate())
+			Fecha fechaPosterior = createFecha(equipoCanotto, equipoChasqui, fechaDeJuegoPosterior)
 		when: 'pido reprogramar la fecha la fecha'
 			controller.params.id = fecha.id
 			controller.pedirReprogramacionFecha()
-		then: 'la fecha debe quedar en estado de pedido de cambio de fecha'
-			fecha.pedidoCambioDeFecha == true
-		and: 'la fecha de reprogramacion debe ser la primera disponible, dejando pasar por lo menos una semana'
+		then: 'la fecha de reprogramacion debe ser la primera disponible, dejando pasar por lo menos una semana'
 			new LocalDate(fecha.fechaReprogramacion) == diaDeReprogramacionEsperado
 		and: 'respetando en lo posible los horarios disponibles del club local'
 			fecha.equipoLocal.club.horariosPreferidosParaLocal.contains(new DateTime(fecha.fechaReprogramacion).hourOfDay)
@@ -110,8 +93,35 @@ class FechaControllerSpec extends BaseControllerSpec{
 		     new DateTime().plusWeeks(1).toDate()  |  new LocalDate().plusWeeks(2)
 			 new DateTime().plusWeeks(2).toDate()  |  new LocalDate().plusWeeks(1)
 			 new DateTime().plusWeeks(3).toDate()  |  new LocalDate().plusWeeks(1)
-			
 	}
+	
+	def 'aceptar reprogramacion de fecha'() {
+		given: '1 fecha con pedido de reprogramacion'
+			loggedUser = equipoCanotto.jugadores.find { it.email == 'canotto90@gmail.com' }
+			def fechaDeJuego = new Date()
+			def fechaDeReprogramacion = new DateTime(fechaDeJuego).plusWeeks(1).toDate()
+			Fecha fecha = createFecha(equipoCanotto, equipoChasqui, fechaDeJuego, fechaDeReprogramacion)
+		when: 'el administrador acepta la reprogramacion'
+			controller.params.id = fecha.id
+			controller.aceptarReprogramacionFecha()
+			fecha = Fecha.get(fecha.id)
+		then: 'la fecha de reprogramacion pasa a ser la fecha de juego'
+			fecha.fechaDeJuego == fechaDeReprogramacion
+		and: 'la fecha de reprogramacion debe quedar nula'
+			fecha.fechaReprogramacion == null
+	}
+	
+//	def 'aceptar reprogramacion masiva de fechas'() {
+//		given: 'x fechas con pedido de reprogramacion'
+//		when: 'el administrador acepta las reprogramaciones'
+//		then: 'las fechas de reprogramacion pasan a ser las fechas de juego'
+//	}
+//	
+//	def 'rechazar la reprogramacion de la fecha'() {
+//		given: '1 fecha con pedido de reprogramacion'
+//		when: 'el administrador rechaza la reprogramacion'
+//		then: 'la fecha de juego debe seguir siendo la misma'
+//	}
 	
 	private Map crearPartido(jugadorLocalId, jugadorVisitanteId, primerSet, segundoSet, tercerSet, equipoGanadorId){
 		def ps = primerSet.tokenize('-').toArray()
@@ -132,5 +142,16 @@ class FechaControllerSpec extends BaseControllerSpec{
 				parejaLocal: [doblista1: [id: jugadorLocalId[0]], doblista2: [id: jugadorLocalId[1]]],
 				parejaVisitante: [doblista1: [id: jugadorVisitanteId[0]], doblista2: [id: jugadorVisitanteId[1]]]]
 		}
+	}
+	
+	private Fecha createFecha(Equipo equipoLocal, Equipo equipoVisitante, Date fechaDeJuego, fechaReprogramacion = null){
+		Fecha fecha = new Fecha(equipoLocal: equipoLocal, equipoVisitante: equipoVisitante,
+								fechaDeJuego: fechaDeJuego, fechaSubidaResultado: new Date(), categoria: Categoria.build(), 
+								fechaReprogramacion: fechaReprogramacion)
+		equipoLocal.fechasLocal.add(fecha)
+		equipoVisitante.fechasVisitante.add(fecha)
+		equipoLocal.save()
+		equipoVisitante.save()
+		return fecha
 	}
 }

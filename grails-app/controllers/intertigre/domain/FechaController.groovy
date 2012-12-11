@@ -230,8 +230,15 @@ class FechaController extends BaseDomainController{
 	def pedirReprogramacionFecha() {
 		def fecha = Fecha.get(params.id)
 		def fechaReprogramacion = fixtureService.getPrimeraFechaDeJuegoDisponible(fecha)
-		fecha.pedidoCambioDeFecha = true
 		fecha.fechaReprogramacion = fechaReprogramacion
+		fecha.save()
+	}
+	
+	@Secured(['ROLE_ADMIN'])
+	def aceptarReprogramacionFecha() {
+		def fecha = Fecha.get(params.id)
+		fecha.fechaDeJuego = fecha.fechaReprogramacion
+		fecha.fechaReprogramacion = null
 		fecha.save()
 	}
 	

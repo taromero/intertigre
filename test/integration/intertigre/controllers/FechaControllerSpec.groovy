@@ -112,16 +112,29 @@ class FechaControllerSpec extends BaseControllerSpec{
 			fecha.fechaReprogramacion == null
 	}
 	
-//	def 'ver todas las fechas con pedido de reprogramacion'() {
-//		given: 'fechas con y sin pedido de reprogramacion'
-//			loggedUser = equipoCanotto.jugadores.find { it.email == 'canotto90@gmail.com' }
-//			def fechaDeJuego = new Date()
-//			def fechaDeReprogramacion = new DateTime(fechaDeJuego).plusWeeks(1).toDate()
-//			Fecha fechaR1 = createFecha(equipoCanotto, equipoChasqui, fechaDeJuego, fechaDeReprogramacion)
-//			Fecha fechaR1 = createFecha(equipoCanotto, equipoChasqui, fechaDeJuego, fechaDeReprogramacion)
-//		when: 'pido ver las fechas con pedido de reprogramacion'
-//		then: 'solo deberia mostrarme las que tienen pedido de reprogramacion'
-//	}
+	def 'ver todas las fechas con pedido de reprogramacion'() {
+		given: 'fechas con pedido de reprogramacion'
+			loggedUser = equipoCanotto.jugadores.find { it.email == 'canotto90@gmail.com' }
+			def fechaDeJuego = new Date()
+			def fechaDeReprogramacion = new DateTime(fechaDeJuego).plusWeeks(1)
+			List<Fecha> fechasConPedidoReprogramacion = new ArrayList<Fecha>()
+			fechasConPedidoReprogramacion.add(createFecha(equipoCanotto, equipoChasqui, fechaDeJuego, fechaDeReprogramacion.toDate()))
+			fechasConPedidoReprogramacion.add(createFecha(equipoCanotto, equipoChasqui, fechaDeReprogramacion.plusWeeks(1).toDate(), fechaDeReprogramacion.toDate()))
+			fechasConPedidoReprogramacion.add(createFecha(equipoCanotto, equipoChasqui, fechaDeReprogramacion.plusWeeks(4).toDate(), fechaDeReprogramacion.toDate()))
+		and: 'sin pedido de reprogramacion'
+			List<Fecha> fechasSinPedidoReprogramacion = new ArrayList<Fecha>()
+			fechasSinPedidoReprogramacion.add(createFecha(equipoCanotto, equipoChasqui, fechaDeReprogramacion.plusWeeks(2).toDate()))
+			fechasSinPedidoReprogramacion.add(createFecha(equipoCanotto, equipoChasqui, fechaDeReprogramacion.plusWeeks(5).toDate()))
+			fechasSinPedidoReprogramacion.add(createFecha(equipoCanotto, equipoChasqui, fechaDeReprogramacion.plusWeeks(3).toDate()))
+		when: 'pido ver las fechas con pedido de reprogramacion'
+			controller.getFechasConPedidoDeReprogramacion()
+		then: 'solo deberia mostrarme las que tienen pedido de reprogramacion'
+			renderMap.model.fechas.size() == 3
+			renderMap.model.fechas.each { fechasConPedidoReprogramacion.contains(it) }
+			fechasConPedidoReprogramacion.each { renderMap.model.fechas.contains(it) }
+		and: 'no deberia mostrarme las fechas sin pedido de reprogramacion'
+			!renderMap.model.fechas.any { fechasSinPedidoReprogramacion.contains(it) }
+	}
 	
 //	def 'aceptar reprogramacion masiva de fechas'() {
 //		given: 'x fechas con pedido de reprogramacion'

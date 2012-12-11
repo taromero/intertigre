@@ -10,8 +10,6 @@ import java.lang.invoke.MethodHandleImpl.BindCaller.T
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 
-import spock.lang.Ignore
-
 class FechaControllerSpec extends BaseControllerSpec{
 
 	FechaController controller = new FechaController()
@@ -24,53 +22,57 @@ class FechaControllerSpec extends BaseControllerSpec{
 		equipoChasqui = domainFactoryService.crearEquipoMas19MElChasqui()
 	}
 
-	//tengo que lograr que se me cree la fecha con equipo_visitante_id != null
-	@Ignore()
 	def 'crear partidos para una fecha'(){
 		given: 'un usuario loggeado que pertenece a alguno de los equipos de la fecha'
-			def canotto = domainFactoryService.crearClubCanotto()
-			def elChasqui = domainFactoryService.crearClubElChasqui()
-			def fecha = Fecha.build(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui, fechaDeJuego: new Date())
-			fecha.save(flush: true, failOnError: true)
+			def fecha = new Fecha(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui, 
+				fechaDeJuego: new Date(), fechaSubidaResultado: new Date(), categoria: Categoria.build())
+			equipoCanotto.fechasLocal.add(fecha)
+			equipoChasqui.fechasVisitante.add(fecha)
+			equipoCanotto.save()
+			equipoChasqui.save()
 			loggedUser = equipoCanotto.jugadores.find { it.email == 'canotto90@gmail.com' }
 			
 			def idsJresCanotto = equipoCanotto.jugadores*.id.toArray()
 			def idsJresChasqui = equipoChasqui.jugadores*.id.toArray()
 		when: 'creo partidos para la fecha'
 			controller.params.id = fecha.id
-			controller.params.single1 = crearPartido(idsJresCanotto[0], idsJresChasqui[0], '7-5', '3-6', '6-2', canotto.id)
-			controller.params.single2 = crearPartido(idsJresCanotto[1], idsJresChasqui[1], '6-4', '7-6', null, canotto.id)
+			controller.params.wo = false
+			controller.params.single1 = crearPartido(idsJresCanotto[0], idsJresChasqui[0], '7-5', '3-6', '6-2', equipoCanotto.id)
+			controller.params.single2 = crearPartido(idsJresCanotto[1], idsJresChasqui[1], '6-4', '7-6', null, equipoCanotto.id)
 			controller.params.doble = crearPartido([idsJresCanotto[3], idsJresCanotto[2]], [idsJresChasqui[3], idsJresChasqui[2]],
-																				'6-3,', '7-5', null, elChasqui.id)
+																				'6-3,', '7-5', null, equipoChasqui.id)
 			controller.savePartidos()
 		then: 'se debe crear correctamente y mostrarse por pantalla la fecha con los resultados actualizados'
 			controller.response.redirectedUrl == '/fecha/show/' + fecha.id
 			fecha.single1.primerSet.gamesGanador == 7
 	}
 
-	//tengo que lograr que se me cree la fecha con equipo_visitante_id != null
-	@Ignore()
 	def 'crear partidos para una fecha con datos incorrectos para los games'(){
 		given: 'un usuario loggeado que pertenece a alguno de los equipos de la fecha'
-			def canotto = domainFactoryService.crearClubCanotto()
-			def elChasqui = domainFactoryService.crearClubElChasqui()
-			Fecha fecha = Fecha.build(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui,
-								fechaDeJuego: new Date())
+			Fecha fecha = new Fecha(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui,
+								fechaDeJuego: new Date(), fechaSubidaResultado: new Date(), categoria: Categoria.build())
+			equipoCanotto.fechasLocal.add(fecha)
+			equipoChasqui.fechasVisitante.add(fecha)
+			equipoCanotto.save()
+			equipoChasqui.save()
 			loggedUser = equipoCanotto.jugadores.find { it.email == 'canotto90@gmail.com' }
 			
 			def idsJresCanotto = equipoCanotto.jugadores*.id.toArray()
 			def idsJresChasqui = equipoChasqui.jugadores*.id.toArray()
 		when: 'creo partidos para la fecha con datos incorrectos para los games'
 			controller.params.id = fecha.id
-			controller.params.single1 = crearPartido(idsJresCanotto[0], idsJresChasqui[0], s1ps, s1ss, s1ts, canotto.id)
-			controller.params.single2 = crearPartido(idsJresCanotto[1], idsJresChasqui[1], '6-4', '7-6', null, canotto.id)
+			controller.params.wo = false
+			controller.params.single1 = crearPartido(idsJresCanotto[0], idsJresChasqui[0], s1ps, s1ss, s1ts, equipoCanotto.id)
+			controller.params.single2 = crearPartido(idsJresCanotto[1], idsJresChasqui[1], '6-4', '7-6', null, equipoCanotto.id)
 			controller.params.doble = crearPartido([idsJresCanotto[2], idsJresCanotto[3]], [idsJresChasqui[2], idsJresChasqui[3]],
-																				'6-3,', '7-5', null, elChasqui.id)
+																				'6-3,', '7-5', null, equipoChasqui.id)
 			controller.savePartidos()
 			fecha = Fecha.first()
-		then:
+			def a = renderMap.model.fecha.errors
+		then: 'se debe volver a la pagina de creacion de partidos indicando el error'
 			renderMap.view == 'createPartido'
-
+			renderMap.model.fecha.errors.getAt('single1.primerSet.gamesGanador').code == 'range.toobig'
+			renderMap.model.fecha.errors.allErrors.size() == 1
 //			No puedo probar que se haga el roolback por ahora			
 //			fecha.single1 == null
 //			fecha.single2 == null

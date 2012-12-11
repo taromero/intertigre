@@ -9,7 +9,7 @@ abstract class Partido {
 	Sett primerSet
 	Sett segundoSet
 	Sett tercerSet
-	Boolean abandono
+	Boolean abandono = false  
 	
 	static embedded = ['primerSet', 'segundoSet', 'tercerSet']
 	

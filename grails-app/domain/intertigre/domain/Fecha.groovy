@@ -23,6 +23,7 @@ class Fecha implements Comparable<Fecha>{
 	Boolean formacionIncorrectaLocal = false
 	Boolean formacionIncorrectaVisitante = false
 	Boolean wo = false
+	Boolean fueReprogramada = false
 
 	static constraints = {
 		single1 nullable: true
@@ -50,6 +51,7 @@ class Fecha implements Comparable<Fecha>{
 	def void reprogramar() {
 		fechaDeJuego = fechaReprogramacion
 		fechaReprogramacion = null
+		fueReprogramada = true
 	}
 	
 	def Equipo getEquipoGanador(){

@@ -110,6 +110,8 @@ class FechaControllerSpec extends BaseControllerSpec{
 			fecha.fechaDeJuego == fechaDeReprogramacion
 		and: 'la fecha de reprogramacion debe quedar nula'
 			fecha.fechaReprogramacion == null
+		and: 'debe figurar que la fecha fue reprogramada'
+			fecha.fueReprogramada == true
 	}
 	
 	def 'ver todas las fechas con pedido de reprogramacion'() {
@@ -151,11 +153,14 @@ class FechaControllerSpec extends BaseControllerSpec{
 		then: 'las fechas de reprogramacion pasan a ser las fechas de juego en las fechas reprogramadas'
 			fecha1.fechaDeJuego == fechaDeReprogramacion.toDate()
 			fecha1.fechaReprogramacion == null
+			fecha1.fueReprogramada == true
 			fecha2.fechaDeJuego == fechaDeReprogramacion.plusWeeks(3).toDate()
 			fecha2.fechaReprogramacion == null
+			fecha2.fueReprogramada == true
 		and: 'las fechas no seleccionadas para reprogramar se quedan igual'
 			fecha3.fechaDeJuego == fechaDeReprogramacion.plusWeeks(4).toDate()
 			fecha3.fechaReprogramacion == fechaDeReprogramacion.toDate()
+			fecha3.fueReprogramada == false
 	}
 	
 	def 'rechazar la reprogramacion de la fecha'() {
@@ -171,6 +176,7 @@ class FechaControllerSpec extends BaseControllerSpec{
 			fecha.fechaDeJuego == fechaDeJuego
 		and: 'la fecha de reprogramacion debe quedar nula'
 			fecha.fechaReprogramacion == null
+			fecha.fueReprogramada == false
 	}
 	
 	private Map crearPartido(jugadorLocalId, jugadorVisitanteId, primerSet, segundoSet, tercerSet, equipoGanadorId){

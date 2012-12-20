@@ -10,7 +10,6 @@ import java.lang.invoke.MethodHandleImpl.BindCaller.T
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 
-import spock.lang.IgnoreRest;
 import static intertigre.util.DomainFactoryService.createFecha
 
 class FechaControllerSpec extends BaseControllerSpec{

@@ -8,8 +8,6 @@ import java.lang.invoke.MethodHandleImpl.BindCaller.T
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 
-import spock.lang.IgnoreRest;
-
 class FixtureServiceSpec extends BaseIntegrationSpec{
 
 	FixtureService fixtureService

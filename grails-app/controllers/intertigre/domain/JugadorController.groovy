@@ -1,12 +1,17 @@
 package intertigre.domain
 
+import grails.plugins.springsecurity.Secured
 import intertigre.security.SecRole
 import intertigre.security.SecUserSecRole
-import grails.plugins.springsecurity.Secured;
+
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatter
 
 
 class JugadorController extends BaseDomainController{
 
+	DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+	
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index() {
@@ -47,6 +52,7 @@ class JugadorController extends BaseDomainController{
     @Secured(['ROLE_CAPITAN_EQUIPO'])
     def save() {
 		params.username = params.username.toLowerCase()
+		params.nacimiento = formatter.parseDateTime(params.nacimiento).toDate()
 		
 		params.role = [null, ''].contains(params.role) ? 'Jugador normal' : params.role
         def jugadorInstance = new Jugador(params)
@@ -112,6 +118,8 @@ class JugadorController extends BaseDomainController{
     @Secured(['ROLE_JUGADOR'])
     def update() {
 		params.username = params.username.toLowerCase()
+		params.nacimiento = params.nacimiento != null ? formatter.parseDateTime(params.nacimiento).toDate() : null
+		
         def jugadorInstance = Jugador.get(params.id)
 		
 		if(!esAdmin() && jugadorInstance != getLoggedUser()){
@@ -155,6 +163,7 @@ class JugadorController extends BaseDomainController{
 			params.role = jugadorInstance.role
 		}
 		
+//		params.nacimiento = new Date(params.nacimiento)
         jugadorInstance.properties = params
 
         if (!jugadorInstance.save(flush: true)) {

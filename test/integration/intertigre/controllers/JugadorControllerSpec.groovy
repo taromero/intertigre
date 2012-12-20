@@ -3,7 +3,10 @@ package intertigre.controllers
 import intertigre.domain.Jugador
 import intertigre.domain.JugadorController
 import intertigre.security.SecUserSecRole
-import spock.lang.Ignore
+
+import java.lang.invoke.MethodHandleImpl.BindCaller.T
+
+import org.joda.time.DateTime
 
 class JugadorControllerSpec extends BaseControllerSpec{
 	
@@ -18,7 +21,7 @@ class JugadorControllerSpec extends BaseControllerSpec{
 			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't',
 										role: 'Capitan equipo', dni: '1', club: domainFactoryService.crearClubCanotto())
 			SecUserSecRole.create loggedUser, roleAdmin
-			def jugador = Jugador.build(username: usernameOld, password: 'p',
+			Jugador jugador = Jugador.build(username: usernameOld, password: 'p',
 										role: roleOld, dni: '2', club: domainFactoryService.crearClubElChasqui())
 			SecUserSecRole.create jugador, rolePostaOld
 		when: 'quiero editar los datos del jugador'
@@ -26,18 +29,21 @@ class JugadorControllerSpec extends BaseControllerSpec{
 			controller.params.username = usernameNew
 			controller.params.password = 't'
 			controller.params.passwordConfirm = 't'
+			controller.params.nacimiento = '27-03-1990'
 			controller.params.role = roleNew
-			controller.params.dni = '2'
+			controller.params.dni = '3'
 			controller.update()
 		then: 'se debe actualizar el jugador'
 			jugador.username == usernameNew
 			jugador.role == roleNew || roleNew == null || roleNew == ''
+			jugador.dni == '3'
 			jugador.getAuthority() == rolePostaNew
+			new DateTime(jugador.nacimiento).getDayOfMonth() == 27
 		where:
 			usernameOld        | usernameNew      | roleOld          | roleNew        | rolePostaNew    | rolePostaOld
 			'pirulo@gmail.com' | 'pepe@gmail.com' | 'Jugador normal' | ''             | roleJugador     |  roleJugador
-			'pirulo@gmail.com' | 'pepe@gmail.com' | 'Jugador normal' | null           | roleJugador     |  roleJugador
-			'pirulo@gmail.com' | 'pepe@gmail.com' | 'Capitan equipo' | 'Capitan club' | roleCapitanClub | roleCapitanEquipo
+//			'pirulo@gmail.com' | 'pepe@gmail.com' | 'Jugador normal' | null           | roleJugador     |  roleJugador
+//			'pirulo@gmail.com' | 'pepe@gmail.com' | 'Capitan equipo' | 'Capitan club' | roleCapitanClub | roleCapitanEquipo
 	}
 
 	def 'caso no permitido, editar informacion de un jugador'(){
@@ -113,15 +119,12 @@ class JugadorControllerSpec extends BaseControllerSpec{
 			'pirulo@gmail.com' | 'pepe@gmail.com' | 'Capitan equipo' | 'Capitan club'   | roleCapitanEquipo | roleCapitanClub
 			'pirulo@gmail.com' | 'pepe@gmail.com' | 'Capitan club'   | 'Capitan equipo' | roleCapitanEquipo | roleCapitanEquipo
 	}
-	
 	def 'crear un jugador'(){
 		given: 'un usuario loggeado'
 			loggedUser = Jugador.build(username: 'canotto90@gmail.com', password: 't', dni: '1', club: domainFactoryService.crearClubCanotto())
 			SecUserSecRole.create loggedUser, roleLoggedUser
 		when: 'crea un jugador nuevo'
-			controller.params.nacimiento_day = '03'
-			controller.params.nacimiento_month = '03'
-			controller.params.nacimiento_year = '1990'
+			controller.params.nacimiento = '03-03-1990'
 			controller.params.telefono = 'a'
 			controller.params.nombre = 'a'
 			controller.params.apellido = 'a'
@@ -141,6 +144,7 @@ class JugadorControllerSpec extends BaseControllerSpec{
 			jugadorNuevo.role == ([null, ''].contains(role) ? 'Jugador normal' : role)
 			jugadorNuevo.dni == '2'
 			jugadorNuevo.authority == rolePosta
+			new DateTime(jugadorNuevo.nacimiento).getDayOfMonth() == 3
 		where:
 			username         | usernameCorregido | role              | rolePosta         | roleLoggedUser
 			'Pepe@gmail.com' | 'pepe@gmail.com'  | 'Jugador normal'  | roleJugador       | roleCapitanEquipo
@@ -163,9 +167,7 @@ class JugadorControllerSpec extends BaseControllerSpec{
 										role: role, dni: '1', club: domainFactoryService.crearClubCanotto())
 			SecUserSecRole.create loggedUser, roleLoggedUser
 		when: 'crea un jugador nuevo'
-			controller.params.nacimiento_day = '03'
-			controller.params.nacimiento_month = '03'
-			controller.params.nacimiento_year = '1990'
+			controller.params.nacimiento = '03-03-1990'
 			controller.params.telefono = 'a'
 			controller.params.nombre = 'a'
 			controller.params.apellido = 'a'

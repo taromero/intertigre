@@ -31,22 +31,6 @@ class FechaGebSpec extends BaseControllerGebSpec{
 			checkearTodosCheck.displayed == true
 	}
 	
-	@Ignore
-	def 'un usuario NO administrador quiere ver la lista de fechas a reprogramar'() {
-		given: 'un usuario NO administrador logeado'
-			Jugador usuarioNoAdmin = Jugador.build(password: passwordDefault)
-			SecUserSecRole.create(usuarioNoAdmin, roleCapitanClub).save()
-			logearse(usuarioNoAdmin.email, passwordDefault)
-		and: 'una serie de fechas a reprogramar'
-			createFechasParaReprogramar(new Date(), 10)
-		when: 'voy a ver las fechas a reprogramar'
-			to ReprogramarFechasPage
-		then: 'me deberia redireccionar al home'
-			at HomePage
-		and: 'indicando que no tengo permisos para ver esto'
-			$('.message').text() == 'Solo podes editar tus datos'
-	}
-	
 	def 'un usuario administrador quiere reprogramar todas las fechas'() {
 		given: 'un usuario administrador logeado'
 			Jugador usuarioAdmin = Jugador.build(password: passwordDefault)
@@ -66,9 +50,6 @@ class FechaGebSpec extends BaseControllerGebSpec{
 			for(fecha in fechasAReprogramar) {
 				$("#fechaDeJuego" + fecha.id).text() == fecha.fechaDeJuego
 			}
-//		when: 'voy a ver el detalle de alguna de las fechas'
-//			
-//		then: 'me muestra un texto indicando que la fecha fue reprogramada'
 	}
 	
 	def 'un usuario administrador quiere reprogramar una serie de fechas'() {
@@ -98,9 +79,17 @@ class FechaGebSpec extends BaseControllerGebSpec{
 			}
 	}
 	
+	@Ignore
 	def 'un capitan de equipo quiere reprogramar una fecha'() {
 		given: 'un capitan de equipo loggeado'
+			Jugador usuarioCapitanEquipo = Jugador.build(password: passwordDefault)
+			SecUserSecRole.create(usuarioCapitanEquipo, roleCapitanEquipo).save()
+			logearse(usuarioCapitanEquipo.email, passwordDefault)
 		and: 'una serie de fechas para el equipo del capitan'
+			def fechas
+			10.times { i ->
+				create
+			}
 		when: 'va a ver el detalle de una fecha'
 		and: 'toca el boton de reprogramar'
 		then: 'deberia volverse a la pagina de detalle'

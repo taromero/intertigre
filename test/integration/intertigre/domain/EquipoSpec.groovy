@@ -1,18 +1,19 @@
 package intertigre.domain
 
+import intertigre.util.DomainFactoryService;
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Ignore
+import static intertigre.util.DomainFactoryService.createFecha
 
 class EquipoSpec extends BaseIntegrationSpec{
 
-	//tengo que lograr que se me cree la fecha con equipo_visitante_id != null
-	@Ignore()
 	def 'no permitir borrar equipo si esta en alguna fecha'(){
 		given: 'un equipo con una fecha'
 			Equipo canottoTeam = Equipo.build()
-			canottoTeam.fechasLocal.add(Fecha.build())
+			Equipo equipoVisitante = Equipo.build()
+			canottoTeam.fechasLocal.add(createFecha(canottoTeam, equipoVisitante, new Date()))
 		when: 'intento eliminar el equipo'
-			canottoTeam.delete(flush: true)
+			canottoTeam.delete()
 		then: 'no se permite la eliminacion'
 			thrown(UnsupportedOperationException)
 	}

@@ -8,6 +8,18 @@
 		<title>Reprogramar Fechas</title>
 	</head>
 	<body>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$('#checkearTodos').click(function(){
+					if($('#checkearTodos').prop('checked')) {
+						$('input:checkbox').prop('checked', true);
+					} else {
+						$('input:checkbox').prop('checked', false);
+					}
+					
+				})
+			})
+        </script>
 		<a href="#list-fecha" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 		<div id="list-fecha" class="content scaffold-list" role="main">
 			<h1>Reprogramar Fechas</h1>
@@ -26,7 +38,7 @@
 							
 							<th> Fecha de juego </th>
 
-							<th> Reprogramar? </th>
+							<th> Reprogramar? <input type="checkbox" id="checkearTodos"></th>
 						
 						</tr>
 					</thead>
@@ -47,8 +59,7 @@
 					</tbody>
 				</table>
 					<fieldset class="buttons">
-					<g:actionSubmit class="save" action="reprogramarFechasMasivamente" id="marcarAlgunasComoResueltas" value="Reprogramar seleccionadas" />
-					<g:actionSubmit class="save" action="reprogramarTodasLasFechas" id="marcarTodasComoResueltas" value="Reprogramar todas"/>
+					<g:actionSubmit class="save" action="reprogramarFechasMasivamente" id="reprogramar" value="Reprogramar seleccionadas" />
 				</fieldset>
 			</g:form>
 		</div>

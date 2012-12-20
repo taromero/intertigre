@@ -8,8 +8,8 @@ class ReprogramarFechasPage extends Page{
 	
 	static content = {
 		fechasField { $('.fecha') }
-		checkboxes { $('input[type=checkbox]') } //$('input:checkbox') anda en el navegador pero no con el driver
-		marcarAlgunasComoResueltasButton { $('#marcarAlgunasComoResueltas') }
-		marcarTodasComoResueltasButton { $('#marcarTodasComoResueltas') }
+		checkboxes { $('.fecha input[type=checkbox]') } //$('input:checkbox') anda en el navegador pero no con el driver
+		checkearTodosCheck { $('#checkearTodos') }
+		reprogramarButton { $('#reprogramar') }
 	}
 }

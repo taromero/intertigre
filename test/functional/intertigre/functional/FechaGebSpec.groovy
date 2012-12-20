@@ -27,8 +27,8 @@ class FechaGebSpec extends BaseControllerGebSpec{
 		and: 'con un checkbox en cada una para poder marcalas como resueltas'
 			checkboxes.size() == fechasField.size()
 			checkboxes.each { it.displayed == true }
-		and: 'y un boton para marcar todas como resueltas'
-			marcarTodasComoResueltasButton.displayed == true
+		and: 'y un checkbox para marcar todas como resueltas'
+			checkearTodosCheck.displayed == true
 	}
 	
 	@Ignore
@@ -46,21 +46,26 @@ class FechaGebSpec extends BaseControllerGebSpec{
 		and: 'indicando que no tengo permisos para ver esto'
 			$('.message').text() == 'Solo podes editar tus datos'
 	}
-	@Ignore
+	
 	def 'un usuario administrador quiere reprogramar todas las fechas'() {
 		given: 'un usuario administrador logeado'
 			Jugador usuarioAdmin = Jugador.build(password: passwordDefault)
 			SecUserSecRole.create(usuarioAdmin, roleAdmin).save()
 			logearse(usuarioAdmin.email, passwordDefault)
 		and: 'una serie de fechas a reprogramar'
-			createFechasParaReprogramar(new Date(), 50)
+			def fechasAReprogramar = createFechasParaReprogramar(new Date(), 50)
 		when: 'voy a ver las fechas a reprogramar'
 			to ReprogramarFechasPage
 			at ReprogramarFechasPage
 		and: 'toco el boton de reprogramar todas'
-			marcarTodasComoResueltasButton.click()
+			checkearTodosCheck.click()
+			reprogramarButton.click()
 		then: 'me deberia redirigir a una pagina mostrandome las nuevas fechas de juego para cada fecha'
 			at FechasListPage
+		and: 'mostrandome las nuevas fechas de juego para cada fecha seleccionada'
+			for(fecha in fechasAReprogramar) {
+				$("#fechaDeJuego" + fecha.id).text() == fecha.fechaDeJuego
+			}
 //		when: 'voy a ver el detalle de alguna de las fechas'
 //			
 //		then: 'me muestra un texto indicando que la fecha fue reprogramada'
@@ -84,7 +89,7 @@ class FechaGebSpec extends BaseControllerGebSpec{
 				fechaCheck.value(true)
 			}
 		and: 'toco el boton de reprogramar algunas'
-			marcarAlgunasComoResueltasButton.click()
+			reprogramarButton.click()
 		then: 'me deberia redirigir a la pagina de listado de fechas'
 			at FechasListPage
 		and: 'mostrandome las nuevas fechas de juego para cada fecha seleccionada'

@@ -1,17 +1,16 @@
 package intertigre.controllers
 
-import intertigre.domain.Categoria
+import static intertigre.util.DomainFactoryService.createFecha
 import intertigre.domain.Equipo
 import intertigre.domain.Fecha
 import intertigre.domain.FechaController
 
-import java.lang.invoke.MethodHandleImpl.BindCaller.T
-
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 
-import static intertigre.util.DomainFactoryService.createFecha
+import extension.custom.Report
 
+@Report
 class FechaControllerSpec extends BaseControllerSpec{
 
 	FechaController controller = new FechaController()

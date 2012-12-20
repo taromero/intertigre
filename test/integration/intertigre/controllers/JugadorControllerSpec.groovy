@@ -4,10 +4,12 @@ import intertigre.domain.Jugador
 import intertigre.domain.JugadorController
 import intertigre.security.SecUserSecRole
 
-import java.lang.invoke.MethodHandleImpl.BindCaller.T
-
 import org.joda.time.DateTime
 
+import extension.custom.Report
+
+
+@Report
 class JugadorControllerSpec extends BaseControllerSpec{
 	
 	JugadorController controller = new JugadorController()
@@ -42,8 +44,8 @@ class JugadorControllerSpec extends BaseControllerSpec{
 		where:
 			usernameOld        | usernameNew      | roleOld          | roleNew        | rolePostaNew    | rolePostaOld
 			'pirulo@gmail.com' | 'pepe@gmail.com' | 'Jugador normal' | ''             | roleJugador     |  roleJugador
-//			'pirulo@gmail.com' | 'pepe@gmail.com' | 'Jugador normal' | null           | roleJugador     |  roleJugador
-//			'pirulo@gmail.com' | 'pepe@gmail.com' | 'Capitan equipo' | 'Capitan club' | roleCapitanClub | roleCapitanEquipo
+			'pirulo@gmail.com' | 'pepe@gmail.com' | 'Jugador normal' | null           | roleJugador     |  roleJugador
+			'pirulo@gmail.com' | 'pepe@gmail.com' | 'Capitan equipo' | 'Capitan club' | roleCapitanClub | roleCapitanEquipo
 	}
 
 	def 'caso no permitido, editar informacion de un jugador'(){

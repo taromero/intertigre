@@ -1,9 +1,11 @@
 package intertigre.domain
 
-import intertigre.util.DomainFactoryService;
-import grails.plugin.spock.IntegrationSpec
-import spock.lang.Ignore
 import static intertigre.util.DomainFactoryService.createFecha
+import intertigre.util.DomainFactoryService
+
+import java.lang.invoke.MethodHandleImpl.BindCaller.T
+
+import spock.lang.Ignore
 
 class EquipoSpec extends BaseIntegrationSpec{
 
@@ -28,9 +30,10 @@ class EquipoSpec extends BaseIntegrationSpec{
 	}
 	
 	def 'obtener el equipo ganador de una fecha'(){
-		given: '2 equipos (canotto y elChasqui) y una fecha con 2 partidos ganados por canotto y 1 ganado por el Chasqui'
+		given: '2 equipos (canotto y elChasqui)'
 			Equipo canotto = domainFactoryService.crearEquipoMas19MCanotto()
 			Equipo elChasqui = domainFactoryService.crearEquipoMas19MElChasqui()
+		and: 'una fecha con 2 partidos ganados por canotto y 1 ganado por el Chasqui'
 			Fecha fecha = new Fecha(equipoLocal: canotto, equipoVisitante: elChasqui, 
 						single1: new Single(equipoGanador: canotto), single2: new Single(equipoGanador: elChasqui), 
 						doble: new Doble(equipoGanador: canotto))

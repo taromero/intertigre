@@ -249,19 +249,29 @@ class FechaController extends BaseDomainController{
 	}
 	
 	@Secured(['ROLE_ADMIN'])
-	def getFechasConPedidoDeReprogramacion() {
+	def fechasAReprogramar() {
 		def fechasConPedidoReprogramacion = Fecha.findAll { fechaReprogramacion != null }
 		render(view: "listPedidosReprogramaciones", model: [fechas: fechasConPedidoReprogramacion])
 	}
 	
 	@Secured(['ROLE_ADMIN'])
 	def reprogramarFechasMasivamente() {
-		def idsFechasAReprogramar = params.ids
-		for(idFechaAReprogramar in idsFechasAReprogramar) {
-			def fechaAReprogramar = Fecha.find { id == idFechaAReprogramar }
+		def idsFechasAReprogramar = params['ids[]'].collect { new Long(it) }
+		def fechasAReprogramar = Fecha.findAll { id in idsFechasAReprogramar }
+		for(Fecha fechaAReprogramar in fechasAReprogramar) {
 			fechaAReprogramar.reprogramar()
 			fechaAReprogramar.save()
 		}
+		render(view: "list", model: [fechaInstanceList: fechasAReprogramar, fechaInstanceTotal: fechasAReprogramar.size()])
+	}
+	
+	def reprogramarTodasLasFechas() {
+		def fechasAReprogramar = Fecha.findAll()
+		for(Fecha fechaAReprogramar in fechasAReprogramar) {
+			fechaAReprogramar.reprogramar()
+			fechaAReprogramar.save()
+		}
+		render(view: "list", model: [fechaInstanceList: fechasAReprogramar, fechaInstanceTotal: fechasAReprogramar.size()])
 	}
 	
 	def void redirectIfNotAllowedEdit(Fecha fecha){

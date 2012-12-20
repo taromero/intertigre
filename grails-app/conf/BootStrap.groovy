@@ -59,6 +59,7 @@ class BootStrap {
 										mensaje: 'Las bombas inteligentes, que tan burras parecen, son las que más saben. Ellas han ' + 
 													'revelado la verdad de la invasión. Mientras Rumsfeld decía: “Estos son bombardeos ' + 
 													'humanitarios”, las bombas destripaban niños y arrasaban mercados callejeros.').save()
+					domainFactoryService.createFechasParaReprogramar(new Date(), 10)
 				}
             }
 			production {

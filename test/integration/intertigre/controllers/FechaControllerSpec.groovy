@@ -129,7 +129,7 @@ class FechaControllerSpec extends BaseControllerSpec{
 			fechasSinPedidoReprogramacion.add(createFecha(equipoCanotto, equipoChasqui, fechaDeReprogramacion.plusWeeks(5).toDate()))
 			fechasSinPedidoReprogramacion.add(createFecha(equipoCanotto, equipoChasqui, fechaDeReprogramacion.plusWeeks(3).toDate()))
 		when: 'pido ver las fechas con pedido de reprogramacion'
-			controller.getFechasConPedidoDeReprogramacion()
+			controller.fechasAReprogramar()
 		then: 'solo deberia mostrarme las que tienen pedido de reprogramacion'
 			renderMap.model.fechas.size() == 3
 			renderMap.model.fechas.each { fechasConPedidoReprogramacion.contains(it) }
@@ -148,7 +148,7 @@ class FechaControllerSpec extends BaseControllerSpec{
 														fechaDeReprogramacion.plusWeeks(3).toDate())
 			Fecha fecha3 = createFecha(equipoCanotto, equipoChasqui, fechaDeReprogramacion.plusWeeks(4).toDate(), fechaDeReprogramacion.toDate())
 		when: 'el administrador acepta las reprogramaciones de x-y de las reprogramaciones'
-			controller.params.ids = [fecha1.id, fecha2.id]
+			controller.params['ids[]'] = [fecha1.id, fecha2.id]
 			controller.reprogramarFechasMasivamente()
 		then: 'las fechas de reprogramacion pasan a ser las fechas de juego en las fechas reprogramadas'
 			fecha1.fechaDeJuego == fechaDeReprogramacion.toDate()

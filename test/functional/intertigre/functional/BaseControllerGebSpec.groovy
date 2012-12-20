@@ -20,6 +20,7 @@ class BaseControllerGebSpec extends GebReportingSpec{
 	
 	def cleanup() {
 		Equipo.executeUpdate("delete ItemListaBuenaFe")
+		Equipo.executeUpdate("delete Fecha")
 		Equipo.executeUpdate("delete Equipo")
 		Equipo.executeUpdate("delete SecUserSecRole")
 		Equipo.executeUpdate("delete SecUser")

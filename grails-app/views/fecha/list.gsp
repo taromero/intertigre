@@ -41,13 +41,13 @@
 				</thead>
 				<tbody>
 				<g:each in="${fechaInstanceList}" status="i" var="fechaInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+					<tr class="${(i % 2) == 0 ? 'even' : 'odd'} fechaItem">
 					
 						<td><g:link controller="equipo" action="show" id="${fechaInstance.equipoLocal.id}">${fieldValue(bean: fechaInstance, field: "equipoLocal")}</g:link></td>
 					
 						<td><g:link controller="equipo" action="show" id="${fechaInstance.equipoVisitante.id}">${fieldValue(bean: fechaInstance, field: "equipoVisitante")}</g:link></td>
 						
-						<td><g:link action="show" id="${fechaInstance.id}">${fieldValue(bean: fechaInstance, field: "fechaDeJuego")}</g:link></td>
+						<td><g:link action="show" id="fechaDeJuego${fechaInstance.id}">${fieldValue(bean: fechaInstance, field: "fechaDeJuego")}</g:link></td>
 					
 					</tr>
 				</g:each>

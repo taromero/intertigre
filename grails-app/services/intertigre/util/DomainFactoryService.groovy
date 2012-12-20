@@ -338,4 +338,15 @@ class DomainFactoryService {
 		equipoVisitante.save()
 		return fecha
 	}
+	
+	public static List<Fecha> createFechasParaReprogramar(Date fechaDeJuego, int cantFechas) {
+		def fechas = []
+		cantFechas.times {
+			def equipoLocal = Equipo.build()
+			def equipoVisitante = Equipo.build()
+			def fechaReprogramacion = new DateTime(fechaDeJuego).plusWeeks(1).toDate()
+			fechas.add(createFecha(equipoLocal, equipoVisitante, fechaDeJuego, fechaReprogramacion))
+		}
+		return fechas
+	}
 }

@@ -15,5 +15,6 @@ abstract class Partido {
 	
 	static constraints = {
 		fecha display:false
+		tercerSet nullable: true
 	}
 }

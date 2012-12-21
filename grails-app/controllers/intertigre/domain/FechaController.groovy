@@ -84,7 +84,7 @@ class FechaController extends BaseDomainController{
 								 parejaVisitante: parejaVisitante, primerSet: dobleSet1,
 								 segundoSet: dobleSet2, tercerSet: dobleSet3, abandono: params.abandonoDoble ?: false)
 		fecha.doble = doble
-		fecha.wo = params.wo
+		fecha.wo = params.wo ?: false
 		fecha.fechaSubidaResultado = new Date()
 		fecha.formacionIncorrectaLocal = fecha.verificarFormacionIncorrectaLocal()
 		fecha.formacionIncorrectaVisitante = fecha.verificarFormacionIncorrectaVisitante()

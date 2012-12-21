@@ -141,15 +141,17 @@
 							<span class="property-value" aria-labelledby="wo-label">${fechaInstance?.single1?.jugadorVisitante}</span>
 						</td>
 						<td>
-							<span class="property-value" aria-labelledby="wo-label">
-								${fechaInstance?.single1?.primerSet?.gamesGanador + '-' +
-									 fechaInstance?.single1?.primerSet?.gamesPerdedor + ' ' +
-									 fechaInstance?.single1?.segundoSet?.gamesGanador + '-' +
-									 fechaInstance?.single1?.segundoSet?.gamesPerdedor}
-							</span>
-							<g:if test="${fechaInstance.single1?.tercerSet != null}">
-								${' ' + fechaInstance?.single1?.tercerSet?.gamesGanador + '-' +
-									 fechaInstance?.single1?.tercerSet?.gamesPerdedor }	
+							<g:if test="${ fechaInstance?.single1?.primerSet?.gamesGanador != null }">
+								<span class="property-value" aria-labelledby="wo-label">
+									${fechaInstance?.single1?.primerSet?.gamesGanador + '-' +
+										 fechaInstance?.single1?.primerSet?.gamesPerdedor + ' ' +
+										 fechaInstance?.single1?.segundoSet?.gamesGanador + '-' +
+										 fechaInstance?.single1?.segundoSet?.gamesPerdedor}
+								</span>
+								<g:if test="${fechaInstance.single1?.tercerSet != null}">
+									${' ' + fechaInstance?.single1?.tercerSet?.gamesGanador + '-' +
+										 fechaInstance?.single1?.tercerSet?.gamesPerdedor }	
+								</g:if>
 							</g:if>
 						</td>
 						<td>
@@ -170,15 +172,17 @@
 							<span class="property-value" aria-labelledby="wo-label">${fechaInstance?.single2?.jugadorVisitante}</span>
 						</td>
 						<td>
-							<span class="property-value" aria-labelledby="wo-label">
-								${fechaInstance?.single2?.primerSet?.gamesGanador + '-' +
-									 fechaInstance?.single2?.primerSet?.gamesPerdedor + ' ' +
-									 fechaInstance?.single2?.segundoSet?.gamesGanador + '-' +
-									 fechaInstance?.single2?.segundoSet?.gamesPerdedor}
-							</span>
-							<g:if test="${fechaInstance.single2?.tercerSet != null}">
-								${' ' + fechaInstance?.single2?.tercerSet?.gamesGanador + '-' +
-									 fechaInstance?.single2?.tercerSet?.gamesPerdedor }	
+							<g:if test="${ fechaInstance?.single2?.primerSet?.gamesGanador != null }">
+								<span class="property-value" aria-labelledby="wo-label">
+									${fechaInstance?.single2?.primerSet?.gamesGanador + '-' +
+										 fechaInstance?.single2?.primerSet?.gamesPerdedor + ' ' +
+										 fechaInstance?.single2?.segundoSet?.gamesGanador + '-' +
+										 fechaInstance?.single2?.segundoSet?.gamesPerdedor}
+								</span>
+								<g:if test="${fechaInstance.single2?.tercerSet != null}">
+									${' ' + fechaInstance?.single2?.tercerSet?.gamesGanador + '-' +
+										 fechaInstance?.single2?.tercerSet?.gamesPerdedor }	
+								</g:if>
 							</g:if>
 						</td>
 						<td>
@@ -199,14 +203,16 @@
 							<span class="property-value" aria-labelledby="wo-label">${fechaInstance?.doble?.parejaVisitante?.doblista1}</span>
 						</td>
 						<td>
-							<span class="property-value" aria-labelledby="wo-label">
-								${fechaInstance?.doble?.primerSet?.gamesGanador + '-' +
-									 fechaInstance?.doble?.primerSet?.gamesPerdedor + ' ' +
-									 fechaInstance?.doble?.segundoSet?.gamesGanador + '-' +
-									 fechaInstance?.doble?.segundoSet?.gamesPerdedor + ' '}
-							<g:if test="${fechaInstance.doble?.tercerSet != null}">
-								${' ' + fechaInstance?.doble?.tercerSet?.gamesGanador + '-' +
-									 fechaInstance?.doble?.tercerSet?.gamesPerdedor }	
+							<g:if test="${ fechaInstance?.doble?.primerSet?.gamesGanador != null }">
+								<span class="property-value" aria-labelledby="wo-label">
+									${fechaInstance?.doble?.primerSet?.gamesGanador + '-' +
+										 fechaInstance?.doble?.primerSet?.gamesPerdedor + ' ' +
+										 fechaInstance?.doble?.segundoSet?.gamesGanador + '-' +
+										 fechaInstance?.doble?.segundoSet?.gamesPerdedor + ' '}
+								<g:if test="${fechaInstance.doble?.tercerSet != null}">
+									${' ' + fechaInstance?.doble?.tercerSet?.gamesGanador + '-' +
+										 fechaInstance?.doble?.tercerSet?.gamesPerdedor }	
+								</g:if>
 							</g:if>
 							</span>
 						</td>

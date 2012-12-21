@@ -8,8 +8,8 @@ class Sett { //no podia usar el nombre 'Set' porque genera problemas con GORM pa
 	Integer gamesPerdedor
 	
 	static constraints = {
-		gamesGanador range: 0..7
-		gamesPerdedor range: 0..7
+		gamesGanador range: 0..7, nullable: true
+		gamesPerdedor range: 0..7, nullable: true
 	}
 	
 	def String toString(){

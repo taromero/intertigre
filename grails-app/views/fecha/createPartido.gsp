@@ -26,6 +26,7 @@
 			</g:hasErrors>
 			<g:form action="savePartidos" id="${fecha?.id}">
 				<input type="hidden" name="fechaId" value="${fechaId}"/>
+				WO: <input type="checkbox" id="wo" name="wo" value="false">
 				<table>
 					<thead>
 						<th>Partido</th>

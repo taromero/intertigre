@@ -44,7 +44,7 @@ class FechaControllerSpec extends BaseControllerSpec{
 			controller.response.redirectedUrl == '/fecha/show/' + fecha.id
 			fecha.single1.primerSet.gamesGanador == 7
 	}
-	
+
 	def 'crear partidos para una fecha con datos incorrectos para los games'(){
 		given: 'un usuario loggeado que pertenece a alguno de los equipos de la fecha'
 			Fecha fecha = createFecha(equipoCanotto, equipoChasqui, new Date())
@@ -185,15 +185,15 @@ class FechaControllerSpec extends BaseControllerSpec{
 		def ts = tercerSet != null ? tercerSet.tokenize('-').toArray() : ['null', 'null']
 		if(!jugadorLocalId.respondsTo('size')){ // Me fijo si es un single o un doble
 			return [primerSet: [gamesGanador: ps[0], gamesPerdedor: ps[1]],
-					  segundoSet: [gamesGanador: 3, gamesPerdedor: 6],
-					  tercerSet: [gamesGanador: 6, gamesPerdedor: 2],
+					  segundoSet: [gamesGanador: ss[0], gamesPerdedor: ss[1]],
+					  tercerSet: [gamesGanador: ts[0], gamesPerdedor: ts[1]],
 					  equipoGanador: [id: equipoGanadorId],
 					  jugadorLocal: [id: jugadorLocalId],
 					  jugadorVisitante: [id: jugadorVisitanteId]]
 		}else{
 			return [primerSet: [gamesGanador: ps[0], gamesPerdedor: ps[1]],
-				segundoSet: [gamesGanador: 3, gamesPerdedor: 6],
-				tercerSet: [gamesGanador: 6, gamesPerdedor: 2],
+				segundoSet: [gamesGanador: ss[0], gamesPerdedor: ss[1]],
+				tercerSet: [gamesGanador: ts[0], gamesPerdedor: ts[1]],
 				equipoGanador: [id: equipoGanadorId],
 				parejaLocal: [doblista1: [id: jugadorLocalId[0]], doblista2: [id: jugadorLocalId[1]]],
 				parejaVisitante: [doblista1: [id: jugadorVisitanteId[0]], doblista2: [id: jugadorVisitanteId[1]]]]

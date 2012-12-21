@@ -2,6 +2,7 @@ package intertigre.domain
 
 import grails.plugins.springsecurity.Secured;
 import intertigre.security.SecRole;
+import intertigre.services.FixtureService;
 
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -10,6 +11,8 @@ class FechaController extends BaseDomainController{
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+	FixtureService fixtureService
+	
     def index() {
         redirect(action: "list", params: params)
     }
@@ -222,6 +225,55 @@ class FechaController extends BaseDomainController{
 		flash.message = 'Resultado desaprobado. Contacta al equipo rival para que corrijan el resultado. ' + 
 							'Si el resultado no se corrige, deberas traer a la administracion tu copia de la planilla firmada'
 		redirect(action: "show", id: fecha.id)
+	}
+	
+	@Secured(['ROLE_CAPITAN_EQUIPO'])
+	def pedirReprogramacionFecha() {
+		def fecha = Fecha.get(params.id)
+		def fechaReprogramacion = fixtureService.getPrimeraFechaDeJuegoDisponible(fecha)
+		fecha.fechaReprogramacion = fechaReprogramacion
+		fecha.save()
+		render(view: "show", model: [fechaInstance: fecha])
+	}
+	
+	@Secured(['ROLE_ADMIN'])
+	def aceptarReprogramacionFecha() {
+		def fecha = Fecha.get(params.id)
+		fecha.reprogramar()
+		fecha.save()
+	}
+	
+	@Secured(['ROLE_ADMIN'])
+	def rechazarReprogramacionFecha() {
+		def fecha = Fecha.get(params.id)
+		fecha.fechaReprogramacion = null
+		fecha.save()
+	}
+	
+	@Secured(['ROLE_ADMIN'])
+	def fechasAReprogramar() {
+		def fechasConPedidoReprogramacion = Fecha.findAll { fechaReprogramacion != null }
+		render(view: "listPedidosReprogramaciones", model: [fechas: fechasConPedidoReprogramacion])
+	}
+	
+	@Secured(['ROLE_ADMIN'])
+	def reprogramarFechasMasivamente() {
+		def idsFechasAReprogramar = params['ids[]'].collect { new Long(it) }
+		def fechasAReprogramar = Fecha.findAll { id in idsFechasAReprogramar }
+		for(Fecha fechaAReprogramar in fechasAReprogramar) {
+			fechaAReprogramar.reprogramar()
+			fechaAReprogramar.save()
+		}
+		render(view: "list", model: [fechaInstanceList: fechasAReprogramar, fechaInstanceTotal: fechasAReprogramar.size()])
+	}
+	
+	def reprogramarTodasLasFechas() {
+		def fechasAReprogramar = Fecha.findAll()
+		for(Fecha fechaAReprogramar in fechasAReprogramar) {
+			fechaAReprogramar.reprogramar()
+			fechaAReprogramar.save()
+		}
+		render(view: "list", model: [fechaInstanceList: fechasAReprogramar, fechaInstanceTotal: fechasAReprogramar.size()])
 	}
 	
 	def void redirectIfNotAllowedEdit(Fecha fecha){

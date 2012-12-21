@@ -9,8 +9,6 @@ import intertigre.util.DomainFactoryService
 
 import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
-import spock.lang.IgnoreRest
-
 class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 
 	DomainFactoryService domainFactoryService = new DomainFactoryService()

@@ -41,7 +41,7 @@
 				</thead>
 				<tbody>
 				<g:each in="${fechaInstanceList}" status="i" var="fechaInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+					<tr class="${(i % 2) == 0 ? 'even' : 'odd'} fechaItem">
 					
 						<td><g:link controller="equipo" action="show" id="${fechaInstance.equipoLocal.id}">${fieldValue(bean: fechaInstance, field: "equipoLocal")}</g:link></td>
 					

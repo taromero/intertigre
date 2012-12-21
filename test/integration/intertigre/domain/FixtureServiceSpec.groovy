@@ -8,9 +8,6 @@ import java.lang.invoke.MethodHandleImpl.BindCaller.T
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 
-import spock.lang.Ignore
-import spock.lang.IgnoreRest;
-
 class FixtureServiceSpec extends BaseIntegrationSpec{
 
 	FixtureService fixtureService
@@ -242,5 +239,42 @@ class FixtureServiceSpec extends BaseIntegrationSpec{
 			[20, 22, 10]  |   [22, 18, 20]   |   [12, 22, 20, 16]      |        20
 			[22, 10, 3]   |   [3, 5, 23]     |   [20, 5, 3, 22]        |        22
 			[]            |   [2, 5, 23]     |   [15, 20, 22, 14]      |        15
+	}
+	
+	def 'devuelve fechas disponibles que no se juegen en dias que ya juegan los equipos'() {
+		given: '2 equipos con una fecha entre si para un dia y horario'
+			def equipoCanotto = domainFactoryService.crearEquipoMas19MCanotto()
+			def equipoChasqui = domainFactoryService.crearEquipoMas19MElChasqui()
+			def fechaDeJuego = new DateTime().toDate()
+			def fecha = new Fecha(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui, 
+							fechaDeJuego: fechaDeJuego)
+			equipoCanotto.fechasLocal.add(fecha)
+			equipoChasqui.fechasVisitante.add(fecha)
+		when: 'quiero obtener una fecha disponible para ambos'
+			def fechaDeJuegoAlternativa = new DateTime(fechaDeJuego).plusWeeks(1).toDate()
+			def fechasDisponibles = [new DateTime(fechaDeJuego), new DateTime(fechaDeJuegoAlternativa)]
+			def fechaDisponible = fixtureService.getDiaHorarioDisponibleParaAmbos(equipoCanotto, equipoChasqui, fechasDisponibles)
+		then: 'obtengo una fecha en otro dia, a pesar de que el mismo dia hay horarios disponibles'
+			fechaDisponible.getDayOfYear() == new DateTime(fechaDeJuegoAlternativa).getDayOfYear() 
+	}
+	
+	def 'pedir primera fecha de juego disponible'() {
+		given: '3 fechas entre 2 equipos, para hoy, una semana antes y una despues'
+			def equipoCanotto = domainFactoryService.crearEquipoMas19MCanotto()
+			def equipoChasqui = domainFactoryService.crearEquipoMas19MElChasqui()
+			def fechaPrevia1 = new Fecha(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui, 
+							fechaDeJuego: new DateTime().minusWeeks(1).toDate())
+			Fecha fechaAReprogramar = new Fecha(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui, 
+							fechaDeJuego: new DateTime().toDate())
+			def fechaPrevia2 = new Fecha(equipoLocal: equipoCanotto, equipoVisitante: equipoChasqui, 
+							fechaDeJuego: new DateTime().plusWeeks(1).toDate())
+			equipoCanotto.fechasLocal = [fechaPrevia1, fechaAReprogramar, fechaPrevia2]
+			equipoChasqui.fechasVisitante = [fechaPrevia1, fechaAReprogramar, fechaPrevia2]
+		when: 'pido la primer fecha de juego disponible para reprogramar la fecha del medio'
+			def fechaDisponible = fixtureService.getPrimeraFechaDeJuegoDisponible(fechaAReprogramar)
+		then: 'la fecha deberia ser 2 semanas despues de hoy'
+			new LocalDate(new DateTime(fechaDisponible)).equals(new LocalDate().plusWeeks(2))
+		and: 'en un horario dentro de los disponibles para el club local'
+			fechaAReprogramar.equipoLocal.club.horariosPreferidosParaLocal.contains(new DateTime(fechaDisponible).getHourOfDay())
 	}
 }

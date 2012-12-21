@@ -5,6 +5,8 @@ import grails.plugins.springsecurity.SpringSecurityService
 import intertigre.security.SecRole
 import intertigre.util.DomainFactoryService
 
+import java.lang.invoke.MethodHandleImpl.BindCaller.T
+
 abstract class BaseControllerSpec extends IntegrationSpec{
 	
 	SpringSecurityService springSecurityService

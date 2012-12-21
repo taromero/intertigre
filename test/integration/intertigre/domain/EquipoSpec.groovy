@@ -1,18 +1,21 @@
 package intertigre.domain
 
-import grails.plugin.spock.IntegrationSpec
+import static intertigre.util.DomainFactoryService.createFecha
+import intertigre.util.DomainFactoryService
+
+import java.lang.invoke.MethodHandleImpl.BindCaller.T
+
 import spock.lang.Ignore
 
 class EquipoSpec extends BaseIntegrationSpec{
 
-	//tengo que lograr que se me cree la fecha con equipo_visitante_id != null
-	@Ignore()
 	def 'no permitir borrar equipo si esta en alguna fecha'(){
 		given: 'un equipo con una fecha'
 			Equipo canottoTeam = Equipo.build()
-			canottoTeam.fechasLocal.add(Fecha.build())
+			Equipo equipoVisitante = Equipo.build()
+			canottoTeam.fechasLocal.add(createFecha(canottoTeam, equipoVisitante, new Date()))
 		when: 'intento eliminar el equipo'
-			canottoTeam.delete(flush: true)
+			canottoTeam.delete()
 		then: 'no se permite la eliminacion'
 			thrown(UnsupportedOperationException)
 	}
@@ -27,9 +30,10 @@ class EquipoSpec extends BaseIntegrationSpec{
 	}
 	
 	def 'obtener el equipo ganador de una fecha'(){
-		given: '2 equipos (canotto y elChasqui) y una fecha con 2 partidos ganados por canotto y 1 ganado por el Chasqui'
+		given: '2 equipos (canotto y elChasqui)'
 			Equipo canotto = domainFactoryService.crearEquipoMas19MCanotto()
 			Equipo elChasqui = domainFactoryService.crearEquipoMas19MElChasqui()
+		and: 'una fecha con 2 partidos ganados por canotto y 1 ganado por el Chasqui'
 			Fecha fecha = new Fecha(equipoLocal: canotto, equipoVisitante: elChasqui, 
 						single1: new Single(equipoGanador: canotto), single2: new Single(equipoGanador: elChasqui), 
 						doble: new Doble(equipoGanador: canotto))

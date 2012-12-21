@@ -68,6 +68,6 @@ grails.project.dependency.resolution = {
 		compile ":build-test-data:2.0.3"
 		compile ":mail:1.0"
 		compile ":lesscss-resources:1.3.0.3"
-		compile ":code-coverage:1.2.5"
+//		compile ":code-coverage:1.2.5"
     }
 }

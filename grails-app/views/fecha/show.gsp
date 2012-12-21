@@ -11,6 +11,7 @@
 				width: 25%
 			}
 		</style>
+		<title style='display:none'>Show Fecha</title>
 	</head>
 	<body>
 		<div id="show-fecha" class="content scaffold-show" role="main">
@@ -53,6 +54,14 @@
 					<span id="fechaDeJuego-label" class="property-label"><g:message code="fecha.fechaDeJuego.label" default="Fecha De Juego" /></span>
 					
 						<span class="property-value" aria-labelledby="fechaDeJuego-label"><g:formatDate format="HH:mm dd/MM/yyyy" date="${fechaInstance?.fechaDeJuego}" /></span>
+					
+				</li>
+				</g:if>
+				<g:if test="${fechaInstance?.fechaReprogramacion}">
+				<li class="fieldcontain">
+					<span id="fechaReprogramacion-label" class="property-label"><g:message code="fecha.fechaReprogramacion.label" default="Fecha De Reprogramacion" /></span>
+					
+						<span class="property-value" aria-labelledby="fechaReprogramacion-label" id="fechaReprogramacion"><g:formatDate format="HH:mm dd/MM/yyyy" date="${fechaInstance?.fechaReprogramacion}" /></span>
 					
 				</li>
 				</g:if>
@@ -238,6 +247,7 @@
 							<g:link class="edit" action="aprobarComoRival" id="${fechaInstance?.id}">Aprobar resultado</g:link>
 							<g:link class="edit" action="desaprobar" id="${fechaInstance?.id}">Desaprobar resultado</g:link>
 						</g:if>
+						<g:link class="edit reprogramar" action="pedirReprogramacionFecha" id="${fechaInstance?.id}">Pedir reprogramacion</g:link>
 					</sec:ifAllGranted>
 				</fieldset>
 			</g:form>

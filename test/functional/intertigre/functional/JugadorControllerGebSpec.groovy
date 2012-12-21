@@ -1,13 +1,8 @@
 package intertigre.functional
 
-import geb.spock.GebReportingSpec
-import intertigre.domain.Club
 import intertigre.domain.Jugador
-import intertigre.functional.pages.HomePage
 import intertigre.functional.pages.JugadorEditPage
-import intertigre.functional.pages.JugadorShowPage;
-import intertigre.functional.pages.LoginPage
-import intertigre.security.SecRole
+import intertigre.functional.pages.JugadorShowPage
 import intertigre.security.SecUserSecRole
 
 import java.lang.invoke.MethodHandleImpl.BindCaller.T

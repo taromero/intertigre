@@ -15,6 +15,10 @@ abstract class Partido {
 	
 	static constraints = {
 		fecha display:false
-		tercerSet nullable: true
+		tercerSet nullable: true, validator: { val, obj -> if(!(val.gamesGanador > val.gamesPerdedor)){
+														   		return 'El ultimo set debe tener un numero mayor ' + 
+																   'de games al principio que final (por ej. 6-3 y no 3-6)'
+															}
+											 }
 	}
 }

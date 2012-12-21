@@ -3,11 +3,17 @@ package intertigre.functional
 import static intertigre.util.DomainFactoryService.createFechasParaReprogramar
 import intertigre.domain.Fecha
 import intertigre.domain.Jugador
+import intertigre.functional.pages.FechaShowPage
 import intertigre.functional.pages.FechasListPage
-import intertigre.functional.pages.HomePage
 import intertigre.functional.pages.ReprogramarFechasPage
 import intertigre.security.SecUserSecRole
-import spock.lang.Ignore
+
+import java.lang.invoke.MethodHandleImpl.BindCaller.T
+
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatter
+
+import spock.lang.IgnoreRest
 
 class FechaGebSpec extends BaseControllerGebSpec{
 
@@ -79,7 +85,6 @@ class FechaGebSpec extends BaseControllerGebSpec{
 			}
 	}
 	
-	@Ignore
 	def 'un capitan de equipo quiere reprogramar una fecha'() {
 		given: 'un capitan de equipo loggeado'
 			Jugador usuarioCapitanEquipo = Jugador.build(password: passwordDefault)
@@ -88,12 +93,17 @@ class FechaGebSpec extends BaseControllerGebSpec{
 		and: 'una serie de fechas para el equipo del capitan'
 			def fechas
 			10.times { i ->
-				create
+				fechas = createFechasParaReprogramar(new Date(), 10)
 			}
 		when: 'va a ver el detalle de una fecha'
+			def fecha = fechas.get(0)
+			to FechaShowPage, fecha.id
 		and: 'toca el boton de reprogramar'
+			reprogramarButton.click()
 		then: 'deberia volverse a la pagina de detalle'
+			at FechaShowPage
 		and: 'mostrando la fecha de reprogramacion'
+			fechaReprogramacionField.text() != ''
 	}
 	
 }

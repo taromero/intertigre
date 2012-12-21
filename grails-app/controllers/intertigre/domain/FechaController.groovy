@@ -227,11 +227,13 @@ class FechaController extends BaseDomainController{
 		redirect(action: "show", id: fecha.id)
 	}
 	
+	@Secured(['ROLE_CAPITAN_EQUIPO'])
 	def pedirReprogramacionFecha() {
 		def fecha = Fecha.get(params.id)
 		def fechaReprogramacion = fixtureService.getPrimeraFechaDeJuegoDisponible(fecha)
 		fecha.fechaReprogramacion = fechaReprogramacion
 		fecha.save()
+		render(view: "show", model: [fechaInstance: fecha])
 	}
 	
 	@Secured(['ROLE_ADMIN'])

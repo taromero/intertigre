@@ -47,7 +47,7 @@
 					
 						<td><g:link controller="equipo" action="show" id="${fechaInstance.equipoVisitante.id}">${fieldValue(bean: fechaInstance, field: "equipoVisitante")}</g:link></td>
 						
-						<td><g:link action="show" id="fechaDeJuego${fechaInstance.id}">${fieldValue(bean: fechaInstance, field: "fechaDeJuego")}</g:link></td>
+						<td><g:link action="show" id="${fechaInstance.id}">${fieldValue(bean: fechaInstance, field: "fechaDeJuego")}</g:link></td>
 					
 					</tr>
 				</g:each>

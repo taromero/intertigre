@@ -8,6 +8,8 @@ import intertigre.domain.FechaController
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 
+import spock.lang.IgnoreRest;
+
 import extension.custom.Report
 
 @Report
@@ -42,7 +44,7 @@ class FechaControllerSpec extends BaseControllerSpec{
 			controller.response.redirectedUrl == '/fecha/show/' + fecha.id
 			fecha.single1.primerSet.gamesGanador == 7
 	}
-
+	
 	def 'crear partidos para una fecha con datos incorrectos para los games'(){
 		given: 'un usuario loggeado que pertenece a alguno de los equipos de la fecha'
 			Fecha fecha = createFecha(equipoCanotto, equipoChasqui, new Date())
@@ -68,7 +70,7 @@ class FechaControllerSpec extends BaseControllerSpec{
 //			fecha.single1 == null
 //			fecha.single2 == null
 //			fecha.doble == null
-		where:
+		where: 'distintos partidos'
 			  s1ps  | s1ss | s1ts
 			 '123-4'  | '3-6'| '6-2'
 	}

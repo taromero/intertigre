@@ -13,6 +13,7 @@ class ReportExtension extends AbstractAnnotationDrivenExtension<Report> {
             void afterFeature(FeatureInfo feature) {
 				def lastKind = ''
                 for (block in feature.blocks) {
+					def aux = block
                     for (text in block.texts) {
 						def bloque = lastKind.equals(block.kind.toString()) ? 'AND' : block.kind.toString()
 						bloque =  traducir(bloque)
@@ -26,13 +27,15 @@ class ReportExtension extends AbstractAnnotationDrivenExtension<Report> {
 	
 	private traducir(bloque) {
 		if(bloque == 'SETUP'){
-			return 'DADO:'
+			return 'DADO:    '
 		} else if(bloque == 'WHEN') {
-			return 'CUANDO:'
+			return 'CUANDO:  '
 		} else if(bloque == 'THEN') {
 			return 'ENTONCES:'
 		} else if(bloque == 'AND') {
-			return 'Y:'
+			return 'Y:       '
+		} else if(bloque == 'WHERE') {
+			return 'DONDE:   '
 		}
 	}
 

@@ -17,13 +17,13 @@ environments {
     }
     test {
         dataSource {
-            dbCreate = "create-drop"
-            url = "jdbc:h2:mem:testDb;MVCC=TRUE"
-//			driverClassName = "org.postgresql.Driver"
-//			username = "postgres"
-//			password = "postgres"
-//			dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
-//			url = "jdbc:postgresql://localhost:5432/intertigretest"
+//            dbCreate = "create-drop"
+//            url = "jdbc:h2:mem:testDb;MVCC=TRUE"
+			driverClassName = "org.postgresql.Driver"
+			username = "postgres"
+			password = "postgres"
+			dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
+			url = "jdbc:postgresql://localhost:5432/intertigretest"
         }
 		hibernate {
 			flush.mode = 'AUTO'

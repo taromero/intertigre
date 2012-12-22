@@ -20,7 +20,7 @@ abstract class Partido {
 																return 'El partido tiene mal los datos de los sets.' +
 																'Los games del ganador deben ir del lado izquierdo de cada set'
 															}
-															if(!(set.gamesGanador > set.gamesPerdedor)){
+															if(set.gamesGanador != null && !(set.gamesGanador > set.gamesPerdedor)){
 														   		return 'El ultimo set debe tener un numero mayor ' + 
 																   'de games al principio que final (por ej. 6-3 y no 3-6)'
 															}

@@ -4,17 +4,32 @@ import static intertigre.util.DomainFactoryService.createFecha
 
 import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
-import spock.lang.IgnoreRest;
-
 class PartidoSpec extends BaseIntegrationSpec{
 
-	static Equipo equipoL = Equipo.build()
-	static Equipo equipoV = Equipo.build()
-	static Jugador jugador1 = Jugador.build()
-	static Jugador jugador2 = Jugador.build()
-	static ParejaDoble pareja1 = new ParejaDoble(doblista1: jugador1, doblista2: jugador2)
-	static ParejaDoble pareja2 = new ParejaDoble(doblista1: jugador1, doblista2: jugador2)
-	static Fecha fecha = createFecha(equipoL, equipoV, new Date())
+	static Equipo equipoL
+	static Equipo equipoV
+	static Jugador jugador1
+	static Jugador jugador2
+	static ParejaDoble pareja1
+	static ParejaDoble pareja2
+	static Fecha fecha
+	
+	def setupSpec() {
+		equipoL = Equipo.build()
+		equipoV = Equipo.build()
+		jugador1 = Jugador.build()
+		jugador2 = Jugador.build()
+		pareja1 = new ParejaDoble(doblista1: jugador1, doblista2: jugador2)
+		pareja2 = new ParejaDoble(doblista1: jugador1, doblista2: jugador2)
+		fecha = createFecha(equipoL, equipoV, new Date())
+	}
+	
+	def cleanupSpec() {
+		Equipo.executeUpdate("delete Fecha")
+		Equipo.executeUpdate("delete Equipo")
+		Equipo.executeUpdate("delete ParejaDoble")
+		Equipo.executeUpdate("delete SecUser")
+	}
 	
 	def 'el ultimo set de un partido debe tener un numero de games mas grande al final que al principio (6-3 y no 3-6)'() {
 		given: 'un partido donde el ganador pierde el ultimo set'
@@ -69,6 +84,32 @@ class PartidoSpec extends BaseIntegrationSpec{
 							 Doble.buildWithoutSave(crearDoble('7-5', '3-6', '6-4')),
 							 Doble.buildWithoutSave(crearDoble('5-7', '6-3', '6-4')),
 							 Doble.buildWithoutSave(crearDoble('7-5', '6-3'))]
+	}
+
+	def 'un partido abandonado no puede tener un resultado normal'() {
+		given: 'un partido abandonado con resultado de un partido normal'
+			def partido = singleODoble
+		when: 'guardo el partido'
+			partido.save()
+		then: 'no se deberia guardar'
+			Partido.findAll().size() == 0
+		and: 'deberia mostrar un mensaje de error acorde'
+			partido.errors.allErrors.toString().contains('El partido esta marcado como abandono, pero ' +
+															'tiene todos los sets terminados')
+		where: 'el partido es un single o un doble'
+			singleODoble << [Single.buildWithoutSave(crearSingle('7-5', '6-3') + [abandono: true])]
+	}
+
+	def 'un partido abandonado puede tener un resultado anormal'() {
+		given: 'un partido abandonado con resultado anormal'
+			def partido = singleODoble
+		when: 'guardo el partido'
+			partido.save()
+		then: 'se deberia guardar'
+			Partido.findAll().size() > 0
+			Partido.get(partido.id) != null
+		where: 'el partido es un single o un doble'
+			singleODoble << [Single.buildWithoutSave(crearSingle('7-5', '3-6') + [abandono: true])]
 	}
 	
 	private Map crearSingle(primerSet, segundoSet, tercerSet = null){

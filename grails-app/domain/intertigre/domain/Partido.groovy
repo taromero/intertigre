@@ -28,9 +28,13 @@ abstract class Partido {
 														}
 											 }
 		abandono validator: { Boolean abandon, Partido partido ->
-								if(abandon && partido.tieneResultadoNormal()){
-									return 'El partido esta marcado como abandono, pero ' +
-											'tiene todos los sets terminados'
+								if(abandon){
+									if(partido.tieneResultadoNormal()){
+										return 'El partido esta marcado como abandono, pero ' +
+												'tiene todos los sets terminados'
+									} else if (partido.tieneSetsConGamesCuandoLosAnterioresEstanSinTerminar()) {
+										return 'El partido tiene games para un set cuando el set anterior no esta terminado'
+									}
 								}
 							 }
 	}
@@ -51,6 +55,18 @@ abstract class Partido {
 	}
 
 	private boolean tieneResultadoTerminado() {
-		return primerSet.terminoDeJugarse() && segundoSet.terminoDeJugarse() && tercerSet.terminoDeJugarse()
+		return primerSet.terminoDeJugarse() && segundoSet.terminoDeJugarse() && (tercerSet == null || tercerSet.terminoDeJugarse()) 
+	}
+
+	private boolean tieneSetsConGamesCuandoLosAnterioresEstanSinTerminar() {
+		if(!primerSet?.terminoDeJugarse()) {
+			if(segundoSet != null || tercerSet != null) {
+				return true
+			}
+		} else if (!segundoSet?.terminoDeJugarse() && tercerSet != null) {
+			return true
+		} else {
+			return false
+		}
 	}
 }

@@ -100,7 +100,7 @@ class PartidoSpec extends BaseIntegrationSpec{
 			Partido.findAll().size() == 0
 		and: 'deberia mostrar un mensaje de error acorde'
 			partido.errors.allErrors.toString().contains('El partido esta marcado como abandono, pero ' +
-															'tiene todos los sets terminados')
+															'tiene un resultado normal')
 		where: 'el partido es un single o un doble'
 			singleODoble << [Single.buildWithoutSave(crearSingle('7-5', '6-3') + [abandono: true]),
 								Single.buildWithoutSave(crearSingle('7-5', '3-6', '7-6') + [abandono: true]),
@@ -113,7 +113,18 @@ class PartidoSpec extends BaseIntegrationSpec{
 	}
 
 	def 'un partido abandonado no puede tener los 3 sets completos'(){
-		
+		given: 'un partido abandonado con los 3 sets completos'
+			def partido = singleODoble
+		when: 'guardo el partido'
+			partido.save()
+		then: 'no se deberia guardar'
+			Partido.findAll().size() == 0
+		and: 'deberia mostrar un mensaje de error acorde'
+			partido.errors.allErrors.toString().contains('El partido esta marcado como abandono, pero ' +
+															'tiene todos los sets terminados')
+		where: 'el partido es un single o un doble'
+			singleODoble << [Single.buildWithoutSave(crearSingle('7-5', '3-6', '3-6') + [abandono: true]),
+								Doble.buildWithoutSave(crearDoble('7-5', '3-6', '3-6') + [abandono: true]),]
 	}
 
 	def 'un partido abandonado puede tener un resultado anormal'() {
@@ -125,8 +136,7 @@ class PartidoSpec extends BaseIntegrationSpec{
 			Partido.findAll().size() > 0
 			Partido.get(partido.id) != null
 		where: 'el partido es un single o un doble'
-			singleODoble << [Single.buildWithoutSave(crearSingle('7-5', '3-6') + [abandono: true]),
-								Single.buildWithoutSave(crearSingle('7-5', '3-6', '3-6') + [abandono: true])]
+			singleODoble << [Single.buildWithoutSave(crearSingle('7-5', '3-6') + [abandono: true])]
 	}
 
 	def 'un partido abandonado no puede tener games en un set si el set anterior no fue completado'() {

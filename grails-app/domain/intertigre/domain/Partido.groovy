@@ -35,6 +35,10 @@ abstract class Partido {
 									} else if (partido.tieneSetsConGamesCuandoLosAnterioresEstanSinTerminar()) {
 										return 'El partido tiene games para un set cuando el set anterior no esta terminado'
 									}
+								} else { 
+									if(!partido.tieneResultadoTerminado()){
+										'Falta completar el resultado en alguno de los sets'
+									} 
 								}
 							 }
 	}

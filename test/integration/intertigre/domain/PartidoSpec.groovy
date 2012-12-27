@@ -112,6 +112,10 @@ class PartidoSpec extends BaseIntegrationSpec{
 								Doble.buildWithoutSave(crearDoble('7-5', '6-3') + [abandono: true]),]
 	}
 
+	def 'un partido abandonado no puede tener los 3 sets completos'(){
+		
+	}
+
 	def 'un partido abandonado puede tener un resultado anormal'() {
 		given: 'un partido abandonado con resultado anormal'
 			def partido = singleODoble
@@ -121,7 +125,8 @@ class PartidoSpec extends BaseIntegrationSpec{
 			Partido.findAll().size() > 0
 			Partido.get(partido.id) != null
 		where: 'el partido es un single o un doble'
-			singleODoble << [Single.buildWithoutSave(crearSingle('7-5', '3-6') + [abandono: true])]
+			singleODoble << [Single.buildWithoutSave(crearSingle('7-5', '3-6') + [abandono: true]),
+								Single.buildWithoutSave(crearSingle('7-5', '3-6', '3-6') + [abandono: true])]
 	}
 
 	def 'un partido abandonado no puede tener games en un set si el set anterior no fue completado'() {
@@ -146,22 +151,39 @@ class PartidoSpec extends BaseIntegrationSpec{
 	
 	def 'un partido no puede tener sets sin terminar con games'() {
 		given: 'un partido con sets sin terminar (por ej. 5-4)'
+			def partido = singleODoble
 		when: 'guardo'
+			partido.save()
 		then: 'no se deberia guardar'
+			Partido.findAll().size() == 0
 		and: 'deberia mostrar un mensaje de error acorde'
+			partido.errors.allErrors.toString().contains('Falta completar el resultado en alguno de los sets')
 		where: 'el partido es un single o un doble'
+			singleODoble << [Single.buildWithoutSave(crearSingle('7-5', '5-3')),
+								Single.buildWithoutSave(crearSingle('7-5', '6-3', '3-4')),
+								Single.buildWithoutSave(crearSingle('2-1', '5-3')),
+								Single.buildWithoutSave(crearSingle('2-1', '6-3', '7-6')),
+								Single.buildWithoutSave(crearSingle('2-1', '3-2', '3-5')),
+								Single.buildWithoutSave(crearSingle('2-1', '3-2', '5-3')),
+								Doble.buildWithoutSave(crearDoble('7-5', '5-3')),
+								Doble.buildWithoutSave(crearDoble('7-5', '6-3', '3-4')),
+								Doble.buildWithoutSave(crearDoble('2-1', '5-3')),
+								Doble.buildWithoutSave(crearDoble('2-1', '6-3', '7-6')),
+								Doble.buildWithoutSave(crearDoble('2-1', '3-2', '3-5')),
+								Doble.buildWithoutSave(crearDoble('2-1', '3-2', '5-3'))]
 	}
 	
 	private Map crearSingle(primerSet, segundoSet, tercerSet = null){
-		def ps = primerSet.tokenize('-').toArray()
-		def ss = segundoSet.tokenize('-').toArray()
+		def ps = primerSet != null ? primerSet.tokenize('-').toArray() : null
+		def ss = segundoSet != null ? segundoSet.tokenize('-').toArray() : null
 		def ts = tercerSet != null ? tercerSet.tokenize('-').toArray() : null
 		return [primerSet: [gamesGanador: ps[0], gamesPerdedor: ps[1]],
 				  segundoSet: [gamesGanador: ss[0], gamesPerdedor: ss[1]],
 				  tercerSet: ts != null ? [gamesGanador: ts[0], gamesPerdedor: ts[1]] : null,
 				  equipoGanador: equipoL,
 				  fecha: fecha,
-				  jugadorLocal: jugador1, jugadorVisitante: jugador2]
+				  jugadorLocal: jugador1, jugadorVisitante: jugador2,
+				  abandono: false]
 	}
 	
 	private Map crearDoble(primerSet, segundoSet, tercerSet = null){

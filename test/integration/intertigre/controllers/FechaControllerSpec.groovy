@@ -65,7 +65,7 @@ class FechaControllerSpec extends BaseControllerSpec{
 		then: 'se debe volver a la pagina de creacion de partidos indicando el error'
 			renderMap.view == 'createPartido'
 			renderMap.model.fecha.errors.getAt('single1.primerSet.gamesGanador').code == 'range.toobig'
-			renderMap.model.fecha.errors.allErrors.size() == 1
+			renderMap.model.fecha.errors.allErrors.size() == 2
 //			No puedo probar que se haga el roolback por ahora			
 //			fecha.single1 == null
 //			fecha.single2 == null

@@ -5,11 +5,7 @@ class Sett { //no podia usar el nombre 'Set' porque genera problemas con GORM pa
 	Integer gamesPerdedor
 	
 	static constraints = {
-		gamesGanador range: 0..7, nullable: true, validator: { Integer games, Sett set ->
-																if(!set.esCorrectaLaDiferenciaDeGames()){
-																	return 'La diferencia de games en el set no es correcta'
-																}
-															 }
+		gamesGanador range: 0..7, nullable: true
 		gamesPerdedor range: 0..7, nullable: true
 	}
 

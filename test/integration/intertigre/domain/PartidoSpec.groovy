@@ -1,14 +1,10 @@
 package intertigre.domain
 
 import static intertigre.util.DomainFactoryService.createFecha
+import spock.lang.IgnoreRest
+import extension.custom.Report
 
-import java.lang.invoke.MethodHandleImpl.BindCaller.T
-
-import org.junit.Ignore;
-
-import spock.lang.IgnoreRest;
-import spock.lang.Unroll;
-
+@Report
 class PartidoSpec extends BaseIntegrationSpec{
 
 	static Equipo equipoL
@@ -136,7 +132,12 @@ class PartidoSpec extends BaseIntegrationSpec{
 			Partido.findAll().size() > 0
 			Partido.get(partido.id) != null
 		where: 'el partido es un single o un doble'
-			singleODoble << [Single.buildWithoutSave(crearSingle('7-5', '3-6') + [abandono: true])]
+			singleODoble << [Single.buildWithoutSave(crearSingle('7-5', '3-6') + [abandono: true]),
+								Single.buildWithoutSave(crearSingle('7-5') + [abandono: true]),
+								Single.buildWithoutSave(crearSingle('2-1') + [abandono: true]),
+								Doble.buildWithoutSave(crearDoble('7-5', '3-6') + [abandono: true]),
+								Doble.buildWithoutSave(crearDoble('7-5') + [abandono: true]),
+								Doble.buildWithoutSave(crearDoble('2-1') + [abandono: true])]
 	}
 
 	def 'un partido abandonado no puede tener games en un set si el set anterior no fue completado'() {
@@ -183,12 +184,12 @@ class PartidoSpec extends BaseIntegrationSpec{
 								Doble.buildWithoutSave(crearDoble('2-1', '3-2', '5-3'))]
 	}
 	
-	private Map crearSingle(primerSet, segundoSet, tercerSet = null){
+	private Map crearSingle(primerSet, segundoSet = null, tercerSet = null){
 		def ps = primerSet != null ? primerSet.tokenize('-').toArray() : null
 		def ss = segundoSet != null ? segundoSet.tokenize('-').toArray() : null
 		def ts = tercerSet != null ? tercerSet.tokenize('-').toArray() : null
 		return [primerSet: [gamesGanador: ps[0], gamesPerdedor: ps[1]],
-				  segundoSet: [gamesGanador: ss[0], gamesPerdedor: ss[1]],
+				  segundoSet: ss != null ? [gamesGanador: ss[0], gamesPerdedor: ss[1]] : null,
 				  tercerSet: ts != null ? [gamesGanador: ts[0], gamesPerdedor: ts[1]] : null,
 				  equipoGanador: equipoL,
 				  fecha: fecha,
@@ -196,7 +197,7 @@ class PartidoSpec extends BaseIntegrationSpec{
 				  abandono: false]
 	}
 	
-	private Map crearDoble(primerSet, segundoSet, tercerSet = null){
+	private Map crearDoble(primerSet, segundoSet = null, tercerSet = null){
 		pareja1.save()
 		pareja2.save()
 		return crearSingle(primerSet, segundoSet, tercerSet)

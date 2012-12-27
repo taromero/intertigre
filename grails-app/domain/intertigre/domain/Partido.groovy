@@ -15,6 +15,8 @@ abstract class Partido {
 	
 	static constraints = {
 		fecha display:false
+		primerSet nullable: true
+		segundoSet nullable: true
 		tercerSet nullable: true, validator: { Sett set, Partido partido -> 
 														if(!partido.abandono) {
 															if(partido.tieneIgualOMasSetsGanadosPorDerechaQuePorIzquierda()) {
@@ -48,11 +50,11 @@ abstract class Partido {
 	
 	private boolean tieneIgualOMasSetsGanadosPorDerechaQuePorIzquierda() {
 		def ps = [primerSet.gamesGanador, primerSet.gamesPerdedor]
-		def ss = [segundoSet.gamesGanador, segundoSet.gamesPerdedor]
+		def ss = [segundoSet?.gamesGanador, segundoSet?.gamesPerdedor]
 		def ts = [tercerSet?.gamesGanador, tercerSet?.gamesPerdedor]
 		def aux = 0
 		ps[0] < ps[1] ? aux-- : aux++
-		ss[0] < ss[1] ? aux-- : aux++
+		(ss[0] != null) ? ((ss[0] < ss[1]) ? aux-- : aux++) : null
 		(ts[0] != null) ? ((ts[0] < ts[1]) ? aux-- : aux++) : null
 		return aux <= 0
 	}
@@ -62,11 +64,11 @@ abstract class Partido {
 	}
 
 	private boolean tieneResultadoTerminado() {
-		return primerSet.terminoDeJugarse() && segundoSet.terminoDeJugarse() && (tercerSet == null || tercerSet.terminoDeJugarse()) 
+		return primerSet.terminoDeJugarse() && segundoSet?.terminoDeJugarse() && (tercerSet == null || tercerSet.terminoDeJugarse()) 
 	}
 
 	private boolean terminaronDeJugarseTodosLosSets() {
-		return primerSet.terminoDeJugarse() && segundoSet.terminoDeJugarse() && tercerSet?.terminoDeJugarse()
+		return primerSet.terminoDeJugarse() && segundoSet?.terminoDeJugarse() && tercerSet?.terminoDeJugarse()
 	}
 
 	private boolean tieneSetsConGamesCuandoLosAnterioresEstanSinTerminar() {

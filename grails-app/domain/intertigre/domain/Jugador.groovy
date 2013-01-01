@@ -3,6 +3,8 @@ import java.util.Date;
 
 import intertigre.security.SecUser
 
+import net.sf.ehcache.util.SlewClock.TimeProvider;
+
 import org.joda.time.DateTime;
 
 class Jugador extends SecUser{
@@ -50,7 +52,7 @@ class Jugador extends SecUser{
 	def Integer getEdadAlFinalizarAnio(){
 		DateTime fechaNacimiento = new DateTime(this.nacimiento)
 		int anioNacimiento = fechaNacimiento.getYear()
-		int anioActual = Calendar.getInstance().get(Calendar.YEAR)
+		int anioActual = new DateTime().year
 		return anioActual - anioNacimiento
 	}
 

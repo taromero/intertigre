@@ -2,10 +2,21 @@ package intertigre.domain
 import grails.plugin.spock.IntegrationSpec
 import grails.validation.ValidationException
 
+import java.lang.invoke.MethodHandleImpl.BindCaller.T
+
 import org.joda.time.DateTime
+import org.joda.time.DateTimeUtils
 
 class JugadorSpec extends IntegrationSpec{
 
+	def setupSpec() {
+		DateTimeUtils.setCurrentMillisFixed(new DateTime(2012, 1, 1, 0,0,0).getMillis())
+	}
+	
+	def cleanupSpec() {
+		DateTimeUtils.setCurrentMillisSystem()
+	}
+	
 	def 'no deberia permitir eliminar un jugador'(){
 		given:
 			def jugador = Jugador.build(nombre: 'roger')

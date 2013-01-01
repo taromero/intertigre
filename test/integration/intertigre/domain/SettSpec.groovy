@@ -1,5 +1,6 @@
 package intertigre.domain
 
+import spock.lang.IgnoreRest;
 import grails.plugin.spock.IntegrationSpec
 
 

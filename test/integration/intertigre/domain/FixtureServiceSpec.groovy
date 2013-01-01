@@ -3,11 +3,12 @@ package intertigre.domain
 import intertigre.services.FixtureService
 import intertigre.util.DomainFactoryService
 
-import java.lang.invoke.MethodHandleImpl.BindCaller.T
-
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 
+import extension.custom.Report
+
+@Report
 class FixtureServiceSpec extends BaseIntegrationSpec{
 
 	FixtureService fixtureService

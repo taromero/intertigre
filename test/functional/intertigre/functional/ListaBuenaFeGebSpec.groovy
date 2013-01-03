@@ -2,7 +2,7 @@ package intertigre.functional
 
 import intertigre.domain.Equipo
 import intertigre.domain.Jugador
-import intertigre.functional.pages.EquipoShowPage
+import intertigre.functional.pages.EquipoEditPage
 import intertigre.functional.pages.ListaBuenaFeEditPage
 import intertigre.security.SecUserSecRole
 import intertigre.util.DomainFactoryService
@@ -11,10 +11,6 @@ import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
 class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 
-	DomainFactoryService domainFactoryService = new DomainFactoryService()
-	
-	static Jugador admin
-	
 	def setup() {
 		admin = Jugador.build(email: adminMail, password: passwordDefault)
 		SecUserSecRole.create(admin, roleAdmin).save()
@@ -33,7 +29,7 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 			}
 			submitButton.click()
 		then: 'deberia llevarme a la pagina de show del equipo'
-			at EquipoShowPage
+			at EquipoEditPage
 		and: 'la lista se deberia mostrar con las posiciones actualizadas'
 			itemsListaBuenaFeField.findIndexOf { it.text() == 'Juan Martin Del Potro'} < itemsListaBuenaFeField.findIndexOf { it.text() == 'Tomas Romero'}
 	}
@@ -69,7 +65,7 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 			}
 			submitButton.click()
 		then: 'deberia llevarme a la pagina de show del equipo'
-			at EquipoShowPage
+			at EquipoEditPage
 		then: 'el equipo debe contar con el jugador nuevo'
 			itemsListaBuenaFeField.find { it.text() == 'Novak Djokovic'} != null
 		and: 'en la ultima posicion'
@@ -88,7 +84,7 @@ class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 			}
 			submitButton.click()
 		then: 'deberia llevarme a la pagina de show del equipo'
-			at EquipoShowPage
+			at EquipoEditPage
 		and: 'el equipo no debe poseer mas al jugador'
 			itemsListaBuenaFeField.find { it.text() == 'Juan Martin Del Potro'} == null
 	}

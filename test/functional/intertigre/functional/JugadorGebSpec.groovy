@@ -7,7 +7,7 @@ import intertigre.security.SecUserSecRole
 
 import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
-class JugadorControllerGebSpec extends BaseControllerGebSpec{
+class JugadorGebSpec extends BaseControllerGebSpec{
 	
 	def 'un usuario no administrador quiere editar informacion de otro jugador'() {
 		given: 'un usuario no administrador logeado'

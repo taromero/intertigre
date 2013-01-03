@@ -2,10 +2,12 @@ package intertigre.functional
 
 import geb.spock.GebReportingSpec
 import intertigre.domain.Equipo
+import intertigre.domain.Jugador;
 import intertigre.functional.pages.HomePage
 import intertigre.functional.pages.LoginPage
 import intertigre.functional.pages.LogoutPage
 import intertigre.security.SecRole
+import intertigre.util.DomainFactoryService;
 
 import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
@@ -17,6 +19,10 @@ class BaseControllerGebSpec extends GebReportingSpec{
 	
 	def static adminMail = 'admin@mail.com'
 	def static passwordDefault = 'p'
+	
+	static Jugador admin
+	
+	DomainFactoryService domainFactoryService = new DomainFactoryService()
 	
 	def cleanup() {
 		Equipo.executeUpdate("delete ItemListaBuenaFe")

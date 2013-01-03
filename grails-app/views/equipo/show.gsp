@@ -120,17 +120,14 @@
 						<table id="listaBuenaFe">
 							<thead>
 								<th>Nombre</th>
-								<th>Ver</th>
-								<th></th>
 							</thead>
 							<tbody>
 								<g:each in="${equipoInstance.itemsListaBuenaFe*.jugador}" status="i" var="jugador">
 									<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-										<td class="itemListaBuenaFe">${jugador.nombre + ' ' + jugador.apellido }</td>
-										<td>
-											<span class="property-value" aria-labelledby="fechas-label">
-												<g:link controller="jugador" action="show" id="${jugador.id}">Ver</g:link>
-											</span>
+										<td class="itemListaBuenaFe">
+											<g:link controller="jugador" action="show" id="${jugador.id}" name="${jugador.id}">
+												${jugador.nombre + ' ' + jugador.apellido }
+											</g:link>
 										</td>
 									</tr>
 								</g:each>

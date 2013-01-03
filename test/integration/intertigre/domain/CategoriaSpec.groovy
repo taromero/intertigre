@@ -1,7 +1,11 @@
 package intertigre.domain
 
-import grails.plugin.spock.IntegrationSpec;
+import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
+import extension.custom.Report
+import grails.plugin.spock.IntegrationSpec
+
+@Report
 class CategoriaSpec extends IntegrationSpec{
 
 	def '2 categorias con los mismos atributos deberian ser iguales'() {

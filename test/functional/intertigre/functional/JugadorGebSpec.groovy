@@ -7,6 +7,9 @@ import intertigre.security.SecUserSecRole
 
 import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
+import extension.custom.Report
+
+@Report
 class JugadorGebSpec extends BaseControllerGebSpec{
 	
 	def 'un usuario no administrador quiere editar informacion de otro jugador'() {

@@ -1,9 +1,12 @@
 package intertigre.domain
 
-import grails.plugin.spock.IntegrationSpec;
-import intertigre.util.DomainFactoryService;
-import static intertigre.util.DomainFactoryService.createFechasParaReprogramar;
+import static intertigre.util.DomainFactoryService.createFechasParaReprogramar
 
+import java.lang.invoke.MethodHandleImpl.BindCaller.T
+
+import extension.custom.Report
+import grails.plugin.spock.IntegrationSpec
+@Report
 class DomainFactoryServiceSpec extends IntegrationSpec{
 
 	def 'el metodo crearFechasParaReprogramar anda'() {

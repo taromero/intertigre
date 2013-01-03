@@ -1,12 +1,14 @@
 package intertigre.functional	
 
-import geb.spock.GebReportingSpec
 import intertigre.domain.Jugador
 import intertigre.functional.pages.HomePage
 import intertigre.functional.pages.LoginPage
 
 import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
+import extension.custom.Report
+
+@Report
 class LoginGebSpec extends BaseControllerGebSpec{
 
 	def cleanup() {

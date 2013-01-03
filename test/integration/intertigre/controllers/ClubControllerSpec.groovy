@@ -3,8 +3,11 @@ package intertigre.controllers
 import intertigre.domain.Club
 import intertigre.domain.ClubController
 
-import javax.naming.LimitExceededException
+import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
+import extension.custom.Report
+
+@Report
 class ClubControllerSpec extends BaseControllerSpec{
 
 	ClubController controller = new ClubController()

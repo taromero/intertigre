@@ -1,9 +1,10 @@
 package intertigre.domain
 
+import extension.custom.Report;
 import spock.lang.IgnoreRest;
 import grails.plugin.spock.IntegrationSpec
 
-
+@Report
 class SettSpec extends IntegrationSpec{
 
 	def 'no deberia dejar guardar singles con sets de mas de 7 games'(){

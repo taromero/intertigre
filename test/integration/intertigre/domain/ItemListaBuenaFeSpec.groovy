@@ -1,7 +1,10 @@
 package intertigre.domain
 
-import grails.plugin.spock.IntegrationSpec
+import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
+import extension.custom.Report
+
+@Report
 class ItemListaBuenaFeSpec extends BaseIntegrationSpec{
 
 	def 'crear un equipo, con items de la lista de buena fe en posiciones correctas'(){

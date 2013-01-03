@@ -10,11 +10,9 @@ import intertigre.security.SecUserSecRole
 
 import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
-import org.joda.time.format.DateTimeFormat
-import org.joda.time.format.DateTimeFormatter
+import extension.custom.Report
 
-import spock.lang.IgnoreRest
-
+@Report
 class FechaGebSpec extends BaseControllerGebSpec{
 
 	def 'un usuario administrador quiere ver la lista de fechas a reprogramar'() {

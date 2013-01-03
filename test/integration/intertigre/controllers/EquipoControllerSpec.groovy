@@ -6,9 +6,13 @@ import intertigre.domain.Equipo
 import intertigre.domain.EquipoController
 import intertigre.domain.ItemListaBuenaFe
 import intertigre.domain.Jugador
-import spock.lang.Ignore
-import spock.lang.IgnoreRest
 
+import java.lang.invoke.MethodHandleImpl.BindCaller.T
+
+import spock.lang.Ignore
+import extension.custom.Report
+
+@Report
 public class EquipoControllerSpec extends BaseControllerSpec{
 
 	EquipoController controller = new EquipoController()

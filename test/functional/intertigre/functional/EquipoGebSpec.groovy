@@ -5,9 +5,9 @@ import intertigre.domain.Jugador
 import intertigre.functional.pages.EquipoShowPage
 import intertigre.functional.pages.JugadorShowPage
 import intertigre.security.SecUserSecRole
+import extension.custom.Report
 
-import java.lang.invoke.MethodHandleImpl.BindCaller.T
-
+@Report
 class EquipoGebSpec extends BaseControllerGebSpec{
 
 	def setup() {

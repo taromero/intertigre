@@ -2,10 +2,13 @@ package intertigre.domain
 
 import static intertigre.util.DomainFactoryService.createFecha
 
+import java.lang.invoke.MethodHandleImpl.BindCaller.T
+
 import org.joda.time.DateTime
 
-import spock.lang.Unroll
+import extension.custom.Report
 
+@Report
 class FechaSpec extends BaseIntegrationSpec{
 
 	Equipo equipoCanotto

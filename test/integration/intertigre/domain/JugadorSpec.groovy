@@ -1,12 +1,14 @@
 package intertigre.domain
-import grails.plugin.spock.IntegrationSpec
-import grails.validation.ValidationException
-
 import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
 import org.joda.time.DateTime
 import org.joda.time.DateTimeUtils
 
+import extension.custom.Report
+import grails.plugin.spock.IntegrationSpec
+import grails.validation.ValidationException
+
+@Report
 class JugadorSpec extends IntegrationSpec{
 
 	def setupSpec() {

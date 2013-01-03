@@ -9,6 +9,9 @@ import intertigre.util.DomainFactoryService
 
 import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
+import extension.custom.Report
+
+@Report
 class ListaBuenaFeGebSpec extends BaseControllerGebSpec{
 
 	def setup() {

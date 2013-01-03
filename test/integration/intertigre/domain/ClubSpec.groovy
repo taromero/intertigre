@@ -1,8 +1,12 @@
 package intertigre.domain
 
+import java.lang.invoke.MethodHandleImpl.BindCaller.T
+
+import extension.custom.Report
 import grails.plugin.spock.IntegrationSpec
 import grails.validation.ValidationException
 
+@Report
 class ClubSpec extends IntegrationSpec{
 
 	def 'no deberia permitir eliminar un club'(){

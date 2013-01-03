@@ -6,7 +6,9 @@ import intertigre.util.DomainFactoryService
 import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
 import spock.lang.Ignore
+import extension.custom.Report
 
+@Report
 class EquipoSpec extends BaseIntegrationSpec{
 
 	def 'no permitir borrar equipo si esta en alguna fecha'(){

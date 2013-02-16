@@ -127,6 +127,8 @@ class EquipoController extends BaseDomainController{
 		if(nuevoCapitan.authority.authority.toString() == 'ROLE_JUGADOR') {
 			SecUserSecRole.find { secUser == nuevoCapitan }.delete()
 			SecUserSecRole.create(nuevoCapitan, SecRole.find { authority == 'ROLE_CAPITAN_EQUIPO' })
+			nuevoCapitan.role = 'Capitan de equipo'
+			nuevoCapitan.save()
 		}
         render equipo.capitan as JSON
     }

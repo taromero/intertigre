@@ -26,8 +26,8 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 		    def canottoTeam = domainFactoryService.crearEquipoMas19MCanotto()
 		    controller.metaClass.esCapitanClub = { true }
 			def nuevoCapitan = canottoTeam.jugadores.find { it.nombre == 'Roger' }
-			nuevoCapitan.role = null
-			SecUserSecRole.create(nuevoCapitan, SecRole.find { authority == roleViejo })
+			nuevoCapitan.role = roleViejo
+			SecUserSecRole.create(nuevoCapitan, SecRole.find { authority == rolePostaViejo })
 		when: 'cambio el capitan'
 			controller.params.idNuevoCapitan = canottoTeam.jugadores.find { it.nombre == nuevoCapitan.nombre }.id
 			controller.params.idEquipo = canottoTeam.id
@@ -37,11 +37,11 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 		and: 'el jugador elegido como capitan pasa a tener el rol de capitan de equipo, si es que poseia un rol mas bajo'
 			nuevoCapitan.role == roleNuevo
 		where:
-			roleViejo             | roleNuevo
-			'ROLE_JUGADOR'        | 'Capitan de Equipo'
-			'ROLE_CAPITAN_EQUIPO' | 'Capitan de Equipo'
-			'ROLE_CAPITAN_CLUB'   | 'Capitan de Club'
-			'ROLE_ADMIN'          | 'Administrador'
+			rolePostaViejo             | roleViejo           | roleNuevo
+			'ROLE_JUGADOR'        | 'Jugador normal'    | 'Capitan de equipo'
+			'ROLE_CAPITAN_EQUIPO' | 'Capitan de equipo' | 'Capitan de equipo'
+			'ROLE_CAPITAN_CLUB'   | 'Capitan de club'   | 'Capitan de club'
+			'ROLE_ADMIN'          | 'Administrador'     | 'Administrador'
 			
 	}
 	

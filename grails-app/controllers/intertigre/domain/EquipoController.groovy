@@ -1,5 +1,7 @@
 package intertigre.domain
 
+import intertigre.security.SecRole;
+import intertigre.security.SecUserSecRole;
 import grails.converters.JSON
 import grails.gorm.DetachedCriteria
 import grails.plugins.springsecurity.Secured
@@ -122,6 +124,10 @@ class EquipoController extends BaseDomainController{
         def equipo = Equipo.get(idEquipo)
         def nuevoCapitan = Jugador.get(idNuevoCapitan)
         equipo.capitan = nuevoCapitan
+		if(nuevoCapitan.authority.authority.toString() == 'ROLE_JUGADOR') {
+			SecUserSecRole.find { secUser == nuevoCapitan }.delete()
+			SecUserSecRole.create(nuevoCapitan, SecRole.find { authority == 'ROLE_CAPITAN_EQUIPO' })
+		}
         render equipo.capitan as JSON
     }
 

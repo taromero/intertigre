@@ -6,10 +6,14 @@ import intertigre.domain.Equipo
 import intertigre.domain.EquipoController
 import intertigre.domain.ItemListaBuenaFe
 import intertigre.domain.Jugador
+import intertigre.security.SecRole
+import intertigre.security.SecUserSecRole
 
 import java.lang.invoke.MethodHandleImpl.BindCaller.T
 
 import spock.lang.Ignore
+import spock.lang.IgnoreRest
+import spock.lang.Unroll;
 import extension.custom.Report
 
 @Report
@@ -21,12 +25,24 @@ public class EquipoControllerSpec extends BaseControllerSpec{
 		given: 'un equipo con un capitan'
 		    def canottoTeam = domainFactoryService.crearEquipoMas19MCanotto()
 		    controller.metaClass.esCapitanClub = { true }
+			def nuevoCapitan = canottoTeam.jugadores.find { it.nombre == 'Roger' }
+			nuevoCapitan.role = null
+			SecUserSecRole.create(nuevoCapitan, SecRole.find { authority == roleViejo })
 		when: 'cambio el capitan'
-			controller.params.idNuevoCapitan = canottoTeam.jugadores.find { it.nombre == 'Roger' }.id
+			controller.params.idNuevoCapitan = canottoTeam.jugadores.find { it.nombre == nuevoCapitan.nombre }.id
 			controller.params.idEquipo = canottoTeam.id
 			controller.cambiarCapitanEquipoAjax()
 		then: 'veo reflejado el cambio'
-			canottoTeam.capitan == Jugador.findAll().find { it.nombre == 'Roger' } //El find de GORM no funcionaba bien
+			canottoTeam.capitan == Jugador.findAll().find { it.nombre == nuevoCapitan.nombre } //El find de GORM no funcionaba bien
+		and: 'el jugador elegido como capitan pasa a tener el rol de capitan de equipo, si es que poseia un rol mas bajo'
+			nuevoCapitan.role == roleNuevo
+		where:
+			roleViejo             | roleNuevo
+			'ROLE_JUGADOR'        | 'Capitan de Equipo'
+			'ROLE_CAPITAN_EQUIPO' | 'Capitan de Equipo'
+			'ROLE_CAPITAN_CLUB'   | 'Capitan de Club'
+			'ROLE_ADMIN'          | 'Administrador'
+			
 	}
 	
 	def 'cambiar orden de la lista de buena fe'() {

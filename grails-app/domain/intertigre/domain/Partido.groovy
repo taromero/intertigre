@@ -82,4 +82,6 @@ abstract class Partido {
 			return false
 		}
 	}
+	
+	abstract List<Jugador> jugadores()
 }

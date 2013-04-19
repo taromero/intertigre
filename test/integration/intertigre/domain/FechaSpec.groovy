@@ -22,7 +22,7 @@ class FechaSpec extends BaseIntegrationSpec{
 		equipoNahuel = domainFactoryService.crearEquipoNahuel()
 	}
 	
-	def 'no deberia dejar guardar 2 fechas de local el mismo dia para un equipo'() {
+	def 'un equipo no puede tener 2 fechas de local el mismo dia'() {
 		given: 'una fecha de un equipo'
 			createFecha(equipoCanotto, equipoChasqui, fechaDeJuego)
 		when: 'quiero guardar otra fecha para el mismo dia en otro horario'
@@ -34,7 +34,7 @@ class FechaSpec extends BaseIntegrationSpec{
 			fechaDeJuegoParaElMismoDia << [fechaDeJuego, new DateTime(fechaDeJuego).plusHours(2).toDate()]
 	}
 	
-	def 'no deberia dejar guardar 2 fechas de visitante el mismo dia para un equipo'() {
+	def 'un equipo no puede tener 2 fechas de visitante el mismo dia'() {
 		given: 'una fecha de un equipo'
 			createFecha(equipoCanotto, equipoChasqui, fechaDeJuego)
 		when: 'quiero guardar otra fecha para el mismo dia'
@@ -46,7 +46,7 @@ class FechaSpec extends BaseIntegrationSpec{
 			fechaDeJuegoParaElMismoDia << [fechaDeJuego, new DateTime(fechaDeJuego).plusHours(2).toDate()]
 	}
 	
-	def 'no deberia dejar guardar 1 fecha de local y otra de visitante el mismo dia para un equipo'() {
+	def 'un equipo no puede tener una fecha de local y otra de visitante el mismo dia'() {
 		given: 'una fecha de un equipo'
 			createFecha(equipoCanotto, equipoChasqui, fechaDeJuego)
 		when: 'quiero guardar otra fecha para el mismo dia'
@@ -58,7 +58,7 @@ class FechaSpec extends BaseIntegrationSpec{
 			fechaDeJuegoParaElMismoDia << [fechaDeJuego, new DateTime(fechaDeJuego).plusHours(2).toDate()]
 	}
 
-	def 'deberia dejar guardar 2 fechas de distinto dia para un equipo'() {
+	def 'un equipo puede tener 2 fechas de distinto dia'() {
 		given: 'una fecha de un equipo'
 			createFecha(equipoCanotto, equipoChasqui, fechaDeJuego)
 		when: 'quiero guardar otra fecha para otro dia'
@@ -67,6 +67,24 @@ class FechaSpec extends BaseIntegrationSpec{
 			Fecha.count() == 2
 		where:
 			fechaDeJuegoParaOtroDia << [new DateTime(fechaDeJuego).minusDays(1).toDate(), new DateTime(fechaDeJuego).plusDays(2).toDate()]
+	}
+
+	def 'un jugador no puede estar en mas de un partido de la misma fecha'() {
+		given: 'una fecha con un mismo jugador en mas de un partido'
+			def fecha = createFecha(equipoCanotto, equipoChasqui, fechaDeJuego)
+			fecha.single1 = new Single(jugadorLocal: equipoCanotto.jugadores.first(), 
+											jugadorVisitante: equipoChasqui.jugadores.first(),
+											primerSet: Sett.build(), segundoSet: Sett.build(), 
+											fecha: fecha, equipoGanador: equipoCanotto).save(failOnError: true)
+			fecha.single2 = new Single(jugadorLocal: equipoCanotto.jugadores.first(), 
+											jugadorVisitante: equipoChasqui.jugadores.get(2),
+											primerSet: Sett.build(), segundoSet: Sett.build(),
+											fecha: fecha, equipoGanador: equipoChasqui).save(failOnError: true)
+		when: 'quiero guardar la fecha'
+			fecha.save(failOnError: true)
+		then: 'no me lo deberia permitir'
+			Exception ex = thrown(UnsupportedOperationException)
+			ex.message == "hay un jugador que figura en mas de un partido para esta serie"
 	}
 	
 }

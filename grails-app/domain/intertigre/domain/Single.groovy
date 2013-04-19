@@ -1,5 +1,7 @@
 package intertigre.domain
 
+import java.util.List;
+
 class Single extends Partido{
 	Jugador jugadorLocal
 	Jugador jugadorVisitante
@@ -8,5 +10,9 @@ class Single extends Partido{
 		return jugadorLocal.toString() + ' - ' + jugadorVisitante.toString() + ' : ' +
 					 primerSet.toString() + ' ' + segundoSet.toString() + ' ' + (tercerSet != null ? tercerSet.toString() : '') + 
 					 ' gano ' + equipoGanador.toString();
+	}
+	
+	public List<Jugador> jugadores() {
+		return [jugadorLocal, jugadorVisitante]
 	}
 }

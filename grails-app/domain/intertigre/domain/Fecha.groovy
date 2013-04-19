@@ -46,8 +46,21 @@ class Fecha implements Comparable<Fecha>{
 		}else if(equipoVisitante.fechas.find { new LocalDate(it.fechaDeJuego) == new LocalDate(fechaDeJuego) && !it.equals(this) }){
 			throw new UnsupportedOperationException("El equipo '$equipoVisitante' ya tiene una fecha para ese dia")
 		}
+		
+		checkearQueNoTengaJugadoresEnMasDeUnPartido()
+	}
+	
+	def beforeUpdate() {
+		checkearQueNoTengaJugadoresEnMasDeUnPartido()
 	}
 
+	def checkearQueNoTengaJugadoresEnMasDeUnPartido() {
+		if((single1?.jugadores().any { single2?.jugadores()?.contains(it) || doble?.jugadores()?.contains(it)}
+			|| single2?.jugadores().any { doble?.jugadores()?.contains(it) })) {
+			throw new UnsupportedOperationException("hay un jugador que figura en mas de un partido para esta serie")
+		}
+	}
+	
 	def void reprogramar() {
 		fechaDeJuego = fechaReprogramacion
 		fechaReprogramacion = null
